@@ -1,0 +1,41 @@
+﻿@using LearningEnglishWeb.Models
+@model IEnumerable<Word>
+@{
+    ViewData["Title"] = "Vocabulare Page";
+}
+
+
+<div>
+
+
+    <input id="find-input" type="text" placeholder="Найти" />
+    <input class="add-word-button" type="button" value="add" />
+
+    <div>
+
+        <table class="table">
+            @foreach (var w in Model)
+            {
+                <tr>
+                  <td>@w.Name</td>
+                  <td>@w.Transcription</td>
+                  <td>@w.Translation</td></tr>
+            }
+        </table>
+    </div>
+</div>
+
+<script>
+    (function () {
+        var input = document.querySelector("#find-input");
+        input.addEventListener("input", function (event) {
+            let button = document.querySelector(".add-word-button");
+
+            if (this.value.length > 0) {
+                button.style.visibility = "visible";
+            } else {
+                button.style.visibility = "hidden";
+            }
+        }, false);
+    })();
+</script>
