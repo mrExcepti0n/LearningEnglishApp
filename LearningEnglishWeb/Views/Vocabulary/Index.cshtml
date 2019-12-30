@@ -11,31 +11,80 @@
     <input id="find-input" type="text" placeholder="Найти" />
     <input class="add-word-button" type="button" value="add" />
 
-    <div>
-
-        <table class="table">
-            @foreach (var w in Model)
-            {
-                <tr>
-                  <td>@w.Name</td>
-                  <td>@w.Transcription</td>
-                  <td>@w.Translation</td></tr>
-            }
-        </table>
+    <div id="available-words">
     </div>
+
+    <div id="partial">
+        @await Html.PartialAsync("WordList")
+    </div>
+
+
 </div>
 
-<script>
+@section Scripts {
+    <script>
     (function () {
+
         var input = document.querySelector("#find-input");
         input.addEventListener("input", function (event) {
-            let button = document.querySelector(".add-word-button");
+            toogleButton(this.value);
+            refreshArea(this.value);
+        }, false);
 
-            if (this.value.length > 0) {
+
+        let addButton = document.querySelector(".add-word-button");
+
+
+
+        $(document).on('click', '.translation-word', function () {
+
+
+            $.ajax({
+                url: '@Url.Action("AddWord", "Vocabulary")',
+                type: 'POST',
+                data: { word: input.value, translation: this.innerText },
+                success: function (res) {
+                     location.reload();  
+                }
+            })
+        });
+
+
+        addButton.addEventListener('click', function () {
+            $.ajax({
+                url: '@Url.Action("TranslationList", "Vocabulary")',
+                type: 'GET',
+                data: { word: input.value },
+                success: (res) => {
+                    var area = document.querySelector('#available-words');
+                    area.innerHTML = res;
+                }
+            });
+        });
+
+
+        function toogleButton(str) {
+            let button = document.querySelector(".add-word-button");
+            if (str.length > 0) {
                 button.style.visibility = "visible";
             } else {
                 button.style.visibility = "hidden";
             }
-        }, false);
+        }
+
+        function refreshArea(str) {
+            $.ajax({
+                url: '@Url.Action("WordList", "Vocabulary")',
+                type: 'GET',
+                data: { mask: str },
+                success: (res) => {
+                    var refreshArea = document.querySelector("#partial");
+                    refreshArea.innerHTML = res;
+                }
+            });
+
+        }
+
     })();
-</script>
+ </script>
+}
