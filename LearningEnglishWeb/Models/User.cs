@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class User : IdentityUser
+    public class User : IdentityUser<int>
     {
         public int Year { get; set; }
     }
