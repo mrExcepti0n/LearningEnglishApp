@@ -10,5 +10,7 @@ namespace LearningEnglishWeb.Services
         List<string> GetTranslations(string word);
 
         void AddWord(string name, string translation);
+
+        void RemoveWord(string name, string translation);
     }
 }

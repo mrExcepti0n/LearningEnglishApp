@@ -14,6 +14,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using VocabularyApi.Controllers;
+using VocabularyApi.Infrastructure.DataAccess;
 
 namespace LearningEnglishWeb
 {
@@ -37,15 +39,23 @@ namespace LearningEnglishWeb
             });
 
             services.AddDbContext<ApplicationDbContext>(options =>
+                                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"))
+            );
+
+             services.AddDbContext<VocabularyContext>(options =>
                                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
+
+
+            services.AddScoped<IVocabularyService, VocabularyService>();
+            services.AddScoped<VocubalryController>();
+
 
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            services.AddSingleton<IVocabularyService, VocabularyService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

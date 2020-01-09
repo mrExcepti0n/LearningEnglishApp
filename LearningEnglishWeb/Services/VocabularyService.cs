@@ -19,7 +19,7 @@ namespace LearningEnglishWeb.Services
 
         public List<Word> GetWords(string mask = null)
         {
-            var words = _vocubalryController.Get(userId, mask).Value;
+            var words = _vocubalryController.Get(mask).Value;
             return words.Select(w => new Word { Name = w.Name, Translation = w.Translation }).ToList();  
         }
 
@@ -30,7 +30,14 @@ namespace LearningEnglishWeb.Services
 
         public void AddWord(string name, string translation)
         {
-            _vocubalryController.Post(userId, name, translation);
+            _vocubalryController.Post(name, translation);
+        }
+
+
+   
+        public void RemoveWord(string name, string translation)
+        {
+            _vocubalryController.Delete(name, translation);
         }
 
         private int userId => 0;

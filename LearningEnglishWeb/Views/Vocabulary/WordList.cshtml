@@ -19,15 +19,18 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+            <td class="wordName">
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
+            <td class="wordTranscription">
                 @Html.DisplayFor(modelItem => item.Transcription)
             </td>
-            <td>
+            <td class="wordTranslation">
                 @Html.DisplayFor(modelItem => item.Translation)
-            </td>          
+            </td>   
+            <td>
+                <button class="btn btn-danger delete-button"> удалить </button>
+            </td>
         </tr>
 }
     </tbody>

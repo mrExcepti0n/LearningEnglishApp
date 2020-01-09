@@ -35,14 +35,61 @@
         let addButton = document.querySelector(".add-word-button");
 
 
+        $(document).on('click', '.add-own-word-button', function () {
+
+            var area = document.createElement("div");
+
+            var input = document.createElement("input");
+            input.setAttribute("type", "text");
+
+            var button = document.createElement("button");
+
+            button.innerText = "Добавить новое слово";
+            button.classList.add("add-new-word");
+
+            area.appendChild(input);
+            area.appendChild(button);
+
+            this.parentElement.replaceChild(area, this);          
+        });
+
+        
+        $(document).on('click', '.add-new-word', function () {
+
+            var translation = this.previousSibling.value;
+
+             $.ajax({
+                url: '@Url.Action("AddOwnTranslation", "Vocabulary")',
+                type: 'POST',
+                data: { word: input.value, translation: translation },
+                success: function (res) {
+                     location.reload();  
+                }
+            })                     
+        });
+
+
 
         $(document).on('click', '.translation-word', function () {
-
-
             $.ajax({
                 url: '@Url.Action("AddWord", "Vocabulary")',
                 type: 'POST',
                 data: { word: input.value, translation: this.innerText },
+                success: function (res) {
+                     location.reload();  
+                }
+            })
+        });
+
+
+        $(document).on('click', '.delete-button', function () {
+
+            let wordName = this.parentElement.parentElement.querySelector(".wordName").innerText;
+            let wordTranslation = this.parentElement.parentElement.querySelector(".wordTranslation").innerText;
+            $.ajax({
+                url: '@Url.Action("RemoveWord", "Vocabulary")',
+                type: 'POST',
+                data: { word: wordName, translation: wordTranslation },
                 success: function (res) {
                      location.reload();  
                 }
