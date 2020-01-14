@@ -1,0 +1,48 @@
+﻿@model LearningEnglishWeb.ViewModels.Training.ChooseTranslateQuestionModel
+
+
+<div class="trainingArea container">
+    @await Html.PartialAsync("ChooseTranslateTrainingQuestion", Model)
+</div>
+
+
+@section Scripts {
+    <script>
+
+        $(document).on("click", '.newGameBtn', _ => {
+            document.location.reload();
+        });
+        $(document).on('click', '.trainingArea button.answerBtn ', function () {
+            checkAnswer(this);
+        });
+
+
+        $(document).on('click', '.trainingArea button.nextAnswerBtn ', function () {
+            getNextAnswer(this);
+        });
+
+
+        function checkAnswer(button) {
+            $.ajax({
+                url: button.dataset.requestUrl,
+                type: 'GET',
+                data: { answer: button.innerText },
+                success: (res) => {
+                    document.querySelector(".trainingArea").innerHTML = res;
+                }
+            });
+        }
+
+        function getNextAnswer(button) {
+            $.ajax({
+                url: button.dataset.requestUrl,
+                type: 'GET',
+                success: (res) => {
+                    document.querySelector(".trainingArea").innerHTML = res;
+                }
+            });
+
+
+        }
+    </script>
+}

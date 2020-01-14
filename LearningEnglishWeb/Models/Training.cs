@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class Training
+    public abstract class TrainingBase<TQ> where TQ: QuestionBase
     {
         public Guid Id { get; set; }
 
@@ -16,67 +16,48 @@ namespace LearningEnglishWeb.Models
         public int RightAnsweredQuestions { get; set; }
 
 
-        public List<Question> Questions { get; set; }
+        protected IEnumerable<TQ> Questions { get; set; }
+
+        private IEnumerator<TQ> QuestionEnumerator { get; }
 
 
-        public Training(List<Question> questions)
+        public TrainingBase(IEnumerable<TQ> questions)
         {
             Id = Guid.NewGuid();
-            QuestionsCount = questions.Count;
+            QuestionsCount = questions.Count();
             Questions = questions;
 
             CurrentQuestionNumber = 0;
             RightAnsweredQuestions = 0;
+
+            QuestionEnumerator = Questions.GetEnumerator();
         }
 
 
-        public Question GetNextQuestion()
+        public TQ GetNextQuestion()
         {
-            if (CurrentQuestionNumber +1  < QuestionsCount)
+            if (QuestionEnumerator.MoveNext())
             {
-                return Questions[++CurrentQuestionNumber];
+                CurrentQuestionNumber++;
+                return GetCurrentQuestion();          
             }
 
             return null;
         }
 
-        public QuestionResult CheckAnswer(string answer)
+
+        public TQ GetCurrentQuestion()
         {
-            var question = Questions[CurrentQuestionNumber];
-
-            var questionResult = new QuestionResult
-            {
-                Word = question.Word
-            };
-
-            if (question.RightAnswer == answer)
-            {
-                RightAnsweredQuestions++;
-
-                questionResult.Answers = new List<AnswerResult>
-                {
-                    new AnswerResult {Word = question.RightAnswer, Right = true, UserSelect = true}
-                };
-
-
-            }
-            else
-            {
-                questionResult.Answers = new List<AnswerResult>
-                {
-                    new AnswerResult {Word = question.RightAnswer, Right = true, UserSelect = false},
-                    new AnswerResult {Word = answer, Right = false, UserSelect = true}
-                };
-            }
-            return questionResult;
-
+            return QuestionEnumerator.Current;
         }
+
 
 
         public void Reset()
         {
             CurrentQuestionNumber = 0;
             RightAnsweredQuestions = 0;
+            QuestionEnumerator.Reset();
         }
     }
 }

@@ -1,0 +1,21 @@
+﻿@model LearningEnglishWeb.ViewModels.Training.ChooseTranslateQuestionModel
+
+
+<div class="row">
+    <p class="col">Вопрос @Model.QuestionNumber </p>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <p> @Model.Word </p>
+    </div>
+    <div class="col-8">
+        @foreach (var trans in Model.Translations)
+        {
+            <button class="answerBtn" data-request-url="@Url.Action("CheckAnswer")"> @trans</button>
+        }
+
+        <button class="answerBtn dontKnow">Не знаю</button>
+    </div>
+</div>
+

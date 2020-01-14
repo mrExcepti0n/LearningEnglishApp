@@ -1,0 +1,29 @@
+﻿.checkAnswerBtn {
+    background-color: aqua;
+}
+
+.wrongAnswer {
+    background-color: red;
+}
+
+.rightAnswer {
+    background-color: green;
+}
+
+
+.trainingArea {
+    margin-top: 50px;
+    border: 1px dashed gray;
+    border-radius: 5px;
+    padding: 15px;
+}
+
+.answerBtn {
+    margin: 5px;
+    display: block;
+    width: 90%;
+    text-align: left;
+}
+
+
+

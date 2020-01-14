@@ -1,0 +1,20 @@
+﻿@using LearningEnglishWeb.Helpers
+@model LearningEnglishWeb.ViewModels.Training.ChooseTranslateQuestionResult
+
+<div class="row">
+    <p class="col">Вопрос @Model.QuestionNumber </p>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <p> @Model.Word </p>
+    </div>
+    <div class="col-8">
+        @foreach (var trans in Model.Translations)
+        {
+            <button class="answerBtn @(@trans.IsRight ? "rightAnswer" : trans.UserSelect ? "wrongAnswer" : "")  " disabled> @trans.Translation</button>
+        }
+        <button class="nextAnswerBtn" data-request-url="@Url.Action("GetNextQuestion")">Следующее слово </button>
+    </div>
+</div>
+

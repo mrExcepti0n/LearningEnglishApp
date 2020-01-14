@@ -5,12 +5,10 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class AnswerResult
+    public class QuestionBase
     {
-        public string Word;
-        public bool Right;
-        public bool UserSelect;
+        public int Number { get; set; }
 
-
+        public string Word { get; set; }
     }
 }

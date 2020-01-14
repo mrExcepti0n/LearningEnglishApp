@@ -1,4 +1,5 @@
-﻿@model QuestionModel
+﻿@model LearningEnglishWeb.ViewModels.Training.TranslateWordQuestionModel
+
 
 
 <p> @Model.Word </p>
@@ -6,4 +7,4 @@
     Введите перевод
     <input type="text" />
 </label>
-<button class="checkAnswer train-btn dontKnow">Не знаю</button>
+<button data-request-url="@Url.Action("CheckAnswer")" class="checkAnswerBtn dontKnowBtn">Не знаю</button>

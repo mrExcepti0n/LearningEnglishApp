@@ -1,18 +1,14 @@
-﻿@model QuestionModel
+﻿@model LearningEnglishWeb.ViewModels.Training.TranslateWordQuestionModel
 
 
-<div class="trainingArea" data-request-controller-url="@Url.Action("")">
+<div class="trainingArea">
     @await Html.PartialAsync("TranslateWordTrainingQuestion", Model)   
 </div>
 
 
 @section Scripts {
-<script src="~/js/training.js">  
-</script>
 
-<script>
-    var z = new training('@Url.Action("CheckAnswer")', '@Url.Action("GetNextQuestion")');
-    z.subscribeOnEvents();
+<script src="~/js/training.js">  
 </script>
 
 }

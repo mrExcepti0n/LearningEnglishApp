@@ -4,28 +4,32 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
+
 
 namespace LearningEnglishWeb.Controllers
 {
     public class TranslateWordTrainingController : Controller
     {
-        Training _training = TrainingFactory.GetTraining();
+        TranslateWordTraining _training = TrainingFactory.GetTranslateTraining();
+
+
 
 
         public IActionResult Index()
         {
-            var questionModel = new QuestionModel { Word = _training.Questions.First().Word };
+            var question = _training.GetNextQuestion();
+            var questionModel = new TranslateWordQuestionModel(_training.Id, question);
             return View(questionModel);
         }
 
         public IActionResult GetNextQuestion()
         {
             var question = _training.GetNextQuestion();
-
             if (question != null)
             {
-                var questionModel = new QuestionModel { Word = question.Word };
+                var questionModel = new TranslateWordQuestionModel(_training.Id, question);
                 return PartialView("TranslateWordTrainingQuestion", questionModel);
             }
 
@@ -43,7 +47,6 @@ namespace LearningEnglishWeb.Controllers
         public IActionResult CheckAnswer(string answer)
         {
             var res = _training.CheckAnswer(answer);
-
             return PartialView("TranslateWordTrainingAnswerResult", res);
         }
     }

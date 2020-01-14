@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class QuestionResult
+    public class ChooseTranslateQuestion : QuestionBase
     {
-        public string Word { get; set; }
-
-        public List<AnswerResult> Answers { get; set; }
+        public List<ChooseTranslateAnswer> TranslationAnswers { get; set; }
+       
     }
 }

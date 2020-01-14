@@ -70,15 +70,3 @@ body {
     visibility: hidden;
 }
 
-
-.checkAnswer {
-    background-color: aqua;
-}
-
-.wrongAnswer {
-    background-color: red;
-}
-
-.rightAnswer {
-    background-color: green;
-}

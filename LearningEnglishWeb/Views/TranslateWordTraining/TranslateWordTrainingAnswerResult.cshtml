@@ -1,7 +1,7 @@
 ﻿@using LearningEnglishWeb.Helpers
-@model QuestionResult
+@model LearningEnglishWeb.ViewModels.Training.TranslateWordAnswerResult
 
 
 <p>@Model.Word</p>
 
-@Html.CreateTranslateWordTrainingAnswerResult(@Model.Answers)
+@Html.CreateTranslateWordTrainingAnswerResult(@Model, Url.Action("GetNextQuestion"))

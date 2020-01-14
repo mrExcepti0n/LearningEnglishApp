@@ -5,13 +5,8 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class QuestionModel
+    public class TranslateWordQuestion : QuestionBase
     {
-        public Guid TrainingId { get; set; }
-
-        public string Word { get; set; }
-
-
-
+        public string RightTranslation { get; set; }
     }
 }
