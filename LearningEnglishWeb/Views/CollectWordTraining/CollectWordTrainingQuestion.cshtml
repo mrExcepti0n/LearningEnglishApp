@@ -1,0 +1,10 @@
+﻿@model string
+
+<div class="answerArea col"> </div>
+<div class="questionArea">
+    @foreach (char letter in Model)
+    {
+        <button class="letter"> @letter </button>
+    }
+
+</div>      

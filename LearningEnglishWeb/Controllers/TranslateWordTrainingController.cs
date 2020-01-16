@@ -49,5 +49,15 @@ namespace LearningEnglishWeb.Controllers
             var res = _training.CheckAnswer(answer);
             return PartialView("TranslateWordTrainingAnswerResult", res);
         }
+
+
+        public IActionResult SkipQuestion()
+        {
+            var res = _training.CheckAnswer(null);
+            return PartialView("TranslateWordTrainingAnswerResult", res);
+        }
+
+
+
     }
 }

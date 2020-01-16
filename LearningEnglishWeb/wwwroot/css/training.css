@@ -3,11 +3,11 @@
 }
 
 .wrongAnswer {
-    background-color: red;
+    color: red;
 }
 
 .rightAnswer {
-    background-color: green;
+    color: green;
 }
 
 
@@ -16,6 +16,7 @@
     border: 1px dashed gray;
     border-radius: 5px;
     padding: 15px;
+    min-height: 200px;
 }
 
 .answerBtn {
@@ -23,6 +24,40 @@
     display: block;
     width: 90%;
     text-align: left;
+}
+
+.nextAnswerBtn {
+    margin: 5px;
+    display: block;
+    width: 50%;
+    text-align: left;
+}
+
+.letter {
+    display: inline-block;
+    text-align: center;
+    border: 1px solid black;
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+}
+
+.questionArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: central;
+    text-align: center;
+    min-height: 100px;
+}
+
+.answerArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: central;
+    text-align: center;
+    min-height: 100px;
 }
 
 

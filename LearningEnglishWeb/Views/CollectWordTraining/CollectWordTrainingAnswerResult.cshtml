@@ -1,0 +1,17 @@
+﻿@model LearningEnglishWeb.ViewModels.Training.CollectWordQuestionResult
+@{
+    ViewData["Title"] = "CollectWordTrainingAnswerResult";
+}
+
+<div class="answerArea">
+
+  @foreach (var letter in Model.CollectWordAnswerResults)
+  {
+       <button class="letter @(@letter.IsRight ? "rightAnswer" : "wrongAnswer") " disabled> @letter.Letter </button>
+  }
+
+</div>
+<div class="questionArea">
+    <button class="nextAnswerBtn" data-request-url="@Url.Action("GetNextQuestion")"> Следующий вопрос </button>
+</div>
+

@@ -1,0 +1,61 @@
+﻿@model  string
+@{
+    ViewData["Title"] = "Index";
+}
+    <div class="trainingArea">
+        @await Html.PartialAsync("CollectWordTrainingQuestion", @Model)        
+    </div>
+
+
+@section Scripts{
+
+    <script>
+         $(document).on("click", '.newGameBtn', _ => {
+            document.location.reload();
+        });
+        $(document).on("click", '.questionArea button.letter', function (evt) {
+            document.querySelector(".answerArea").appendChild(this);
+            if (allLettersIsCollect()) {
+
+                $.ajax({
+                    url: '@Url.Action("CheckAnswer")',
+                    type: 'GET',
+                    data: { answer: getAnswer() },
+                    success: (res) => {
+                        document.querySelector(".trainingArea").innerHTML = res;                        
+                    }
+                });
+            }        
+        });
+
+        function getAnswer() {
+            var answer = '';
+
+            document.querySelectorAll('.answerArea button.letter').forEach(el => {
+                answer += el.innerText;
+            });
+
+            return answer;
+        }
+
+        $(document).on("click", '.answerArea button.letter', function (evt) {
+            document.querySelector(".questionArea").appendChild(this);
+        });
+
+        function allLettersIsCollect() {
+            return document.querySelector(".questionArea").children.length === 0;            
+        }
+
+        $(document).on("click", '.questionArea button.nextAnswerBtn', function (evt) {
+            $.ajax({
+                    url: this.dataset.requestUrl,
+                    type: 'GET',
+                    success: (res) => {
+                        document.querySelector(".trainingArea").innerHTML = res;                        
+                    }
+                });
+            document.querySelector(".questionArea").appendChild(this);
+        });
+
+    </script> 
+}

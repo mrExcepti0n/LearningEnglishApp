@@ -33,13 +33,21 @@ namespace LearningEnglishWeb.Infrastructure
                 new ChooseTranslateAnswer { Translation = "Ручка", IsRight = true},
                 new ChooseTranslateAnswer { Translation = "Карандаш", IsRight = false},
             } }
-
         });
 
+
+        private static CollectWordTraining _collectWordTraining = new CollectWordTraining(new List<TranslateWordQuestion> {
+            new TranslateWordQuestion {Number = 1, Word = "xof", RightTranslation = "fox"},
+            new TranslateWordQuestion {Number = 2, Word = "gdo", RightTranslation = "dog"},
+            new TranslateWordQuestion { Number = 3,Word = "atc", RightTranslation = "cat"}
+        });
 
         public static TranslateWordTraining GetTranslateTraining() => _translateTraining;
 
 
         public static ChooseTranslateTraining GetChooseTranlsateTraining() => _chooseTranslateTraining;
+
+
+        public static CollectWordTraining GetCollectWordTraining() => _collectWordTraining;
     }
 }

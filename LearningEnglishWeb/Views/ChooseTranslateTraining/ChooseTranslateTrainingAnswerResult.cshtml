@@ -12,7 +12,8 @@
     <div class="col-8">
         @foreach (var trans in Model.Translations)
         {
-            <button class="answerBtn @(@trans.IsRight ? "rightAnswer" : trans.UserSelect ? "wrongAnswer" : "")  " disabled> @trans.Translation</button>
+            <button class="answerBtn @(@trans.IsRight ? (Model.Translations.Any(tr => tr.UserSelect) ?
+                "rightAnswer" : "wrongAnswer") : trans.UserSelect ? "wrongAnswer" : "")  " disabled> @trans.Translation</button>
         }
         <button class="nextAnswerBtn" data-request-url="@Url.Action("GetNextQuestion")">Следующее слово </button>
     </div>
