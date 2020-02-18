@@ -12,5 +12,11 @@ namespace LearningEnglishWeb.Services
         void AddWord(string name, string translation);
 
         void RemoveWord(string name, string translation);
+
+
+        List<Word> GetRequiringStudyWords();
+
+
+        void LoadDictionary(byte[] array);
     }
 }

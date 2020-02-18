@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace LearningEnglishWeb.Controllers
 {
-    [Authorize]
+   
     public class VocabularyController : Controller
     {
         public VocabularyController(IVocabularyService vocabularyService)

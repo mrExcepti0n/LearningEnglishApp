@@ -18,5 +18,7 @@ namespace VocabularyApi.Models
         public byte[] AudioRecord { get; set; }
 
         public LanguageEnum Language { get; set; }
+
+        public ICollection<WordTranslation> WordTranslations { get; set; }
     }
 }

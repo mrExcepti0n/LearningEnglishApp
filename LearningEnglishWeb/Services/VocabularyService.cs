@@ -34,10 +34,23 @@ namespace LearningEnglishWeb.Services
         }
 
 
+        public List<Word> GetRequiringStudyWords()
+        {
+            var words = _vocubalryController.GetRequiringStudyWords(10).Value;
+            return words.Select(w => new Word { Name = w.Name, Translation = w.Translation }).ToList();
+        }
+
+
    
         public void RemoveWord(string name, string translation)
         {
             _vocubalryController.Delete(name, translation);
+        }
+
+
+        public void LoadDictionary(byte[] array)
+        {
+            _vocubalryController.LoadDictionary(array);
         }
 
         private int userId => 0;

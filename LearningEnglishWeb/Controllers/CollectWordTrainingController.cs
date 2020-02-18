@@ -8,10 +8,20 @@ namespace LearningEnglishWeb.Controllers
 {
     public class CollectWordTrainingController : Controller
     {
-        CollectWordTraining _training = TrainingFactory.GetCollectWordTraining();
+
+        TrainingFactoryV2 _trainingFactory;
+        public CollectWordTrainingController(TrainingFactoryV2 trainingFactory)
+        {
+            _trainingFactory = trainingFactory;
+        }
+
+
+        static CollectWordTraining  _training;
 
         public IActionResult Index()
         {
+            _training = _trainingFactory.GetCollectWordTraining();
+
             var question = _training.GetNextQuestion();
             return View(model: question.Word);
         }
@@ -38,7 +48,9 @@ namespace LearningEnglishWeb.Controllers
                 TotalQuestions = _training.QuestionsCount
             };
 
-            _training.Reset();
+            
+
+            //_training.Reset();
             return PartialView("../Training/TrainingSummarizing", summary);
         }
     }

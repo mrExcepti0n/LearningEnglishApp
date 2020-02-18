@@ -36,11 +36,11 @@ namespace LearningEnglishWeb.Infrastructure
         });
 
 
-        private static CollectWordTraining _collectWordTraining = new CollectWordTraining(new List<TranslateWordQuestion> {
+       /* private static CollectWordTraining _collectWordTraining = new CollectWordTraining(new List<TranslateWordQuestion> {
             new TranslateWordQuestion {Number = 1, Word = "xof", RightTranslation = "fox"},
             new TranslateWordQuestion {Number = 2, Word = "gdo", RightTranslation = "dog"},
             new TranslateWordQuestion { Number = 3,Word = "atc", RightTranslation = "cat"}
-        });
+        });*/
 
         public static TranslateWordTraining GetTranslateTraining() => _translateTraining;
 
@@ -48,6 +48,6 @@ namespace LearningEnglishWeb.Infrastructure
         public static ChooseTranslateTraining GetChooseTranlsateTraining() => _chooseTranslateTraining;
 
 
-        public static CollectWordTraining GetCollectWordTraining() => _collectWordTraining;
+       // public static CollectWordTraining GetCollectWordTraining() => _collectWordTraining;
     }
 }

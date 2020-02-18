@@ -14,5 +14,11 @@ namespace VocabularyApi.Models
         public string Word { get; set; }
 
         public string Translation { get; set; }
+
+
+        public int GetKnowledgeRatio()
+        {
+            return 100;
+        }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Data;
+using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -46,9 +47,9 @@ namespace LearningEnglishWeb
                                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
             );
 
-
             services.AddScoped<IVocabularyService, VocabularyService>();
             services.AddScoped<VocubalryController>();
+            services.AddScoped<TrainingFactoryV2>();
 
 
             services.AddDefaultIdentity<IdentityUser>()

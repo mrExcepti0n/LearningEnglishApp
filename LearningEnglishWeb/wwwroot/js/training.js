@@ -53,3 +53,35 @@
         });
     }
 })();
+
+
+class training {
+    constructor(questions) {
+        this.questions = questions;        
+        this.currentQuestion = this.questions[0];
+    }
+
+    checkAnswer(userAnswer) {
+        this.currentQuestion.checkAnswer(userAnswer);
+
+        var currentQuestionIndex = this.questions.indexOf(this.currentQuestion);
+
+        if (this.questions.length - 1 > currentQuestionIndex) {
+            this.currentQuestion = this.questions[currentQuestionIndex + 1];
+        }       
+    }   
+}
+
+class question {
+    constructor(title, answers, rightAnswer) {
+        this.title = title;
+        this.answers = answers;
+        this.rightAnswer = rightAnswer;
+        this.userAnswer = '';
+    }    
+
+    checkAnswer(userAnswer) {
+        this.userAnswer = userAnswer;
+        return userAnswer === this.rightAnswer;
+    }
+}
