@@ -1,10 +1,14 @@
-﻿@model string
+﻿@model CollectWordQuestion
 
+
+<h4 class="text-center">
+    @Model.Word
+</h4>
 <div class="answerArea col"> </div>
 <div class="questionArea">
-    @foreach (char letter in Model)
+    @foreach (char letter in Model.AnswerLetters)
     {
-        <button class="letter"> @letter </button>
+        <button class="letter btn text-center btn-info m-1 text-white"> @letter </button>
     }
 
 </div>      

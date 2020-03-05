@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Models;
 using LearningEnglishWeb.ViewModels.Training;
@@ -18,12 +19,12 @@ namespace LearningEnglishWeb.Controllers
 
         static CollectWordTraining  _training;
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            _training = _trainingFactory.GetCollectWordTraining();
+            _training =  await _trainingFactory.GetCollectWordTraining();
 
-            var question = _training.GetNextQuestion();
-            return View(model: question.Word);
+            CollectWordQuestion question = _training.GetNextQuestion();
+            return View(model: question);
         }
 
         public IActionResult CheckAnswer(string answer)
@@ -39,7 +40,7 @@ namespace LearningEnglishWeb.Controllers
             var question = _training.GetNextQuestion();
             if (question != null)
             {
-                return PartialView("CollectWordTrainingQuestion", question.Word);
+                return PartialView("CollectWordTrainingQuestion", question);
             }
 
             var summary = new TrainingSummarizingModel

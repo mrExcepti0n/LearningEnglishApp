@@ -3,15 +3,19 @@
     ViewData["Title"] = "CollectWordTrainingAnswerResult";
 }
 
+<h4 class="text-center">
+    @Model.RigtAnswer
+</h4>
+
 <div class="answerArea">
 
   @foreach (var letter in Model.CollectWordAnswerResults)
   {
-       <button class="letter @(@letter.IsRight ? "rightAnswer" : "wrongAnswer") " disabled> @letter.Letter </button>
+       <button class="letter m-1 btn @(@letter.IsRight ? "btn-success" : "btn-danger") " disabled> @letter.Letter </button>
   }
 
 </div>
 <div class="questionArea">
-    <button class="nextAnswerBtn" data-request-url="@Url.Action("GetNextQuestion")"> Следующий вопрос </button>
+    <button class="nextAnswerBtn btn btn-primary text-center" data-request-url="@Url.Action("GetNextQuestion")"> Следующий вопрос </button>
 </div>
 

@@ -1,4 +1,5 @@
-﻿using LearningEnglishWeb.ViewModels.Training;
+﻿using LearningEnglishWeb.Services;
+using LearningEnglishWeb.ViewModels.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class CollectWordTraining : TrainingBase<TranslateWordQuestion>
+    public class CollectWordTraining : TrainingBase<CollectWordQuestion>
     {
-        public CollectWordTraining(IEnumerable<TranslateWordQuestion> questions) : base(questions)
+        public CollectWordTraining(IWordImageService wordImageService, IEnumerable<CollectWordQuestion> questions, bool isReverse = false) : base(wordImageService, questions, isReverse)
         {
         }
 
@@ -20,13 +21,13 @@ namespace LearningEnglishWeb.Models
             for (int i=0; i< answer.Length; i++)
             {
                 var ch = answer[i];
-                collectWordAnswerResults.Add(new CollectWordAnswerResult { Letter = ch, IsRight = ch == question.RightTranslation[i] });
+                collectWordAnswerResults.Add(new CollectWordAnswerResult { Letter = ch, IsRight = ch == question.RightAnswer[i] });
             }
 
             var questionResult = new CollectWordQuestionResult
             {
                 CollectWordAnswerResults = collectWordAnswerResults,
-                RigtAnswer = question.RightTranslation
+                RigtAnswer = question.RightAnswer
             };
 
             if (questionResult.IsCorrectAnswer)

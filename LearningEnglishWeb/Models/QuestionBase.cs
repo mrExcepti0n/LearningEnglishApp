@@ -5,10 +5,13 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models
 {
-    public class QuestionBase
+    public abstract class QuestionBase
     {
         public int Number { get; set; }
 
         public string Word { get; set; }
+
+
+        public abstract string Translation { get; }
     }
 }

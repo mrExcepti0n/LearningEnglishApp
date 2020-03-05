@@ -1,4 +1,6 @@
-﻿namespace VocabularyApi.Models
+﻿using Data.Core;
+
+namespace VocabularyApi.Models
 {
     public class WordTranslation
     {

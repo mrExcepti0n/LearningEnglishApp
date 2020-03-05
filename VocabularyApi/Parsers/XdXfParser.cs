@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
@@ -12,19 +14,11 @@ namespace VocabularyApi.Parsers
         public XdXfParser()
         {
         }
+    
 
-        public Dictionary<string, List<string>> Parse(byte[] file)
+        public async Task<Dictionary<string, List<string>>> Parse(Stream stream)
         {
-            using (var memoryStream = new MemoryStream(file))
-            {
-                return Parse(memoryStream);
-            }
-        }
-
-
-        public Dictionary<string, List<string>> Parse(Stream stream)
-        {
-            var xmlDocument = XDocument.Load(stream);
+            var xmlDocument = await XDocument.LoadAsync(stream, LoadOptions.PreserveWhitespace, CancellationToken.None);
 
             var result = new Dictionary<string, List<string>>();
 
@@ -42,11 +36,14 @@ namespace VocabularyApi.Parsers
                     continue;
                 }
 
-                var englishWord = word.Element("k").Value;
+                var englishWord = word.Element("k").Value.ToLower();
                 var russianWord = word.LastNode.ToString().Trim('\n', '\r', ' ');
 
+                var match = Regex.Match(russianWord, "(?<=\")(.*)(?=\")");
+                russianWord = match.Value.ToLower();
+
                 if (!result.ContainsKey(englishWord)) {
-                    result.Add(englishWord, new List<string> { russianWord });
+                    result.Add(englishWord, new List<string> {});
                 }
 
                 result[englishWord].Add(russianWord);        

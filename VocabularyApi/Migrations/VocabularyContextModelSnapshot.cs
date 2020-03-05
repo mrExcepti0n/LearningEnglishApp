@@ -44,17 +44,72 @@ namespace VocabularyApi.Migrations
 
                     b.Property<byte[]>("AudioRecord");
 
-                    b.Property<byte[]>("Image");
-
                     b.Property<int>("Language");
+
+                    b.Property<int?>("ThumbnailId");
 
                     b.Property<string>("Trasncription");
 
                     b.Property<string>("Word");
 
+                    b.Property<int?>("WordImageId");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("ThumbnailId");
+
+                    b.HasIndex("WordImageId");
+
                     b.ToTable("VocabularyWords");
+                });
+
+            modelBuilder.Entity("VocabularyApi.Models.WordImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Image");
+
+                    b.Property<bool>("IsThumbnail");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WordImage");
+                });
+
+            modelBuilder.Entity("VocabularyApi.Models.WordSet", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<byte[]>("Image");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WordSets");
+                });
+
+            modelBuilder.Entity("VocabularyApi.Models.WordSetItem", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Translation");
+
+                    b.Property<string>("Word");
+
+                    b.Property<int>("WordSetId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WordSetId");
+
+                    b.ToTable("WordSetItem");
                 });
 
             modelBuilder.Entity("VocabularyApi.Models.WordTranslation", b =>
@@ -76,10 +131,29 @@ namespace VocabularyApi.Migrations
                     b.ToTable("WordTranslations");
                 });
 
+            modelBuilder.Entity("VocabularyApi.Models.VocabularyWord", b =>
+                {
+                    b.HasOne("VocabularyApi.Models.WordImage", "Thumbnail")
+                        .WithMany()
+                        .HasForeignKey("ThumbnailId");
+
+                    b.HasOne("VocabularyApi.Models.WordImage", "Image")
+                        .WithMany()
+                        .HasForeignKey("WordImageId");
+                });
+
+            modelBuilder.Entity("VocabularyApi.Models.WordSetItem", b =>
+                {
+                    b.HasOne("VocabularyApi.Models.WordSet", "WordSet")
+                        .WithMany("WordSetItems")
+                        .HasForeignKey("WordSetId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("VocabularyApi.Models.WordTranslation", b =>
                 {
                     b.HasOne("VocabularyApi.Models.VocabularyWord", "Word")
-                        .WithMany()
+                        .WithMany("WordTranslations")
                         .HasForeignKey("WordId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

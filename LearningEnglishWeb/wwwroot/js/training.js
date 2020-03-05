@@ -12,10 +12,15 @@
         if (this.value.length > 0) {
             if (button.classList.contains(dontKnowBtnClassName)) {
                 button.classList.remove(dontKnowBtnClassName);
+                button.classList.remove('btn-warning');
+                button.classList.add('btn-primary');
                 button.innerText = "Проверить";
             }
         } else if (!button.classList.contains(dontKnowBtnClassName)) {
             button.classList.add(dontKnowBtnClassName);
+
+            button.classList.remove('btn-primary');
+            button.classList.add('btn-warning');
             button.innerText = "Не знаю";
         }
     });

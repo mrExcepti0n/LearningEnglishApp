@@ -1,8 +1,8 @@
-﻿@model  string
+﻿@model  CollectWordQuestion
 @{
     ViewData["Title"] = "Index";
 }
-    <div class="trainingArea">
+    <div class="trainingArea shadow-lg p-5 mb-5 bg-white rounded">
         @await Html.PartialAsync("CollectWordTrainingQuestion", @Model)        
     </div>
 
@@ -12,11 +12,13 @@
     <script>
          $(document).on("click", '.newGameBtn', _ => {
             document.location.reload();
-        });
+         });
+
         $(document).on("click", '.questionArea button.letter', function (evt) {
+            this.classList.add('btn-warning');
+            this.classList.remove('btn-info');
             document.querySelector(".answerArea").appendChild(this);
             if (allLettersIsCollect()) {
-
                 $.ajax({
                     url: '@Url.Action("CheckAnswer")',
                     type: 'GET',
@@ -39,6 +41,8 @@
         }
 
         $(document).on("click", '.answerArea button.letter', function (evt) {
+            this.classList.add('btn-info');
+            this.classList.remove('btn-warning');
             document.querySelector(".questionArea").appendChild(this);
         });
 

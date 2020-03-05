@@ -1,22 +1,23 @@
 ﻿using LearningEnglishWeb.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Services
 {
     public interface IVocabularyService
     {
-        List<Word> GetWords(string mask = null);
+        Task<List<Word>> GetWords(string mask = null);
 
-        List<string> GetTranslations(string word);
+        Task<List<string>> GetTranslations(string word);
 
-        void AddWord(string name, string translation);
+        Task AddWord(string name, string translation);
 
-        void RemoveWord(string name, string translation);
-
-
-        List<Word> GetRequiringStudyWords();
+        Task RemoveWord(string name, string translation);
 
 
-        void LoadDictionary(byte[] array);
+        Task<List<Word>> GetRequiringStudyWords();
+
+
+        Task LoadDictionary(byte[] array);
     }
 }

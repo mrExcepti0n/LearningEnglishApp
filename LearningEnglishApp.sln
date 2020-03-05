@@ -5,7 +5,15 @@ VisualStudioVersion = 16.0.29215.179
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LearningEnglishWeb", "LearningEnglishWeb\LearningEnglishWeb.csproj", "{0F5EAE22-BF87-4C41-9365-06F0C1188703}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyApi", "VocabularyApi\VocabularyApi.csproj", "{FE5A8C81-A7FC-47FB-96C5-A38BABCB818F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VocabularyApi", "VocabularyApi\VocabularyApi.csproj", "{FE5A8C81-A7FC-47FB-96C5-A38BABCB818F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechApi", "SpeachApi\SpeechApi.csproj", "{5EF5306F-C509-4681-926E-3A24ABFDC89A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data.Core", "Data.Core\Data.Core.csproj", "{04AB29E6-F3D7-4898-A6A7-7DDF9DDA782D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{8391949A-B6C0-473A-A463-5FFBD0DE730E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechApi.UnitTests", "SpeechApi.UnitTests\SpeechApi.UnitTests.csproj", "{8A883F90-3643-4D30-8934-C40E000C86EE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,9 +29,24 @@ Global
 		{FE5A8C81-A7FC-47FB-96C5-A38BABCB818F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE5A8C81-A7FC-47FB-96C5-A38BABCB818F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE5A8C81-A7FC-47FB-96C5-A38BABCB818F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EF5306F-C509-4681-926E-3A24ABFDC89A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EF5306F-C509-4681-926E-3A24ABFDC89A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EF5306F-C509-4681-926E-3A24ABFDC89A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EF5306F-C509-4681-926E-3A24ABFDC89A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{04AB29E6-F3D7-4898-A6A7-7DDF9DDA782D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{04AB29E6-F3D7-4898-A6A7-7DDF9DDA782D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{04AB29E6-F3D7-4898-A6A7-7DDF9DDA782D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{04AB29E6-F3D7-4898-A6A7-7DDF9DDA782D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A883F90-3643-4D30-8934-C40E000C86EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A883F90-3643-4D30-8934-C40E000C86EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A883F90-3643-4D30-8934-C40E000C86EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A883F90-3643-4D30-8934-C40E000C86EE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8A883F90-3643-4D30-8934-C40E000C86EE} = {8391949A-B6C0-473A-A463-5FFBD0DE730E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {680B9730-E225-4B3E-8896-E347C792359D}

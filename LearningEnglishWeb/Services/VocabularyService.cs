@@ -1,59 +1,79 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Models;
-using VocabularyApi.Controllers;
+using LearningEnglishWeb.Services.Dtos;
+using LearningEnglishWeb.Services.Helpers;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace LearningEnglishWeb.Services
 {
     public class VocabularyService : IVocabularyService
     {
+        private readonly HttpClient _httpClient;
+        private readonly string _baseUrl;
 
-        private VocubalryController _vocubalryController;
-
-        public VocabularyService(VocubalryController vocubalryController)
+        public VocabularyService(HttpClient httpClient, IConfiguration configuration)
         {
-            _vocubalryController = vocubalryController;
-        }        
+            _httpClient = httpClient;
+            _baseUrl = configuration.GetSection("VocabularyUrl").Value;
+        }
+             
 
-        public List<Word> GetWords(string mask = null)
+        public async Task<List<Word>> GetWords(string mask = null)
         {
-            var words = _vocubalryController.Get(mask).Value;
-            return words.Select(w => new Word { Name = w.Name, Translation = w.Translation }).ToList();  
+            var requestUrl = Api.Vocabulary.GetWords(_baseUrl, mask);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<List<Word>>(stringResult);  
         }
 
-        public List<string> GetTranslations(string word)
+        public async Task<List<string>> GetTranslations(string word)
         {
-            return _vocubalryController.GetTranslations(word).Value;       
+            var requestUrl = Api.Vocabulary.GetTranslation(_baseUrl, word);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<List<string>>(stringResult);
         }
 
-        public void AddWord(string name, string translation)
+        public async Task AddWord(string name, string translation)
         {
-            _vocubalryController.Post(name, translation);
-        }
+            var requestUrl = Api.Vocabulary.AddWord(_baseUrl);
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(new TranslationDto { Name = name, Translation = translation }), Encoding.UTF8, "application/json");
 
-
-        public List<Word> GetRequiringStudyWords()
-        {
-            var words = _vocubalryController.GetRequiringStudyWords(10).Value;
-            return words.Select(w => new Word { Name = w.Name, Translation = w.Translation }).ToList();
-        }
-
-
-   
-        public void RemoveWord(string name, string translation)
-        {
-            _vocubalryController.Delete(name, translation);
+            var result = await _httpClient.PostAsync(requestUrl, content);
+            result.EnsureSuccessStatusCode();
         }
 
 
-        public void LoadDictionary(byte[] array)
+        public async Task RemoveWord(string name, string translation)
         {
-            _vocubalryController.LoadDictionary(array);
+            var requestUrl = Api.Vocabulary.RemoveWord(_baseUrl, name, translation);
+            var result = await _httpClient.DeleteAsync(requestUrl);
+            result.EnsureSuccessStatusCode();
         }
 
-        private int userId => 0;
 
+        public async Task LoadDictionary(byte[] array)
+        {
+            var requestUrl = Api.Vocabulary.LoadDictionary(_baseUrl);
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(new MemoryStream(array)), "fromFile", "vocabulary.xdxf");
+            var result = await _httpClient.PostAsync(requestUrl, content);
+            result.EnsureSuccessStatusCode();          
+        }
+
+
+
+        public async Task<List<Word>> GetRequiringStudyWords()
+        {
+            var requestUrl = Api.Vocabulary.GetRequiringStudyWords(_baseUrl);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<List<Word>>(stringResult);
+        }
     }
 }

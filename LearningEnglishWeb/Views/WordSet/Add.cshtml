@@ -1,0 +1,118 @@
+﻿@model WordSetAddModel
+
+
+@{
+    ViewData["Title"] = "Add";
+}
+
+<h4>
+    Добавление набора слов
+</h4>
+
+<form asp-action="Add" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label class="control-label">Наименование</label>
+        <input type="text" class="form-control" asp-for="Title" />
+    </div>
+
+    <div class="form-group">
+
+        <label>Фотокарточка </label>
+
+        <img class="m-2" style="width:80px; height:60px;" src="" id="ImgPreview" />
+        <div class="custom-file" id="customFile" lang="ru">
+            <input type="file" class="custom-file-input" id="photoInput" aria-describedby="photoInput" lang="ru" asp-for="Image">
+            <label class="custom-file-label" for="photoInput">
+                Выберете файл...
+            </label>
+        </div>
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Слово
+                </th>
+                <th>
+                    Перевод
+                </th>
+            </tr>
+        </thead>
+        <tbody class="WordSetItemsArea">
+        </tbody>
+    </table>
+    <button class="AddWordBtn btn btn-info"> Добавить слово</button>
+
+    <button type="submit" class="btn btn-success  float-right">Сохранить</button>
+</form>
+
+
+
+
+<template id="WordSetItemRow">
+    <tr>
+        <td>
+            <input type="text" class="form-control" />
+        </td>
+        <td>
+            <input type="text" class="form-control" />
+        </td>
+    </tr>
+</template>
+
+
+
+@section Scripts {
+    <script>
+
+        (function () {
+
+            document.querySelector('.custom-file-input').addEventListener('change', function (e) {
+                let fileName = this.files[0].name;
+                let nextSibling = e.target.nextElementSibling;
+                nextSibling.innerText = fileName;
+                showPreivew(this);
+            });
+
+            function showPreivew(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#ImgPreview').attr('src', e.target.result);
+
+                        $('#ImgPreview').hidden = false;
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            let addBtn = document.querySelector('.AddWordBtn');
+            let wordsArea = document.querySelector('.WordSetItemsArea');
+
+            let template = document.querySelector('#WordSetItemRow');
+            let templateInputs = template.content.querySelectorAll('input');
+
+
+            addBtn.addEventListener('click', addNewWordSetItem);
+
+
+            function addNewWordSetItem(event) {
+                event.preventDefault();
+
+                let currentIndex = getNextWordSetItemIndex();
+
+                templateInputs[0].name = `items[${currentIndex}].Word`;
+                templateInputs[1].name = `items[${currentIndex}].Translation`;
+
+                let cloneRow = document.importNode(template.content, true);
+                wordsArea.append(cloneRow);
+            }
+
+
+            function getNextWordSetItemIndex() {
+                return wordsArea.querySelectorAll('tr').length;
+            }
+        })()
+    </script>
+}

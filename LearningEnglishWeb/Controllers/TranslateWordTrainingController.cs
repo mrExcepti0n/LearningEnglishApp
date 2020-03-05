@@ -12,13 +12,21 @@ namespace LearningEnglishWeb.Controllers
 {
     public class TranslateWordTrainingController : Controller
     {
-        TranslateWordTraining _training = TrainingFactory.GetTranslateTraining();
+        static TranslateWordTraining _training;
 
 
 
-
-        public IActionResult Index()
+        TrainingFactoryV2 _trainingFactory;
+        public TranslateWordTrainingController(TrainingFactoryV2 trainingFactory)
         {
+            _trainingFactory = trainingFactory;
+        }
+
+
+
+        public async Task<IActionResult> Index()
+        {
+            _training = await _trainingFactory.GetTranslateTraining();
             var question = _training.GetNextQuestion();
             var questionModel = new TranslateWordQuestionModel(_training.Id, question);
             return View(questionModel);
@@ -39,7 +47,6 @@ namespace LearningEnglishWeb.Controllers
                 TotalQuestions = _training.QuestionsCount
             };
 
-            _training.Reset();
             return PartialView("../Training/TrainingSummarizing", summary);
         }
 

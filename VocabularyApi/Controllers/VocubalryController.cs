@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VocabularyApi.Dtos;
 using VocabularyApi.Infrastructure.DataAccess;
@@ -17,7 +20,7 @@ namespace VocabularyApi.Controllers
     {
         private VocabularyContext _vocabularyContext;
 
- 
+
 
         public VocubalryController(VocabularyContext vocabularyContext)
         {
@@ -28,7 +31,11 @@ namespace VocabularyApi.Controllers
 
         private string userId => "464128bc-6ff0-4434-af91-c6c7c223c2c0";
         // User.FindFirstValue(ClaimTypes.NameIdentifier);
-      
+        [HttpGet("Test")]
+        public string Test()
+        {
+            return "dfsfsdfg";
+        }
 
         [HttpGet]
         public ActionResult<List<TranslationDto>> Get([FromQuery] string mask = null)
@@ -46,7 +53,7 @@ namespace VocabularyApi.Controllers
 
 
         [HttpGet("RequiringStudyWords")]
-        public ActionResult<List<TranslationDto>> GetRequiringStudyWords(int count)
+        public ActionResult<List<TranslationDto>> GetRequiringStudyWords(int count = 10)
         {
             var userWords = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId).ToList();
 
@@ -59,7 +66,7 @@ namespace VocabularyApi.Controllers
 
 
 
-        [HttpGet]
+        [HttpGet("{word}/translations")]
         public ActionResult<List<string>> GetTranslations(string word)
         {
             var translations = _vocabularyContext.Set<WordTranslation>().Where(wt => wt.Word.Word == word).ToList();
@@ -67,9 +74,9 @@ namespace VocabularyApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromQuery] string word, [FromQuery] string translation)
+        public ActionResult Post(TranslationDto translation)
         {
-            _vocabularyContext.Add<UserVocabulary>(new UserVocabulary { Translation = translation, Word = word, UserId = userId });
+            _vocabularyContext.Add<UserVocabulary>(new UserVocabulary { Translation = translation.Translation, Word = translation.Name, UserId = userId });
             _vocabularyContext.SaveChanges();
 
             return Ok();
@@ -77,15 +84,16 @@ namespace VocabularyApi.Controllers
 
 
         [HttpPost("Load")]
-        public ActionResult LoadDictionary(byte[] file)
+        public async Task<ActionResult> LoadDictionary(IFormFile fromFile)
         {
-            new VocabularyLoader(_vocabularyContext).Load(file);
+            var loader = new VocabularyLoader(_vocabularyContext);
+            await loader.LoadAsync(fromFile.OpenReadStream());
             return Ok();
         }
 
 
 
-        [HttpDelete]
+        [HttpDelete("{name}/{translation}")]
         public ActionResult Delete(string name, string translation)
         {
             var word = _vocabularyContext.Set<UserVocabulary>().FirstOrDefault(uv => uv.UserId == userId && uv.Word == name && uv.Translation == translation);

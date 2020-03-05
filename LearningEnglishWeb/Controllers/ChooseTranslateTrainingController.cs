@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Core;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Services;
 using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,23 +14,32 @@ namespace LearningEnglishWeb.Controllers
     public class ChooseTranslateTrainingController : Controller
     {
 
-        ChooseTranslateTraining _training = TrainingFactory.GetChooseTranlsateTraining();
+        static ChooseTranslateTraining _training;
+        private TrainingFactoryV2 _trainingFactory;
 
-
-        public IActionResult Index()
+        public ChooseTranslateTrainingController(TrainingFactoryV2 trainingFactory)
         {
-            _training.Reset();
+            _trainingFactory = trainingFactory;
+        }
+
+        public async Task<IActionResult> Index(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        {
+            _training = await _trainingFactory.GetChooseTranslateTraining(isReverseWay, fromLanguage, toLanguage);
             var question = _training.GetNextQuestion();
-            var questionModel = new ChooseTranslateQuestionModel(_training.Id, question);
+            var image = await _training.GetCurrentWordImageSrc();
+
+            var questionModel = new ChooseTranslateQuestionModel(_training, question, image);
             return View(questionModel);
         }
 
-        public IActionResult GetNextQuestion()
+        public async Task<IActionResult> GetNextQuestion()
         {
             var question = _training.GetNextQuestion();
+            var image = await _training.GetCurrentWordImageSrc();
+
             if (question != null)
             {
-                var questionModel = new ChooseTranslateQuestionModel(_training.Id, question);
+                var questionModel = new ChooseTranslateQuestionModel(_training, question, image);
                 return PartialView("ChooseTranslateTrainingQuestion", questionModel);
             }
 
@@ -38,7 +49,7 @@ namespace LearningEnglishWeb.Controllers
                 TotalQuestions = _training.QuestionsCount
             };
 
-            _training.Reset();
+            //_training.Reset();
             return PartialView("../Training/TrainingSummarizing", summary);
         }
 
@@ -56,5 +67,7 @@ namespace LearningEnglishWeb.Controllers
             var res = _training.CheckAnswer(null);
             return PartialView("ChooseTranslateTrainingAnswerResult", res);
         }
+
+      
     }
 }

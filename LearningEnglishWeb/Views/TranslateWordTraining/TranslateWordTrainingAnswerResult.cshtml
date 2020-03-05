@@ -2,6 +2,26 @@
 @model LearningEnglishWeb.ViewModels.Training.TranslateWordAnswerResult
 
 
-<p>@Model.Word</p>
+<div class="text-center">
+    <h4>@Model.Word</h4>
+</div>
 
-@Html.CreateTranslateWordTrainingAnswerResult(@Model, Url.Action("GetNextQuestion"))
+<div class="m-4 text-center">
+
+
+    @if (@Model.UserTranslation != @Model.RightTranslation)
+    {
+        <h5> <span  class="text-danger"> <s>@Model.UserTranslation </s></span> <span class="text-success">@Model.RightTranslation</span> </h5>
+    }
+    else
+    {
+        <h5 class="text-success"> @Model.UserTranslation </h5>
+    }
+</div>
+
+<div class="text-center">
+
+    <button data-request-url="@Url.Action("GetNextQuestion")" class="btn btn-primary w-50 nextAnswerBtn"> Следующий вопрос</button>
+</div>
+
+@*@Html.CreateTranslateWordTrainingAnswerResult(@Model, Url.Action("GetNextQuestion"))*@

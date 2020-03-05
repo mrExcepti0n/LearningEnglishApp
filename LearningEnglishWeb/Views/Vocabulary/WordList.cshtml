@@ -6,12 +6,14 @@
         <tr>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
+                
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Transcription)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Translation)
+              
             </th>
             <th></th>
         </tr>
@@ -20,15 +22,17 @@
 @foreach (var item in Model) {
         <tr>
             <td class="wordName">
-                @Html.DisplayFor(modelItem => item.Name)
+                <span>@item.Name</span>
+                <button class="audio btn p-0">  <i class="fas audio fa-play"></i> </button>
             </td>
             <td class="wordTranscription">
-                @Html.DisplayFor(modelItem => item.Transcription)
+               @item.Transcription
             </td>
             <td class="wordTranslation">
-                @Html.DisplayFor(modelItem => item.Translation)
+                <span>@item.Translation</span>
+                <button class="audio btn p-0 translation">  <i class="fas audio fa-play"></i> </button>
             </td>   
-            <td>
+            <td class="text-right">
                 <button class="btn btn-danger delete-button"> удалить </button>
             </td>
         </tr>

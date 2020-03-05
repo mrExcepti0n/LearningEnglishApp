@@ -1,7 +1,4 @@
-﻿.checkAnswerBtn {
-    background-color: aqua;
-}
-
+﻿
 .wrongAnswer {
     color: red;
 }
@@ -12,10 +9,6 @@
 
 
 .trainingArea {
-    margin-top: 50px;
-    border: 1px dashed gray;
-    border-radius: 5px;
-    padding: 15px;
     min-height: 200px;
 }
 
@@ -29,17 +22,17 @@
 .nextAnswerBtn {
     margin: 5px;
     display: block;
-    width: 50%;
+    width: 90%;
     text-align: left;
 }
 
 .letter {
-    display: inline-block;
+    /*display: inline-block;
     text-align: center;
     border: 1px solid black;
     width: 30px;
     height: 30px;
-    margin: 5px;
+    margin: 5px;*/
 }
 
 .questionArea {
@@ -52,12 +45,12 @@
 }
 
 .answerArea {
-    display: flex;
+    /*display: flex;
     align-items: center;
     justify-content: center;
     vertical-align: central;
     text-align: center;
-    min-height: 100px;
+    min-height: 100px;*/
 }
 
 

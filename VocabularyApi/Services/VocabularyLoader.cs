@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Data.Core;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using VocabularyApi.Infrastructure.DataAccess;
@@ -22,12 +24,13 @@ namespace VocabularyApi.Services
             _context = context;
         }
 
-        public void Load(byte[] file)
+
+        public async Task LoadAsync(Stream file)
         {
-            var parsedWords = _parser.Parse(file);
-            var allwords = _context.VocabularyWords.Where(vw => vw.Language == _fromLanguage)
+            var parsedWords = await _parser.Parse(file);
+            var allwords =  await _context.VocabularyWords.Where(vw => vw.Language == _fromLanguage)
                                                    .Include(vw => vw.WordTranslations)
-                                                   .ToDictionary(vw => vw.Word);
+                                                   .ToDictionaryAsync(vw => vw.Word);
 
             List<VocabularyWord> newWords = new List<VocabularyWord>();
 
@@ -58,10 +61,10 @@ namespace VocabularyApi.Services
 
             if (newWords.Any())
             {
-                _context.VocabularyWords.AddRange(newWords);
+                await _context.VocabularyWords.AddRangeAsync(newWords);
             }
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

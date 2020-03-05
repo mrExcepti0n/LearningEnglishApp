@@ -1,10 +1,11 @@
 ﻿@model LearningEnglishWeb.ViewModels.Training.TranslateWordQuestionModel
 
-
-
-<p> @Model.Word </p>
-<label>
-    Введите перевод
-    <input type="text" />
-</label>
-<button data-request-url="@Url.Action("CheckAnswer")" class="checkAnswerBtn dontKnowBtn">Не знаю</button>
+<div class="text-center">
+    <h4> @Model.Word </h4>
+</div>
+<div class="form-group  m-4">
+    <input type="text" class="form-control" placeholder="Ваш перевод" />
+</div>
+<div class="text-center ">
+    <button data-request-url="@Url.Action("CheckAnswer")" class="checkAnswerBtn dontKnowBtn btn btn-warning w-50 text-white  text-center">Не знаю</button>
+</div>

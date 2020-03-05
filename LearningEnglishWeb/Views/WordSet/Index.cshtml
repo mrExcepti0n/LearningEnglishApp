@@ -1,0 +1,30 @@
+﻿@model IEnumerable<WordSetShortModel>
+@{
+    ViewData["Title"] = "Index";
+}
+
+    <div class="text-right mb-5">
+        <a asp-action="Add" class="btn btn-info"> Добавить набор слов</a>
+    </div>
+
+    <div class="card-columns">
+        @foreach (var wordSet in Model)
+        {
+            <div class="card" >
+                <img src="@wordSet.ImageSrc" class="card-img-top" style="height: 12rem" />
+                <div class="card-body">
+                    <p class="card-title"> @wordSet.Title </p>
+                    <p class="card-text"> Количество слов - @wordSet.WordsCount </p>                    
+                </div>
+                <div class="card-footer text-right">
+                    <a asp-action="Index" asp-route-id="@wordSet.Id"> Изучить</a>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+
+
+

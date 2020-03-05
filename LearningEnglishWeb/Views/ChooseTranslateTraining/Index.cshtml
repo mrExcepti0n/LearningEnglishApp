@@ -1,7 +1,8 @@
 ﻿@model LearningEnglishWeb.ViewModels.Training.ChooseTranslateQuestionModel
 
 
-<div class="trainingArea container">
+<div class="trainingArea container shadow-lg p-5 mb-5 bg-white rounded" data-isreverse="@Model.IsReverse">
+   
     @await Html.PartialAsync("ChooseTranslateTrainingQuestion", Model)
 </div>
 
@@ -9,40 +10,94 @@
 @section Scripts {
     <script>
 
-        $(document).on("click", '.newGameBtn', _ => {
-            document.location.reload();
-        });
-        $(document).on('click', '.trainingArea button.answerBtn ', function () {
-            checkAnswer(this);
-        });
+        (function() {
 
+            let audio = new Audio();
+            let isReverse = document.querySelector('.trainingArea').dataset['isreverse'] == "True";
 
-        $(document).on('click', '.trainingArea button.nextAnswerBtn ', function () {
-            getNextAnswer(this);
-        });
+            let isBlur = false;
+            if (!isReverse) {
+                changeImageBlur();
+            }
 
+            console.log(isReverse);
 
-        function checkAnswer(button) {
-            $.ajax({
-                url: button.dataset.requestUrl,
-                type: 'GET',
-                data: { answer: button.innerText },
-                success: (res) => {
-                    document.querySelector(".trainingArea").innerHTML = res;
-                }
+            $(document).on("click", '.newGameBtn', _ => {
+                document.location.reload();
             });
-        }
-
-        function getNextAnswer(button) {
-            $.ajax({
-                url: button.dataset.requestUrl,
-                type: 'GET',
-                success: (res) => {
-                    document.querySelector(".trainingArea").innerHTML = res;
-                }
+            $(document).on('click', '.trainingArea button.answerBtn ', function () {
+                checkAnswer(this);
             });
 
 
-        }
+            $(document).on('click', '.trainingArea button.nextAnswerBtn ', function () {
+                getNextAnswer(this);
+            });
+
+            $(document).on('click', 'i.audio', function () {
+                playAudio(this);
+            });
+
+
+            function checkAnswer(button) {
+                $.ajax({
+                    url: button.dataset.requestUrl,
+                    type: 'GET',
+                    data: { answer: button.innerText },
+                    success: (res) => {
+                        if (!isReverse)
+                            changeImageBlur();                
+                        document.querySelector(".answerArea").innerHTML = res;
+                    }
+                });
+            }
+
+
+
+            function changeImageBlur() {
+                if (isBlur) {
+                    document.getElementById('wordImage').style.filter = 'blur(0px)';
+                    isBlur = false;
+                } else {
+                    document.getElementById('wordImage').style.filter = 'blur(8px)';
+                    isBlur = true;
+                }
+            }
+
+
+
+            function playAudio(button) {
+
+                if (button.nodeName == "I") {
+                    button = button.parentElement;
+                }
+
+                let lang = isReverse ? 2 : 1;
+
+                $.ajax({
+                    url: '@Url.Action("GetAudio", "Vocabulary")',
+                    type: 'GET',
+                    data: { word: button.previousElementSibling.innerText, language : lang  },
+                    success: function (res) {
+                        audio.src = '';
+                        audio.src = res;
+                        audio.play();
+                    }
+                })
+            }
+
+            function getNextAnswer(button) {
+                $.ajax({
+                    url: button.dataset.requestUrl,
+                    type: 'GET',
+                    success: (res) => {   
+                        
+                        document.querySelector(".trainingArea").innerHTML = res;
+                        if (!isReverse)
+                            changeImageBlur();  
+                    }
+                });
+            }
+        } )();
     </script>
 }

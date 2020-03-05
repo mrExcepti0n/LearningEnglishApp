@@ -8,22 +8,62 @@
 <div>
 
 
-    <input id="find-input" type="text" placeholder="Найти" />
-    <input class="add-word-button" type="button" value="add" />
+    <div class="form-group">
+        <input id="find-input" type="text" placeholder="Введите слово" class="form-control" />
+        <button class="btn btn-success float-right m-2 add-word-button" type="button"> добавить </button>
+    </div>
 
-    <div id="available-words">
+    <div id="available-words" class="w-50 m-2 text-center shadow-lg p-3 mb-5 bg-white rounded d-none">
     </div>
 
     <div id="partial">
         @await Html.PartialAsync("WordList")
     </div>
-
-
 </div>
+
+
+<template id="addOwnWordTemplate">
+    <div>
+        <input type="text" class="form-control" />
+        <button class="btn add-new-word btn-sm btn-warning text-white mt-1"> Добавить новое слово </button>
+    </div>
+</template>
 
 @section Scripts {
     <script>
-    (function () {
+        (function () {
+
+            let audio = new Audio();
+
+            let availableWordsArea = document.getElementById('available-words');
+
+            document.addEventListener('click', function (evt) {
+                let targetElement = evt.target;
+
+            if (targetElement.classList.contains('add-own-word-button')) {
+                addOwnWordButton(targetElement);
+                return;
+            }
+
+            if (targetElement.classList.contains('add-word-button')) {
+                loadTranslationList();
+                return;
+            }
+
+            if (targetElement.classList.contains('audio')) {
+                playAudio(targetElement);
+                return;
+            }
+
+            do {
+                if (targetElement == availableWordsArea) return;
+                targetElement = targetElement.parentNode;
+            } while (targetElement);
+
+            availableWordsArea.innerHTML = '';
+            availableWordsArea.classList.add('d-none');
+
+        });
 
         var input = document.querySelector("#find-input");
         input.addEventListener("input", function (event) {
@@ -32,40 +72,48 @@
         }, false);
 
 
-        let addButton = document.querySelector(".add-word-button");
+            function playAudio(button) {
+
+                if (button.nodeName == "I") {
+                    button = button.parentElement;
+                }
+
+                let lang = button.classList.contains('translation') ? 2 : 1;
+                $.ajax({
+                    url: '@Url.Action("GetAudio", "Vocabulary")',
+                    type: 'GET',
+                    data: { word: button.previousElementSibling.innerText, language: lang },
+                    success: function (res) {
+                      audio.src = '';
+                    audio.src = res;
+                    audio.play();
+                }
+            })
+        }
 
 
-        $(document).on('click', '.add-own-word-button', function () {
+        function addOwnWordButton(btn) {
+            var template = document.getElementById('addOwnWordTemplate').cloneNode(true);
+            console.log(btn);
+            console.log(btn.parentElement);
+            console.log(template.content);
+            btn.parentElement.replaceChild(template.content, btn);
+        }
 
-            var area = document.createElement("div");
 
-            var input = document.createElement("input");
-            input.setAttribute("type", "text");
 
-            var button = document.createElement("button");
 
-            button.innerText = "Добавить новое слово";
-            button.classList.add("add-new-word");
-
-            area.appendChild(input);
-            area.appendChild(button);
-
-            this.parentElement.replaceChild(area, this);          
-        });
-
-        
         $(document).on('click', '.add-new-word', function () {
 
-            var translation = this.previousSibling.value;
-
-             $.ajax({
+            var translation = this.previousElementSibling.value;
+            $.ajax({
                 url: '@Url.Action("AddOwnTranslation", "Vocabulary")',
                 type: 'POST',
                 data: { word: input.value, translation: translation },
                 success: function (res) {
-                     location.reload();  
+                     location.reload();
                 }
-            })                     
+            })
         });
 
 
@@ -76,7 +124,7 @@
                 type: 'POST',
                 data: { word: input.value, translation: this.innerText },
                 success: function (res) {
-                     location.reload();  
+                     location.reload();
                 }
             })
         });
@@ -91,13 +139,14 @@
                 type: 'POST',
                 data: { word: wordName, translation: wordTranslation },
                 success: function (res) {
-                     location.reload();  
+                     location.reload();
                 }
             })
         });
 
 
-        addButton.addEventListener('click', function () {
+        function loadTranslationList() {
+            availableWordsArea.classList.remove('d-none');
             $.ajax({
                 url: '@Url.Action("TranslationList", "Vocabulary")',
                 type: 'GET',
@@ -107,7 +156,8 @@
                     area.innerHTML = res;
                 }
             });
-        });
+        }
+
 
 
         function toogleButton(str) {
@@ -130,8 +180,11 @@
                 }
             });
 
-        }
+            }
+
+
+
 
     })();
- </script>
+    </script>
 }

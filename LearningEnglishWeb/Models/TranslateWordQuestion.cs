@@ -8,5 +8,6 @@ namespace LearningEnglishWeb.Models
     public class TranslateWordQuestion : QuestionBase
     {
         public string RightTranslation { get; set; }
+        public override string Translation => RightTranslation;
     }
 }

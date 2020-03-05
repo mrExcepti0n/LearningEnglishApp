@@ -15,8 +15,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using VocabularyApi.Controllers;
-using VocabularyApi.Infrastructure.DataAccess;
 
 namespace LearningEnglishWeb
 {
@@ -43,12 +41,16 @@ namespace LearningEnglishWeb
                                 options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"))
             );
 
-             services.AddDbContext<VocabularyContext>(options =>
-                                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-            );
 
-            services.AddScoped<IVocabularyService, VocabularyService>();
-            services.AddScoped<VocubalryController>();
+            services.AddHttpClient<IVocabularyService, VocabularyService>();
+            services.AddHttpClient<IWordSetService, WordSetService>();
+            services.AddHttpClient<IWordImageService, WordImageService>();
+
+
+            services.AddHttpClient<ISpeachService, SpeachService>();
+
+
+
             services.AddScoped<TrainingFactoryV2>();
 
 

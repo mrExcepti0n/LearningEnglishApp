@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VocabularyApi.Models
+namespace LearningEnglishWeb.Services.Dtos
 {
-    public enum LanguageEnum
+    public class FileDto
     {
-        English = 1,
-        Russian = 2
+        public byte[] Content { get; set; }
     }
 }

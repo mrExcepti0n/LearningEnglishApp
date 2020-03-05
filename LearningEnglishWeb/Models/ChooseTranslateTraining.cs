@@ -1,4 +1,5 @@
-﻿using LearningEnglishWeb.ViewModels.Training;
+﻿using LearningEnglishWeb.Services;
+using LearningEnglishWeb.ViewModels.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ namespace LearningEnglishWeb.Models
 {
     public class ChooseTranslateTraining : TrainingBase<ChooseTranslateQuestion>
     {
-        public ChooseTranslateTraining(IEnumerable<ChooseTranslateQuestion> questions) : base(questions)
+        public ChooseTranslateTraining(IWordImageService wordImageService, IEnumerable<ChooseTranslateQuestion> questions, bool isReverse = false) 
+            : base(wordImageService, questions, isReverse)
         {
         }
 
@@ -30,5 +32,6 @@ namespace LearningEnglishWeb.Models
 
             return questionResult;
         }
+      
     }
 }

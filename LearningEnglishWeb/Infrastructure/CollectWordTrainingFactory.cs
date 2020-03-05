@@ -1,43 +1,42 @@
-﻿using LearningEnglishWeb.Models;
+﻿using Data.Core;
+using LearningEnglishWeb.Models;
 using LearningEnglishWeb.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using VocabularyApi.Infrastructure.DataAccess;
 
 namespace LearningEnglishWeb.Infrastructure
 {
     public class CollectWordTrainingFactory : TrainingFactoryBase<CollectWordTraining>
     {
-        private IVocabularyService _service;
         private Random _randomGenerator;
 
-        public CollectWordTrainingFactory(IVocabularyService service)
+        public CollectWordTrainingFactory(IVocabularyService vocabularyService, IWordImageService wordImageService, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
+            : base(vocabularyService, wordImageService, fromLanguage, toLanguage, reverseWay)
         {
-            _service = service;
             _randomGenerator = new Random();
         }
 
-        public override CollectWordTraining GetTraining()
+        public override async Task<CollectWordTraining> GetTraining()
         {
-            var words = _service.GetRequiringStudyWords().ToArray();
+            Word[] words = (await _vocabularyService.GetRequiringStudyWords()).ToArray();
 
-            return new CollectWordTraining(GetQuestions(words));
+            return new CollectWordTraining(_wordImageService, GetQuestions(words));
         }  
 
 
-        private IEnumerable<TranslateWordQuestion> GetQuestions(Word[] words)
+        private IEnumerable<CollectWordQuestion> GetQuestions(Word[] words)
         {
             for (var i= 0; i< words.Length; i++)
             {
                 var word = words[i].Name.ToLower();
-                yield return new TranslateWordQuestion { Number = i + 1, RightTranslation = word, Word = ReshuffleLetters(word) };
+                yield return new CollectWordQuestion { Number = i + 1, RightAnswer = word, AnswerLetters = ReshuffleLetters(word),   Word = words[i].Translation };
             }
         }
 
 
-        private string ReshuffleLetters(string word)
+        private char[] ReshuffleLetters(string word)
         {
             var letters = word.ToArray();
 
@@ -49,7 +48,7 @@ namespace LearningEnglishWeb.Infrastructure
                 letters[i] = temp;
             }
 
-            return new string(letters);
+            return letters;
         }
 
 

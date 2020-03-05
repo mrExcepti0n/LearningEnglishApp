@@ -1,21 +1,24 @@
 ﻿@model LearningEnglishWeb.ViewModels.Training.ChooseTranslateQuestionModel
 
 
-<div class="row">
-    <p class="col">Вопрос @Model.QuestionNumber </p>
+<div class="row mb-2">
+    <h5 class="col text-center">Вопрос @Model.QuestionNumber </h5>
 </div>
 
 <div class="row">
     <div class="col-4">
-        <p> @Model.Word </p>
+        <h4> <span>@Model.Word</span> <button class="audio btn p-0">  <i class="fas audio fa-play"></i> </button></h4>
+        
+
+        <img  id="wordImage" src="@Model.ImageSrc" class="w-100 mt-4 pl-0 ml-0" style="filter: blur(0px)"/>
     </div>
-    <div class="col-8">
+    <div class="col-8 answerArea">        
         @foreach (var trans in Model.Translations)
         {
-            <button class="answerBtn" data-request-url="@Url.Action("CheckAnswer")"> @trans</button>
+            <button class="answerBtn btn btn-info" data-request-url="@Url.Action("CheckAnswer")"> @trans</button>
         }
 
-        <button class="answerBtn dontKnow"  data-request-url="@Url.Action("SkipQuestion")">Не знаю</button>
+        <button class="answerBtn dontKnow btn btn-danger"  data-request-url="@Url.Action("SkipQuestion")">Не знаю</button>
     </div>
 </div>
 

@@ -1,15 +1,21 @@
-﻿@model IEnumerable<string>
+﻿@model LearningEnglishWeb.ViewModels.TranslationListModel
 
-@foreach (var item in Model)
+@if (!@Model.Translations.Any())
 {
-    <p>
-        <a class="translation-word">@item </a>
-    </p>
-
+    <p>у нас таких слов нет, добавьте свой вариант </p>
 }
 
-<button class="add-own-word-button">
-    + Другой вариант
+
+
+<div></div>
+@foreach (var item in Model.Translations)
+{
+    <a class="translation-word">@item </a>
+    <br />
+}
+
+<button class="add-own-word-button btn btn-sm btn-secondary w-50 text-center">
+    другое
 </button>
 
 

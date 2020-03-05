@@ -30,8 +30,7 @@ namespace VocabularyApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<VocabularyContext>(options =>
-                            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
-        );
+                            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")) );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

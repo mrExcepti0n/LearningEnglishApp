@@ -1,0 +1,76 @@
+﻿@model WordSetModel
+@{
+    ViewData["Title"] = "WordSetItem";
+}
+
+
+<h4>
+    @Model.Title
+</h4>
+
+<div class="mb-4 mt-4">
+    <input type="checkbox" id="checkAll" /> 
+    <span> Выбрать все слова </span>
+    <button class="btn btn-sm btn-primary float-right"> Добавить</button>
+
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th>Слово</th>
+            <th>Перевод</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td style="width:5%"><input type="checkbox" data-id="@item.Id" /></td>
+                <td> @item.Word </td>
+                <td> @item.Translation</td>
+            </tr>
+        }
+    </tbody>
+
+
+
+</table>
+
+
+@section Scripts { 
+    
+    <script>
+        (function () {
+            let button = document.querySelector('.btn');
+            button.addEventListener('click', function () {
+
+                let inputs = document.querySelectorAll('table input:checked')
+                inputs = Array.from(inputs);
+                let selectedWords = inputs.map(el => el.dataset.id);
+
+                 $.ajax({
+                    url: '@Url.Action("AddWordsToVocabulary")',
+                    type: 'POST',
+                    data: { wodsSetItems: selectedWords },
+                    success: (res) => {
+                        console.log(res);                       
+                    }
+                });
+            });
+
+            document.querySelector('#checkAll').addEventListener('click', function () {
+                var inputs = document.querySelectorAll('tbody tr input');
+                for (let i = 0; i != inputs.length; i++) {
+                    inputs[i].checked = this.checked;
+                }
+            });
+
+
+
+
+
+        })()
+    </script>
+}
