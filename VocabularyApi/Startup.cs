@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -48,6 +50,27 @@ namespace VocabularyApi
 
             app.UseHttpsRedirection();
             app.UseMvc();
+        }
+
+
+        private void ConfigureAuthService(IServiceCollection services)
+        {
+            // prevent from mapping "sub" claim to nameidentifier.
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
+            var identityUrl = Configuration.GetValue<string>("IdentityUrl");
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = identityUrl;
+                options.RequireHttpsMetadata = false;
+                options.Audience = "basket";
+            });
         }
     }
 }

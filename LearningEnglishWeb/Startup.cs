@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using LearningEnglishWeb.Configuration;
 using LearningEnglishWeb.Data;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Services;
@@ -42,13 +46,8 @@ namespace LearningEnglishWeb
             );
 
 
-            services.AddHttpClient<IVocabularyService, VocabularyService>();
-            services.AddHttpClient<IWordSetService, WordSetService>();
-            services.AddHttpClient<IWordImageService, WordImageService>();
 
-
-            services.AddHttpClient<ISpeachService, SpeachService>();
-
+            services.AddHttpClientServices();
 
 
             services.AddScoped<TrainingFactoryV2>();
@@ -78,8 +77,7 @@ namespace LearningEnglishWeb
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
-
-
+          
             app.UseAuthentication();
 
             app.UseMvc(routes =>
@@ -88,6 +86,22 @@ namespace LearningEnglishWeb
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+        }
+    }
+
+
+    static class ServiceCollectionExtensions
+    {
+        public static IServiceCollection AddHttpClientServices(this IServiceCollection services)
+        {
+            services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
+
+            services.AddHttpClient<IVocabularyService, VocabularyService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            services.AddHttpClient<IWordSetService, WordSetService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>(); 
+            services.AddHttpClient<IWordImageService, WordImageService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            services.AddHttpClient<ISpeachService, SpeachService>();
+            
+            return services;
         }
     }
 }
