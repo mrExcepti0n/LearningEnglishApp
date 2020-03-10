@@ -11,6 +11,7 @@ using System.Reflection;
 using IdentityApi.Models;
 using Microsoft.AspNetCore.Identity;
 using IdentityApi.Certificate;
+using IdentityApi.Services;
 
 namespace IdentityApi
 {
@@ -45,12 +46,18 @@ namespace IdentityApi
             .AddAspNetIdentity<ApplicationUser>()
             .AddConfigurationStore(options =>
             {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString);
+                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, b => b.MigrationsAssembly("IdentityApi"));
             })
             .AddOperationalStore(options =>
             {
-                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString);
+                options.ConfigureDbContext = builder => builder.UseSqlServer(connectionString, b => b.MigrationsAssembly("IdentityApi"));
             });
+        
+            services.AddControllers();
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+
+            services.AddTransient<ILoginService<ApplicationUser>, EFLoginService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,14 +68,14 @@ namespace IdentityApi
                 app.UseDeveloperExceptionPage();
             }
 
+
+            app.UseIdentityServer();
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapDefaultControllerRoute();
+                endpoints.MapControllers();           
             });
         }
     }
