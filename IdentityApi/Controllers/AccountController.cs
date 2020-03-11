@@ -13,6 +13,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using IdentityApi.Services;
 using Microsoft.Extensions.Configuration;
+using IdentityModel;
+using IdentityServer4;
+using System.Security.Claims;
 
 namespace IdentityApi.Controllers
 {
@@ -45,9 +48,7 @@ namespace IdentityApi.Controllers
             }
 
             var vm = BuildLoginViewModel(returnUrl, context);
-
             ViewData["ReturnUrl"] = returnUrl;
-
             return View(vm);
         }
 
@@ -80,7 +81,6 @@ namespace IdentityApi.Controllers
 
                     await _loginService.SignInAsync(user, props);
 
-                    // make sure the returnUrl is still valid, and if yes - redirect back to authorize endpoint
                     if (_interactionService.IsValidReturnUrl(model.ReturnUrl))
                     {
                         return Redirect(model.ReturnUrl);
@@ -89,14 +89,11 @@ namespace IdentityApi.Controllers
                     return Redirect("~/");
                 }
 
-                ModelState.AddModelError("", "Invalid username or password.");
+                ModelState.AddModelError("", "Неверный пароль или логин");
             }
 
-            // something went wrong, show form with error
             var vm = await BuildLoginViewModelAsync(model);
-
             ViewData["ReturnUrl"] = model.ReturnUrl;
-
             return View(vm);
         }
 
@@ -165,6 +162,82 @@ namespace IdentityApi.Controllers
             }
 
             return RedirectToAction("index", "home");
+        }
+
+        [HttpGet]
+        public IActionResult Redirecting()
+        {
+            return View();
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Logout(string logoutId)
+        {
+            if (User.Identity.IsAuthenticated == false)
+            {
+                // if the user is not authenticated, then just show logged out page
+                return await Logout(new LogoutViewModel { LogoutId = logoutId });
+            }
+
+            //Test for Xamarin. 
+            var context = await _interactionService.GetLogoutContextAsync(logoutId);
+            if (context?.ShowSignoutPrompt == false)
+            {
+                //it's safe to automatically sign-out
+                return await Logout(new LogoutViewModel { LogoutId = logoutId });
+            }
+
+            // show the logout prompt. this prevents attacks where the user
+            // is automatically signed out by another malicious web page.
+            var vm = new LogoutViewModel
+            {
+                LogoutId = logoutId
+            };
+            return View(vm);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout(LogoutViewModel model)
+        {
+            var idp = User?.FindFirst(JwtClaimTypes.IdentityProvider)?.Value;
+
+            if (idp != null && idp != IdentityServerConstants.LocalIdentityProvider)
+            {
+                if (model.LogoutId == null)
+                {
+                    // if there's no current logout context, we need to create one
+                    // this captures necessary info from the current logged in user
+                    // before we signout and redirect away to the external IdP for signout
+                    model.LogoutId = await _interactionService.CreateLogoutContextAsync();
+                }
+
+                string url = "/Account/Logout?logoutId=" + model.LogoutId;
+
+                try
+                {
+
+                    // hack: try/catch to handle social providers that throw
+                    await HttpContext.SignOutAsync(idp, new AuthenticationProperties
+                    {
+                        RedirectUri = url
+                    });
+                }
+                catch (Exception ex)
+                {                   
+                }
+            }
+
+            // delete authentication cookie
+            await HttpContext.SignOutAsync();
+            await HttpContext.SignOutAsync(IdentityConstants.ApplicationScheme);
+            // set this so UI rendering sees an anonymous user
+            HttpContext.User = new ClaimsPrincipal(new ClaimsIdentity());
+            // get context information (client name, post logout redirect URI and iframe for federated signout)
+            var logout = await _interactionService.GetLogoutContextAsync(model.LogoutId);
+            return Redirect(logout?.PostLogoutRedirectUri);
         }
     }
 }

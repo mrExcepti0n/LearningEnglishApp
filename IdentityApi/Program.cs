@@ -22,14 +22,14 @@ namespace IdentityApi
 
             var host = BuildWebHost(configuration, args);
 
-            host.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
+            /*host.MigrateDbContext<PersistedGrantDbContext>((_, __) => { })
                    .MigrateDbContext<ApplicationDbContext>((_, __) => { }) 
                    .MigrateDbContext<ConfigurationDbContext>((context, services) =>
                     {
                         new ConfigurationDbContextSeed()
                             .SeedAsync(context, configuration)
                             .Wait();
-                    });
+                    });*/
 
             host.Run();
         }

@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Configuration;
-using LearningEnglishWeb.Data;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -14,11 +14,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Logging;
@@ -37,67 +33,72 @@ namespace LearningEnglishWeb
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            services.AddControllersWithViews()
+    .Services
+    .AddCustomMvc(Configuration)
+    .AddHttpClientServices();
 
-            /*services.AddDbContext<ApplicationDbContext>(options =>
-                                options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection"))
-            );*/
+            IdentityModelEventSource.ShowPII = true;       // Caution! Do NOT use in production: https://aka.ms/IdentityModel/PII
 
+            services.AddControllers();
 
-
-            services.AddHttpClientServices();
-
-
-            services.AddScoped<TrainingFactoryV2>();
-
-
-            //services.AddDefaultIdentity<IdentityUser>()
-            //    .AddDefaultUI(UIFramework.Bootstrap4)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
-
-            IdentityModelEventSource.ShowPII = true;
             services.AddCustomAuthentication(Configuration);
-
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                app.UseExceptionHandler("/Error");
             }
 
-            app.UseHttpsRedirection();
+            var pathBase = Configuration["PATH_BASE"];
+
+            if (!string.IsNullOrEmpty(pathBase))
+            {
+                app.UsePathBase(pathBase);
+            }
+
             app.UseStaticFiles();
-            app.UseCookiePolicy();
+            app.UseSession();
+
+
+
+            app.UseRouting();
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+                endpoints.MapControllerRoute("defaultError", "{controller=Error}/{action=Error}");
+                endpoints.MapControllers();
             });
+
         }
+
+
+
+
     }
-
-
     static class ServiceCollectionExtensions
     {
+        public static IServiceCollection AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddOptions();
+            services.AddSession();
+            services.AddDistributedMemoryCache();
+
+
+            return services;
+        }
         public static IServiceCollection AddHttpClientServices(this IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

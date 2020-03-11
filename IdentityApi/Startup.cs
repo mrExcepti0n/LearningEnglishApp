@@ -35,6 +35,9 @@ namespace IdentityApi
              .AddEntityFrameworkStores<ApplicationDbContext>()
              .AddDefaultTokenProviders();
 
+            services.AddTransient<IRedirectService, RedirectService>();
+
+
             var connectionString = Configuration["ConnectionString"];
 
             services.AddIdentityServer(x =>
@@ -42,7 +45,7 @@ namespace IdentityApi
                 x.IssuerUri = "null";
                 x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
             })
-            //.AddSigningCredential(Certificate.Certificate.Get())
+            .AddSigningCredential(Certificate.Certificate.Get())
             .AddAspNetIdentity<ApplicationUser>()
             .AddConfigurationStore(options =>
             {
@@ -67,8 +70,17 @@ namespace IdentityApi
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
 
+            // Make work identity server redirections in Edge and lastest versions of browers. WARN: Not valid in a production environment.
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Add("Content-Security-Policy", "script-src 'unsafe-inline'");
+                await next();
+            });
 
+            app.UseForwardedHeaders();
+            // Adds IdentityServer
             app.UseIdentityServer();
             app.UseRouting();
 
