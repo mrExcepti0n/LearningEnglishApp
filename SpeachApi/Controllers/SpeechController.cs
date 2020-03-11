@@ -26,15 +26,15 @@ namespace SpeechApi.Controllers
         [Route("{word}")]
         public async Task<HttpResponseMessage> GetAudio(string word, LanguageEnum language = LanguageEnum.English)
         {
-            using (var stream = await _textToSpeach.GetAudioAsync(word, language))
-            {
-                HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-                response.Content = new StreamContent(stream);
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-                response.Content.Headers.ContentDisposition.FileName = "sound.wav";
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
-                return response;
-            }
+            var stream = await _textToSpeach.GetAudioAsync(word, language);
+
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
+            response.Content = new StreamContent(stream);
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
+            response.Content.Headers.ContentDisposition.FileName = "sound.wav";
+            response.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
+            return response;
+
         }
 
 

@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using VocabularyApi.Dtos;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
+using VocabularyApi.Services;
 
 namespace VocabularyApi.Controllers
 {
@@ -15,14 +16,15 @@ namespace VocabularyApi.Controllers
     public class WordSetController : ControllerBase
     {
         private VocabularyContext _vocabularyContext;
+        private IIdentityService _identityService;
 
-
-        public WordSetController(VocabularyContext vocabularyContext)
+        public WordSetController(VocabularyContext vocabularyContext, IIdentityService identityService)
         {
             _vocabularyContext = vocabularyContext;
+            _identityService = identityService;
         }
 
-        private string userId => "464128bc-6ff0-4434-af91-c6c7c223c2c0";
+        private Guid userId => _identityService.GetUserIdentity();
 
         [HttpGet]
         public ActionResult<List<WordSetShortDto>> Get()

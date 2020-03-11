@@ -34,21 +34,24 @@ namespace LearningEnglishWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews()
-    .Services
-    .AddCustomMvc(Configuration)
-    .AddHttpClientServices();
+                .Services.AddCustomMvc(Configuration)
+                .AddHttpClientServices();
 
             IdentityModelEventSource.ShowPII = true;       // Caution! Do NOT use in production: https://aka.ms/IdentityModel/PII
 
             services.AddControllers();
 
             services.AddCustomAuthentication(Configuration);
+
+            services.AddScoped<TrainingFactoryV2>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
+
+            app.UseDeveloperExceptionPage();
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -67,9 +70,6 @@ namespace LearningEnglishWeb
 
             app.UseStaticFiles();
             app.UseSession();
-
-
-
             app.UseRouting();
 
             app.UseAuthentication();

@@ -19,23 +19,18 @@ namespace VocabularyApi.Controllers
     public class VocubalryController : ControllerBase
     {
         private VocabularyContext _vocabularyContext;
+        private IIdentityService _identityService;
 
 
 
-        public VocubalryController(VocabularyContext vocabularyContext)
+        public VocubalryController(VocabularyContext vocabularyContext, IIdentityService identityService)
         {
             _vocabularyContext = vocabularyContext;
-
-
+            _identityService = identityService;
         }
 
-        private string userId => "464128bc-6ff0-4434-af91-c6c7c223c2c0";
-        // User.FindFirstValue(ClaimTypes.NameIdentifier);
-        [HttpGet("Test")]
-        public string Test()
-        {
-            return "dfsfsdfg";
-        }
+
+        private Guid userId => _identityService.GetUserIdentity();
 
         [HttpGet]
         public ActionResult<List<TranslationDto>> Get([FromQuery] string mask = null)
@@ -51,14 +46,11 @@ namespace VocabularyApi.Controllers
 
 
 
-
         [HttpGet("RequiringStudyWords")]
         public ActionResult<List<TranslationDto>> GetRequiringStudyWords(int count = 10)
         {
             var userWords = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId).ToList();
-
             var requiringStudyWords = userWords.OrderByDescending(uv => uv.GetKnowledgeRatio()).Take(count).ToList();
-
             return requiringStudyWords.Select(rsw => new TranslationDto { Name = rsw.Word, Translation = rsw.Translation }).ToList();
         }
 
