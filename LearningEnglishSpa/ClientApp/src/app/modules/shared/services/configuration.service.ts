@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
-import { IConfiguration } from '../models/configuration.model';
+import { IConfiguration } from '../../../models/configuration.model';
 import { StorageService } from './storage.service';
 import { Observable, Subject } from 'rxjs';
 
@@ -19,8 +19,12 @@ export class ConfigurationService {
     let url = `${baseURI}Home/Configuration`;
     this.http.get<IConfiguration>(url).subscribe((response) => {
       this.serverSettings = response;
+      console.log(response);
+
       this.storageService.store('identityUrl', this.serverSettings.identityUrl);
-      this.isReady = true;
+      this.storageService.store('vocabularyUrl', this.serverSettings.vocabularyUrl);
+
+      this.isReady = true;     
       this.settingsLoadedSource.next();
     });
   }

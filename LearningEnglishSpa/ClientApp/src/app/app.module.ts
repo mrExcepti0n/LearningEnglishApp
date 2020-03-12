@@ -2,32 +2,29 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
+import { routing } from './app.routes';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { Identity } from './components/identity.component';
-import { SecurityService } from './services/security.service';
-import { ConfigurationService } from './services/configuration.service';
-import { StorageService } from './services/storage.service';
+import { SharedModule } from './modules/shared/shared.module';
+import { VocabularyModule } from './vocabulary/vocabulary.module';
+import { TrainingModule } from './training/training.module';
+import { WordSetModule } from './wordset/wordset.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    Identity
+    HomeComponent   
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+    routing,
     HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' }
-    ])
+    SharedModule.forRoot(),
+    VocabularyModule,
+    TrainingModule,
+    WordSetModule
   ],
-  providers: [SecurityService,
-    ConfigurationService,
-    StorageService,],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

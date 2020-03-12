@@ -20,6 +20,10 @@ namespace LearningEnglishSpa
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+
+
+            services.Configure<AppSettings>(Configuration);
+
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {

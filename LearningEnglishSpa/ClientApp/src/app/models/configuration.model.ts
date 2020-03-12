@@ -1,3 +1,4 @@
 export interface IConfiguration {
-  identityUrl: string
+  identityUrl: string,
+  vocabularyUrl: string
 }

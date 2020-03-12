@@ -13,7 +13,8 @@ namespace IdentityApi.Configuration
         {
             return new List<ApiResource>
             {
-                new ApiResource("learningenglish", "Web Learning English")
+                new ApiResource("learningenglish", "Web Learning English"),
+                new ApiResource("vocabulary", "Vocabulary Service")
             };
         }
 
@@ -60,11 +61,30 @@ namespace IdentityApi.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "learningenglish"
+                        "learningenglish",
+                        "vocabulary"
                     },
                     AccessTokenLifetime = 60*60*2, // 2 hours
                     IdentityTokenLifetime= 60*60*2 // 2 hours
-                }
+                },
+                  new Client
+                {
+                    ClientId = "js",
+                    ClientName = "SPA OpenId Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris =           { $"{clientsUrl["Spa"]}/" },
+                    RequireConsent = false,
+                    PostLogoutRedirectUris = { $"{clientsUrl["Spa"]}/" },
+                    AllowedCorsOrigins =     { $"{clientsUrl["Spa"]}" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                       "learningenglish",
+                        "vocabulary"
+                    },
+                },
             };
         }
     }

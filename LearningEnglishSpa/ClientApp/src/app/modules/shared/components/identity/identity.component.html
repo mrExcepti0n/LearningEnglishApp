@@ -1,0 +1,22 @@
+
+<div *ngIf="!authenticated" class="nav-item" (click)="login()">
+  <button class="btn">Войти</button>
+</div>
+
+
+
+<ng-template [ngIf]="authenticated">
+  <div class="flex-grow-2">
+    <strong class="text-primary">{{userName}}</strong>
+    <button (click)="logoutClicked($event)" class="btn"> Выйти</button>
+  </div>
+  <ul class="navbar-nav flex-grow-1" *ngIf="authenticated">
+    <li class="nav-item"> <button class="btn nav-link text-dark" [routerLink]="['training']">Тренировки</button></li>
+    <li class="nav-item"><button class="btn nav-link text-dark" [routerLink]="['vocabulary']">Словарь</button></li>
+    <li class="nav-item"><button class="btn nav-link text-dark" [routerLink]="['wordset']">Наборы слов</button></li>
+    <li class="nav-item"><button class=" btn  nav-link text-dark">Администрирование</button></li>
+  </ul>
+</ng-template>
+
+
+

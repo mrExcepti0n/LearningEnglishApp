@@ -35,6 +35,19 @@ namespace VocabularyApi
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
+
+
+            //для работы angular
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy",
+                    builder => builder
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials()
+                 );
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,7 +63,7 @@ namespace VocabularyApi
             //    app.UseHsts();
             //}
 
-
+            app.UseCors("CorsPolicy");
             app.UseRouting();
             ConfigureAuth(app);
 

@@ -1,14 +1,13 @@
 import { Component, OnInit, OnChanges, Output, Input, EventEmitter } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { SecurityService } from '../../services/security.service';
 
-import { IIdentity } from '../models/identity.model';
-import { SecurityService } from '../services/security.service';
 
 @Component({
   selector: 'app-identity',
   templateUrl: './identity.component.html'
 })
-export class Identity implements OnInit {
+export class IdentityComponent implements OnInit {
   authenticated: boolean = false;
   private subscription: Subscription;
   private userName: string = '';
@@ -20,7 +19,7 @@ export class Identity implements OnInit {
   ngOnInit() {
     this.subscription = this.service.authenticationChallenge$.subscribe(res => {
       this.authenticated = res;
-      this.userName = this.service.UserData.email;
+      this.userName = this.service.UserData.name;
     });
 
     if (window.location.hash) {
@@ -32,7 +31,7 @@ export class Identity implements OnInit {
 
     if (this.authenticated) {
       if (this.service.UserData)
-        this.userName = this.service.UserData.email;
+        this.userName = this.service.UserData.name;
     }
   }
 
