@@ -23,6 +23,10 @@ export class VocabularyService {
     }));
   }
 
+  addWord(word: string, translation: string): Observable<Response> {
+    return this.service.post(this.vocabularyUrl, { Name: word, Translation: translation });
+  }
+
   getTranslations(word: string): Observable<string[]> {
     let url = `${this.vocabularyUrl}/${word}/translations`;
     return this.service.get(url).pipe<string[]>(tap((response: any) => {

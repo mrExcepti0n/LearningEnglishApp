@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
 
 @Component({
-  templateUrl: "training.component.html"
+  templateUrl: 'training.component.html'
 })
 export class TrainingComponent {
 
+  constructor() {  
+  }
 }

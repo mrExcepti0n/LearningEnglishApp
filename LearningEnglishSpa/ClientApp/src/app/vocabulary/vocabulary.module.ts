@@ -3,9 +3,10 @@ import { VocabularyComponent } from "./vocabulary.component";
 import { VocabularyService } from "./vocabulary.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
+import { ClickOutsideModule } from 'ng-click-outside';
 
 @NgModule({
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ClickOutsideModule],
   declarations: [VocabularyComponent],
   providers: [VocabularyService]
 })
