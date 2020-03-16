@@ -12,9 +12,14 @@ export class VocabularyService {
   words: Word[];
 
   constructor(private service: DataService, private configurationService: ConfigurationService) {
+    if (this.configurationService.isReady) {
+      this.vocabularyUrl = this.configurationService.serverSettings.vocabularyUrl;
+    }
+    else {
       this.configurationService.settingsLoaded$.subscribe(x => {
         this.vocabularyUrl = this.configurationService.serverSettings.vocabularyUrl;
       });
+    }
   }
 
   getUserWords(): Observable<Word[]> {

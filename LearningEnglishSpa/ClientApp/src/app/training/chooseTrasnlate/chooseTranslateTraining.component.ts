@@ -2,29 +2,36 @@ import { Component } from "@angular/core";
 import { Training } from "./models/training.model";
 import { Question } from "./models/question.model";
 import { Answer } from "./models/answer.model";
+import { TrainingDataService } from "../services/trainigData.service";
 
 @Component({
   templateUrl: 'chooseTranslateTraining.component.html'
 })
 export class ChooseTranslateTrainingComponent {
 
-  private training: Training;
+  public training: Training;
 
-  constructor() {
+  public showAnswer: boolean = false;
 
-    let firstQuestion = new Question();
-    firstQuestion.number = "1";
-    firstQuestion.word = "dog";
-    firstQuestion.answers = [new Answer("девочка", false), new Answer("собака", true), new Answer("парень", false), new Answer("кошка", false)];
-
-    let secondQuestion = new Question();
-    firstQuestion.number = "2";
-    firstQuestion.word = "cat";
-    firstQuestion.answers = [new Answer("девочка", false), new Answer("собака", false), new Answer("парень", false), new Answer("кошка", true)];
-
-    this.training = new Training([firstQuestion, secondQuestion])
+  constructor(private _trainingDataService: TrainingDataService) {
+    this.training = new Training(this._trainingDataService);
+    this.newGame();
   }
 
-  public currentQuestion = () => this.training.getCurrentQuestion() as Question; 
+  public currentQuestion: Question;
 
+  public checkAnswer(answer?: string) {
+    this.training.checkAnswer(answer);
+    this.showAnswer = true;
+  }
+
+  public nextQuestion() {
+    this.showAnswer = false;
+    this.currentQuestion = this.training.getNextQuestion() as Question;
+  }
+
+
+  public newGame() {
+    this.training.newGame().subscribe(res => this.currentQuestion = res as Question);
+  }
 }

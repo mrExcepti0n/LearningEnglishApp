@@ -1,0 +1,8 @@
+
+
+<div class="text-center col justify-content-center">
+  <p> Правильных ответов {{results.rightAnswers}} из {{results.totalQuestions}} </p>
+  <p> {{results.summary()}} </p>
+  <button class="btn btn-primary btn-block w-50 mx-auto" (click)="newGame()"> Еще раз </button>
+  <button class="btn btn-secondary btn-block w-50 mt-3 mx-auto" [routerLink]="['/training']">К тренировкам </button>
+</div>

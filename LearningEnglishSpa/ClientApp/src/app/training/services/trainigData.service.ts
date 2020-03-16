@@ -1,0 +1,33 @@
+import { Word } from "../../vocabulary/models/word.model";
+import { Injectable } from "@angular/core";
+import { DataService } from "../../modules/shared/services/data.service";
+import { ConfigurationService } from "../../modules/shared/services/configuration.service";
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+
+@Injectable()
+export class TrainingDataService {
+
+  private serviceUrl: string = '';
+
+  constructor(private service: DataService, private configurationService: ConfigurationService) {
+    if (this.configurationService.isReady) {
+      this.serviceUrl = this.configurationService.serverSettings.vocabularyUrl;
+    }
+    else {
+      this.configurationService.settingsLoaded$.subscribe(x => {
+        this.serviceUrl = this.configurationService.serverSettings.vocabularyUrl;
+      });
+    }
+  }
+
+
+  public getRequiringStudyWords(): Observable<Word[]> {
+
+    return this.service.get(this.serviceUrl +'/RequiringStudyWords').pipe<Word[]>(tap((response: any) => {
+      return response;
+    }));
+    /*return [{ name: 'dog', translation: "собака" }, { name: 'cat', translation: "кошка" }, { name: 'girl', translation: "девушка" },
+    { name: 'man', translation: "мужчина" }, { name: 'fox', translation: "лиса" }];*/
+  }
+}

@@ -1,12 +1,13 @@
 ﻿@using LearningEnglishWeb.ViewModels.Training
 @model TrainingSummarizingModel
 
-
-    <div class="text-center">
-        <p> Правильных ответов @Model.RightQuestions из @Model.TotalQuestions </p>
-        <p> @Model.Summary </p>
-        <button class="newGameBtn btn btn-primary w-50"> Еще раз </button>
-        <a class="btn btn-secondary w-50 mt-3" asp-controller="Training" asp-action="Index">К тренировкам </a>
+    <div class="row align-items-center justify-content-center">
+        <div class="text-center col">
+            <p> Правильных ответов @Model.RightQuestions из @Model.TotalQuestions </p>
+            <p> @Model.Summary </p>
+            <button class="newGameBtn btn btn-primary w-50"> Еще раз </button>
+            <a class="btn btn-secondary w-50 mt-3" asp-controller="Training" asp-action="Index">К тренировкам </a>
+        </div>
     </div>
 
 
