@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { VocabularyService } from "./vocabulary.service";
-import { ConfigurationService } from "../modules/shared/services/configuration.service";
 import { Word } from "./models/word.model";
+import { ConfigurationService } from "../shared/services/configuration.service";
 
 @Component({
   templateUrl: "vocabulary.component.html"

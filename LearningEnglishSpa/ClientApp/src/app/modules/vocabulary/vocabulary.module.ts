@@ -4,9 +4,10 @@ import { VocabularyService } from "./vocabulary.service";
 import { CommonModule } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { ClickOutsideModule } from 'ng-click-outside';
+import { SharedModule } from "../shared/shared.module";
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ClickOutsideModule],
+  imports: [CommonModule, FormsModule, ClickOutsideModule, SharedModule],
   declarations: [VocabularyComponent],
   providers: [VocabularyService]
 })

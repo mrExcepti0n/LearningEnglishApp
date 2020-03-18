@@ -1,4 +1,5 @@
 export interface IConfiguration {
   identityUrl: string,
-  vocabularyUrl: string
+  vocabularyUrl: string,
+  wordImageUrl: string
 }

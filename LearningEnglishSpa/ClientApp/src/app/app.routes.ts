@@ -1,8 +1,8 @@
 import { Routes, RouterModule } from "@angular/router";
-import { HomeComponent } from "./home/home.component";
-import { VocabularyComponent } from "./vocabulary/vocabulary.component";
-import { TrainingComponent } from "./training/training.component";
-import { WordSetComponent } from "./wordset/wordset.component";
+import { WordSetComponent } from "./modules/wordset/wordset.component";
+import { VocabularyComponent } from "./modules/vocabulary/vocabulary.component";
+import { HomeComponent } from "./modules/home/home.component";
+import { TrainingComponent } from "./modules/training/training.component";
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },

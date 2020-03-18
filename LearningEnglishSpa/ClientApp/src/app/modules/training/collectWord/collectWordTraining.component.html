@@ -1,0 +1,28 @@
+
+  <div class="container shadow-lg p-5 mb-5 bg-white rounded w-75  text-center" data-isreverse="False">
+
+    <div *ngIf="currentQuestion!== null; else showResultBlock">
+      <h5 class="col text-right">Вопрос {{currentQuestion.number}} </h5>
+      <h4> <span>{{currentQuestion.word}}</span> <button class="audio btn p-0">  <i class="fas audio fa-play"></i> </button></h4>
+      <img [src]="currentWordImageUrl" [ngStyle]="wordImageStyles">
+
+      <div *ngIf="!showAnswer; else elseBlock">
+        <div style="min-height: 50px;">
+          <button class="btn text-center btn-warning m-1 text-white" *ngFor="let letter of currentQuestion.userAnswer; index as i" (click)="removeLetter(i)">{{letter}}</button>
+        </div>
+        <div style="min-height: 50px;">
+          <button class="btn text-center btn-info m-1 text-white" *ngFor="let letter of currentQuestion.letters; index as i" (click)="putLetter(i)">{{letter}}</button>
+        </div>
+      </div>
+      <ng-template #elseBlock>
+        <div style="min-height: 50px;">
+          <button class="btn text-center m-1 text-white" *ngFor="let letter of currentQuestion.userAnswer; index as i" [ngClass]="letter==currentQuestion.translation[i]? 'btn-success': 'btn-danger' ">{{letter}}</button>
+        </div>
+        <button class="btn btn-primary text-left w-50" (click)="nextQuestion()">Следующий вопрос</button>
+      </ng-template>
+    </div>
+    <ng-template #showResultBlock>
+      <app-training-result *ngIf="training!= null" class="row align-items-center justify-content-center" [results]="training.getResult()" (newGameEvent)="newGame()">
+      </app-training-result>
+    </ng-template>
+  </div>

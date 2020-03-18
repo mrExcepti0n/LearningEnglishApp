@@ -1,23 +1,15 @@
-import { IQuestion } from "../../models/question.model";
+import { Question } from "./question.model";
 import { Answer } from "./answer.model";
 
-export class Question implements IQuestion {
+export class QuestionWithAnswers extends Question {
 
-
-  answers: Answer[];
-  number: string;
-  word: string ;
-  skippedQuestion: boolean = false;
-  get translation(): string {
-    return this.answers.find(a => a.isRight).translation;
-  };
+  public answers: Answer[];
 
   checkAnswer(userAnswer: string) {
     if (userAnswer === null) {
       this.skippedQuestion = true;
     }
-    else
-    {
+    else {
       let answer: Answer = this.answers.find(a => a.translation == userAnswer);
       if (answer) {
         answer.userSelect = true;
@@ -26,5 +18,4 @@ export class Question implements IQuestion {
     }
     return false;
   }
-
 }

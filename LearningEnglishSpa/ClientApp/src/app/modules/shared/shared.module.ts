@@ -7,6 +7,9 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { DataService } from "./services/data.service";
+import { WordImageService } from "./services/wordImage.service";
+import { WordImageDirective } from "./directives/wordImage.directive";
+import { WordThumbnailDirective } from "./directives/wordThumbnail.directive";
 
 @NgModule({
   imports: [
@@ -17,13 +20,17 @@ import { DataService } from "./services/data.service";
   ],
   declarations: [
     IdentityComponent,
+   WordImageDirective,
+    WordThumbnailDirective
   ],
   exports: [
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule,
-    IdentityComponent
+    IdentityComponent,
+    WordImageDirective,
+    WordThumbnailDirective
    ]
 })
 export class SharedModule {
@@ -34,7 +41,8 @@ export class SharedModule {
         DataService,
         SecurityService,
         ConfigurationService,
-        StorageService
+        StorageService,
+        WordImageService
       ]
     };
   }

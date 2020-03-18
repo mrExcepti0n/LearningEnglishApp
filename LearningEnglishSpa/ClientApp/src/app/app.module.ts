@@ -5,11 +5,11 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { routing } from './app.routes';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
 import { SharedModule } from './modules/shared/shared.module';
-import { VocabularyModule } from './vocabulary/vocabulary.module';
-import { TrainingModule } from './training/training.module';
-import { WordSetModule } from './wordset/wordset.module';
+import { WordSetModule } from './modules/wordset/wordset.module';
+import { HomeComponent } from './modules/home/home.component';
+import { VocabularyModule } from './modules/vocabulary/vocabulary.module';
+import { TrainingModule } from './modules/training/training.module';
 
 @NgModule({
   declarations: [

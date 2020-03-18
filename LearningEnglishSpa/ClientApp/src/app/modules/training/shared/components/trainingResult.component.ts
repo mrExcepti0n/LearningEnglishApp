@@ -12,6 +12,8 @@ export class TrainingResultComponent {
 
   @Input()
   results: TrainingResult;
+
+
   @Output()
   newGameEvent = new EventEmitter<boolean>();
 

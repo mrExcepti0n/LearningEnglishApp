@@ -1,0 +1,39 @@
+<div class="form-group">
+  <input id="find-input" type="text" placeholder="Введите слово" class="form-control" [(ngModel)]="wordMask">
+  <button class="btn btn-success float-right m-2 add-word-button" type="button" (click)="getTranslations()"  [class.invisible]="wordMask.length <= 0"> добавить </button>
+</div>
+
+
+<div (clickOutside)="onClickedOutside($event)" class="w-50 m-2 text-center shadow-lg p-3 mb-3 bg-white rounded" [class.invisible]="hideTranslationArea">
+  <button *ngFor="let translation of wordMaskTranslation" class="btn btn-block" (click)="addWord(wordMask, $event.target.innerText)"> {{translation}}</button>
+
+ 
+  <button  class="btn btn-secondary" >Другое</button>
+</div>
+
+
+<div class="row justify-content-center">
+  <div class="col-xl-8 col-sm-12">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th style="width:2%"></th>
+          <th colspan="2" class="text-center">Слово</th>
+          <th>Транскрипция</th>
+          <th>Перевод</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let word of words">
+          <td class="align-middle"> <input type="checkbox" /></td>
+          <td class="align-middle" style="width:2%">  <div class="d-inline-block align-middle" style="width:60px; height:60px;"> <img class="img-thumbnail" [wordsm]="word.name" />  </div>  </td>
+          <td class="align-middle">  {{word.name}}</td>
+          <td class="align-middle"> {{word.transcription}}</td>
+          <td class="align-middle">  {{word.translation}}</td>
+          <td class="align-middle text-right"> <button class="btn btn-danger btn-sm">удалить</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
 
 import { Observable, throwError } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 
 import { SecurityService } from './security.service';
 import { Guid } from '../../../guid';
@@ -25,6 +25,20 @@ export class DataService {
         }),
         catchError(this.handleError)
       );
+  }
+
+  getBlob(url: string, params?: any): Observable<Blob> {
+    let options = { };
+    this.setHeaders(options);
+    /* this.http.get(url, options)
+       .subscribe(res => console.log(res));*/
+    options['responseType'] = 'blob';
+
+    return this.http.get<any>(url, options)
+      //.pipe(map(res => new Blob([res.blob()], { type: 'image/gif' })));
+      .pipe(tap((res: Blob) => {
+        return res;
+      }));
   }
 
   postWithId(url: string, data: any, params?: any): Observable<Response> {
@@ -98,7 +112,7 @@ export class DataService {
     //options["headers"] = this.securityService.setHeaders().headers;
 
     options["headers"] = new HttpHeaders()
-      .append('authorization', 'Bearer ' + this.securityService.GetToken()); 
+      .append('authorization', 'Bearer ' + this.securityService.GetToken());
    /* if (needId && this.securityService) {
       options["headers"] = new HttpHeaders()
         .append('authorization', 'Bearer ' + this.securityService.GetToken())

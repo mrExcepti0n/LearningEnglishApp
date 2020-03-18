@@ -9,5 +9,7 @@ namespace LearningEnglishSpa
     {
         public string IdentityUrl { get; set; }
         public string VocabularyUrl { get; set; }
+        public string WordImageUrl { get; set; }
+        
     }
 }

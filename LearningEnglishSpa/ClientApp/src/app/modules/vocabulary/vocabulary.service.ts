@@ -1,9 +1,9 @@
 import { Injectable } from "@angular/core";
 import { Word } from "./models/word.model";
 import { Observable } from "rxjs";
-import { DataService } from "../modules/shared/services/data.service";
-import { ConfigurationService } from "../modules/shared/services/configuration.service";
 import { tap } from "rxjs/operators";
+import { DataService } from "../shared/services/data.service";
+import { ConfigurationService } from "../shared/services/configuration.service";
 
 @Injectable()
 export class VocabularyService {

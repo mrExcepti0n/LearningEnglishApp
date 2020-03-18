@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VocabularyApi.Infrastructure.DataAccess;
+using VocabularyApi.Models;
 
 namespace VocabularyApi.Controllers
 {
@@ -28,6 +29,24 @@ namespace VocabularyApi.Controllers
         [HttpGet("{word}")]
         public async Task<FileContentResult>  GetWordImage(string word)
         {
+            var vocabularyWord = _context.VocabularyWords.Include(vw => vw.Image).FirstOrDefault(w => w.Word == word);
+
+            if (vocabularyWord == null)
+            {
+                return null;
+            }
+            if (vocabularyWord.Image == null)
+            {
+                await FillWordImage(vocabularyWord);
+            }            
+            return new FileContentResult(vocabularyWord.Image.Image, "image/gif");
+        }
+
+
+
+        [HttpGet("{word}/thumbnail")]
+        public async Task<FileContentResult> GetWordThumbnaile(string word)
+        {
             var vocabularyWord = _context.VocabularyWords.Include(vw => vw.Thumbnail).FirstOrDefault(w => w.Word == word);
 
             if (vocabularyWord == null)
@@ -36,40 +55,26 @@ namespace VocabularyApi.Controllers
             }
             if (vocabularyWord.Thumbnail == null)
             {
-                var thumbnail = GetImage(word);
-
-                vocabularyWord.Thumbnail = new Models.WordImage { Image = thumbnail };
+                await FillWordImage(vocabularyWord);
             }
+
+            return new FileContentResult(vocabularyWord.Thumbnail.Image, "image/gif");
+        }    
+
+
+        private async Task FillWordImage(VocabularyWord word)
+        {
+            var image = GetImage(word.Word);
+
+            word.Image = new WordImage { Image = GetThubnail(image, 220, 220), IsThumbnail = false};
+            word.Thumbnail = new WordImage { Image = GetThubnail(image, 60, 60), IsThumbnail = true };
+
             await _context.SaveChangesAsync();
-
-
-           // using (var memoryStream = new MemoryStream(vocabularyWord.Thumbnail.Image))
-           // {
-             //   memoryStream.Position = 0;
-                return new FileContentResult(vocabularyWord.Thumbnail.Image, "text/plain");
-           // }       
         }
 
 
-        //[HttpGet("[action]")]
 
-        //public void LoadMissedImages()
-        //{
-        //    var words = _context.VocabularyWords.Where(vw => vw.Image == null).Take(20).ToList();
-
-        //    foreach (var word in words)
-        //    {
-        //        word.Thumbnail = new Models.WordImage
-        //        {
-        //            Image = GetImage(word.Word),
-        //            IsThumbnail = true
-        //        };
-        //    }            
-        //    _context.SaveChanges();
-        //}
-
-
-        private byte[] GetImage(string word)
+        private Image GetImage(string word)
         {
             var config = Configuration.Default.WithDefaultLoader();
             var context = BrowsingContext.New(config);
@@ -80,28 +85,29 @@ namespace VocabularyApi.Controllers
             using (WebClient client = new WebClient())
             {
                 Stream stream = client.OpenRead("http:" + href);
-                var image = Image.FromStream(stream);
+                return Image.FromStream(stream);
+            }
+        }
 
 
-                int thubnailWidth = 220;
-                int thubnailHeight = 220;
+        private byte[] GetThubnail(Image image, int width, int height)
+        {
 
-                if (image.Height > image.Width)
-                {
-                    thubnailWidth = thubnailWidth * image.Width / image.Height;
-                }
-                else
-                {
-                    thubnailHeight = thubnailHeight * image.Height / image.Width;
-                }
+            if (image.Height > image.Width)
+            {
+                width = width * image.Width / image.Height;
+            }
+            else
+            {
+                height = height * image.Height / image.Width;
+            }
 
-                var thubnail = image.GetThumbnailImage(thubnailWidth, thubnailHeight, () => false, IntPtr.Zero);             
-                
-                using (var memoryStream = new MemoryStream())
-                {
-                    thubnail.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Jpeg);
-                    return memoryStream.ToArray();
-                }
+            var thubnail = image.GetThumbnailImage(width, height, () => false, IntPtr.Zero);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                thubnail.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+                return memoryStream.ToArray();
             }
         }
     }

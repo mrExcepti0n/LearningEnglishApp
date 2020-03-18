@@ -22,7 +22,7 @@ namespace VocabularyApi.Models
 
         public ICollection<WordTranslation> WordTranslations { get; set; }
 
-        public int? WordImageId { get; set; }
+        public int? ImageId { get; set; }
 
         public int? ThumbnailId { get; set; }
 

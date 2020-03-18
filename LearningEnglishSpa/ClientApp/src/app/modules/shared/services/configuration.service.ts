@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from "@angular/common/http";
-import { IConfiguration } from '../../../models/configuration.model';
+import { IConfiguration } from '../models/configuration.model';
 import { StorageService } from './storage.service';
 import { Observable, Subject } from 'rxjs';
 
