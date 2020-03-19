@@ -6,6 +6,8 @@ import { ChooseTranslateTraining } from "./models/chooseTranslateTraining.model"
 import { QuestionWithAnswers } from "../shared/models/questionWithAnswers.model";
 import { TrainingComponentBase } from "../shared/components/trainingComponentBase";
 import { WordImageService } from "../../shared/services/wordImage.service";
+import { SpeechService } from "../../shared/services/speech.service";
+import { AudioPlayer } from "../../shared/audioPlayer";
 
 @Component({
   templateUrl: 'chooseTranslateTraining.component.html'
@@ -18,7 +20,8 @@ export class ChooseTranslateTrainingComponent extends TrainingComponentBase<Choo
   }
   public showAnswer: boolean = false;
 
-  constructor(configurationService: ConfigurationService, trainingDataService: TrainingDataService, wordImageService: WordImageService, route: ActivatedRoute) {
-    super(configurationService, trainingDataService, wordImageService, route);
+  constructor(configurationService: ConfigurationService, trainingDataService: TrainingDataService, wordImageService: WordImageService, audioPlayer: AudioPlayer, route: ActivatedRoute) {
+    super(configurationService, trainingDataService, wordImageService, audioPlayer, route);
   }
+
 }

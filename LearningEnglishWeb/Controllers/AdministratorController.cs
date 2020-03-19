@@ -20,8 +20,6 @@ namespace LearningEnglishWeb.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-
-
             return View();
         }
 
@@ -35,13 +33,9 @@ namespace LearningEnglishWeb.Controllers
                 {
                     uploadedFile.CopyTo(ms);
                     var fileBytes = ms.ToArray();
-
                     _vocabularyService.LoadDictionary(fileBytes);
-
                 }
             }
-
-
             return Ok();
         }
     }

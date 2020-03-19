@@ -4,67 +4,95 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data.Core;
 using LearningEnglishWeb.Infrastructure;
+using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Services;
 using LearningEnglishWeb.ViewModels.Training;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace LearningEnglishWeb.Controllers
 {
     public class ChooseTranslateTrainingController : Controller
     {
 
-        static ChooseTranslateTraining _training;
-        private TrainingFactoryV2 _trainingFactory;
+        //static ChooseTranslateTraining _training;
+        private TrainingFactory _trainingFactory;
+        private IWordImageService _wordImageService;
 
-        public ChooseTranslateTrainingController(TrainingFactoryV2 trainingFactory)
+        public ChooseTranslateTrainingController(TrainingFactory trainingFactory, IWordImageService wordImageService)
         {
             _trainingFactory = trainingFactory;
+            _wordImageService = wordImageService;
         }
 
         public async Task<IActionResult> Index(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
         {
-            _training = await _trainingFactory.GetChooseTranslateTraining(isReverseWay, fromLanguage, toLanguage);
-            var question = _training.GetNextQuestion();
-            var image = await _training.GetCurrentWordImageSrc();
+            ChooseTranslateTraining training = await _trainingFactory.GetChooseTranslateTraining(isReverseWay, fromLanguage, toLanguage);
 
-            var questionModel = new ChooseTranslateQuestionModel(_training, question, image);
+            SaveTraining(training);
+
+            var question = training.GetCurrentQuestion();
+            var image = await training.GetCurrentWordImageSrc(_wordImageService);
+
+            var questionModel = new ChooseTranslateQuestionModel(training, question, image);
             return View(questionModel);
         }
 
-        public async Task<IActionResult> GetNextQuestion()
+
+        private ChooseTranslateTraining GetTraining(Guid trainingId)
         {
-            var question = _training.GetNextQuestion();
-            var image = await _training.GetCurrentWordImageSrc();
+            var training = HttpContext.Session.GetString(trainingId.ToString());
+            return JsonConvert.DeserializeObject<ChooseTranslateTraining>(training);
+        }
+
+        private void SaveTraining(ChooseTranslateTraining training)
+        {
+            HttpContext.Session.SetString(training.Id.ToString(), JsonConvert.SerializeObject(training));
+        }
+
+        public async Task<IActionResult> GetNextQuestion(Guid trainingId)
+        {
+            var training = GetTraining(trainingId);
+            var question = training.GetNextQuestion();
 
             if (question != null)
             {
-                var questionModel = new ChooseTranslateQuestionModel(_training, question, image);
+                var image = await training.GetCurrentWordImageSrc(_wordImageService);
+                SaveTraining(training);
+                var questionModel = new ChooseTranslateQuestionModel(training, question, image);
                 return PartialView("ChooseTranslateTrainingQuestion", questionModel);
             }
 
             var summary = new TrainingSummarizingModel
             {
-                RightQuestions = _training.RightAnsweredQuestions,
-                TotalQuestions = _training.QuestionsCount
+                RightQuestions = training.RightAnsweredQuestions,
+                TotalQuestions = training.QuestionsCount
             };
 
-            //_training.Reset();
+            HttpContext.Session.Remove(trainingId.ToString());
+
             return PartialView("../Training/TrainingSummarizing", summary);
         }
 
 
-        public IActionResult CheckAnswer(string answer)
+        public IActionResult CheckAnswer(Guid trainingId, string answer)
         {
-            var res = _training.CheckAnswer(answer);
+            var training = GetTraining(trainingId);
+            var res = training.CheckAnswer(answer);
+            SaveTraining(training);
             return PartialView("ChooseTranslateTrainingAnswerResult", res);
         }
 
 
 
-        public IActionResult SkipQuestion()
+        public IActionResult SkipQuestion(Guid trainingId)
         {
-            var res = _training.CheckAnswer(null);
+            var training = GetTraining(trainingId);
+            var res = training.CheckAnswer(null);
+            SaveTraining(training);
             return PartialView("ChooseTranslateTrainingAnswerResult", res);
         }
 

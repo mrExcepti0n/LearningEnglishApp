@@ -1,4 +1,5 @@
 ﻿using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace LearningEnglishWeb.ViewModels.Training
 
         }
 
-        public TranslateWordQuestionModel(Guid trainingId, TranslateWordQuestion question)
+        public TranslateWordQuestionModel(Guid trainingId, Question question)
         {
             TrainingId = trainingId;
             Word = question.Word;

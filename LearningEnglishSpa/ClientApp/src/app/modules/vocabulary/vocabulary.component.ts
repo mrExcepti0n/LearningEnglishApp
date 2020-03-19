@@ -2,6 +2,8 @@ import { Component, OnInit } from "@angular/core";
 import { VocabularyService } from "./vocabulary.service";
 import { Word } from "./models/word.model";
 import { ConfigurationService } from "../shared/services/configuration.service";
+import { AudioPlayer } from "../shared/audioPlayer";
+import { LanguageEnum } from "../shared/models/language.enum";
 
 @Component({
   templateUrl: "vocabulary.component.html"
@@ -15,7 +17,7 @@ export class VocabularyComponent implements OnInit {
   hideTranslationArea: boolean = true;
 
 
-  constructor(private service: VocabularyService, private configurationService: ConfigurationService) {
+  constructor(private service: VocabularyService, private configurationService: ConfigurationService, private audioPlayer: AudioPlayer) {
   }
 
   ngOnInit() {
@@ -47,5 +49,14 @@ export class VocabularyComponent implements OnInit {
   onClickedOutside() {
     this.hideTranslationArea = true;
     this.wordMaskTranslation = [];
+  }
+
+
+  playWordAudio(word: string) {
+    this.audioPlayer.playWordAudio(word, LanguageEnum.English);
+  }
+
+  playTranslationAudio(word: string) {
+    this.audioPlayer.playWordAudio(word, LanguageEnum.Russian);
   }
 }

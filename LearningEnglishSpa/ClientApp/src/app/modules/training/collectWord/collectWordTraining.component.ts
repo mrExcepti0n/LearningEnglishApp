@@ -7,6 +7,8 @@ import { TrainingComponentBase } from "../shared/components/trainingComponentBas
 import { Component } from "@angular/core";
 import { CollectWordQuestion } from "./collectWordQuestion.model";
 import { WordImageService } from "../../shared/services/wordImage.service";
+import { SpeechService } from "../../shared/services/speech.service";
+import { AudioPlayer } from "../../shared/audioPlayer";
 
 @Component({
   templateUrl: 'collectWordTraining.component.html'
@@ -23,8 +25,8 @@ export class CollectWordTrainingComponent extends TrainingComponentBase<CollectW
   public showAnswer: boolean = false;
 
 
-  constructor(configurationService: ConfigurationService, trainingDataService: TrainingDataService, wordImageService: WordImageService, route: ActivatedRoute) {
-    super(configurationService, trainingDataService, wordImageService, route);
+  constructor(configurationService: ConfigurationService, trainingDataService: TrainingDataService, wordImageService: WordImageService, audioPlayer: AudioPlayer, route: ActivatedRoute) {
+    super(configurationService, trainingDataService, wordImageService, audioPlayer, route);
   }  
 
 

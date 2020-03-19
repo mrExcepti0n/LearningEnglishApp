@@ -8,10 +8,12 @@ using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace SpeechApi.Controllers
 {
-    [RoutePrefix("api/speach")]
+    [RoutePrefix("api/speech")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SpeechController : ApiController
     {
         private TextToSpeech _textToSpeach;

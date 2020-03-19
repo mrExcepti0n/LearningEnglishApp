@@ -13,7 +13,7 @@
 {
     <button class="answerBtn btn @(@trans.IsRight ? (Model.Translations.Any(tr => tr.UserSelect) ?
                 "btn-success" : "btn-danger") : trans.UserSelect ? "btn-danger" : "")  " disabled>
-        @trans.Translation
+        @trans.Option
     </button>
 }
 <button class="nextAnswerBtn btn btn-primary" data-request-url="@Url.Action("GetNextQuestion")">Следующее слово </button>

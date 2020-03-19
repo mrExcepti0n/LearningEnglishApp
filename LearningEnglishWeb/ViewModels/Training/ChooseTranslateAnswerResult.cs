@@ -1,20 +1,17 @@
 ﻿using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training.Shared;
 
 namespace LearningEnglishWeb.ViewModels.Training
 {
-    public class ChooseTranslateAnswerResult : ChooseTranslateAnswer
+    public class ChooseTranslateAnswerResult : Answer
     {
-        public bool UserSelect;
+        public bool IsRight { get; set; }
 
-        public ChooseTranslateAnswerResult(ChooseTranslateAnswer ta, string userAnswer)
+        public ChooseTranslateAnswerResult(Answer answer, bool isRight)
         {
-            if (userAnswer == ta.Translation)
-            {
-                UserSelect = true;
-            }
-
-            Translation = ta.Translation;
-            IsRight = ta.IsRight;
+            Option = answer.Option;
+            UserSelect = answer.UserSelect;
+            IsRight = isRight;
         }
 
 

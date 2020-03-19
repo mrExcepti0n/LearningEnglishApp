@@ -9,6 +9,8 @@ namespace SpeechApi
     {
         public static void Register(HttpConfiguration config)
         {
+
+            config.EnableCors();
             // Конфигурация и службы веб-API
 
             // Маршруты веб-API

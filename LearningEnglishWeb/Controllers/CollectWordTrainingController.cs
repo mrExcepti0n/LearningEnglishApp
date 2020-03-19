@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Infrastructure;
+using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training.CollectWord;
 using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,8 +12,8 @@ namespace LearningEnglishWeb.Controllers
     public class CollectWordTrainingController : Controller
     {
 
-        TrainingFactoryV2 _trainingFactory;
-        public CollectWordTrainingController(TrainingFactoryV2 trainingFactory)
+        TrainingFactory _trainingFactory;
+        public CollectWordTrainingController(TrainingFactory trainingFactory)
         {
             _trainingFactory = trainingFactory;
         }

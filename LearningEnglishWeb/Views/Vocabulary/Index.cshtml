@@ -84,7 +84,7 @@
                     type: 'GET',
                     data: { word: button.previousElementSibling.innerText, language: lang },
                     success: function (res) {
-                      audio.src = '';
+                    audio.src = '';
                     audio.src = res;
                     audio.play();
                 }

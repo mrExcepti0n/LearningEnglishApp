@@ -7,8 +7,6 @@ import { catchError, tap, map } from 'rxjs/operators';
 import { SecurityService } from './security.service';
 import { Guid } from '../../../guid';
 
-// Implementing a Retry-Circuit breaker policy 
-// is pending to do for the SPA app
 @Injectable()
 export class DataService {
   constructor(private http: HttpClient, private securityService: SecurityService) { }
@@ -19,7 +17,6 @@ export class DataService {
 
     return this.http.get(url, options)
       .pipe(
-        // retry(3), // retry a failed request up to 3 times
         tap((res: Response) => {
           return res;
         }),
@@ -30,12 +27,20 @@ export class DataService {
   getBlob(url: string, params?: any): Observable<Blob> {
     let options = { };
     this.setHeaders(options);
-    /* this.http.get(url, options)
-       .subscribe(res => console.log(res));*/
     options['responseType'] = 'blob';
-
     return this.http.get<any>(url, options)
-      //.pipe(map(res => new Blob([res.blob()], { type: 'image/gif' })));
+      .pipe(tap((res: Blob) => {
+        return res;
+      }));
+  }
+
+
+  getBlobWithoutAuth(url: string): Observable<Blob> {
+    let options = {
+      headers: new HttpHeaders()
+    };
+    options['responseType'] = 'blob';
+    return this.http.get<any>(url, options)
       .pipe(tap((res: Blob) => {
         return res;
       }));
@@ -108,12 +113,8 @@ export class DataService {
       );
   }
 
-  private setHeaders(options: any, needId?: boolean) {
-    //options["headers"] = this.securityService.setHeaders().headers;
-
-    options["headers"] = new HttpHeaders()
-      .append('authorization', 'Bearer ' + this.securityService.GetToken());
-   /* if (needId && this.securityService) {
+  private setHeaders(options: any, needId?: boolean) {  
+    if (needId && this.securityService) {
       options["headers"] = new HttpHeaders()
         .append('authorization', 'Bearer ' + this.securityService.GetToken())
         .append('x-requestid', Guid.newGuid());
@@ -121,6 +122,6 @@ export class DataService {
     else if (this.securityService) {
       options["headers"] = new HttpHeaders()
         .append('authorization', 'Bearer ' + this.securityService.GetToken());
-    }*/
+    }
   }
 }

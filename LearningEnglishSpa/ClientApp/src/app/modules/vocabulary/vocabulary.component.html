@@ -28,9 +28,9 @@
         <tr *ngFor="let word of words">
           <td class="align-middle"> <input type="checkbox" /></td>
           <td class="align-middle" style="width:2%">  <div class="d-inline-block align-middle" style="width:60px; height:60px;"> <img class="img-thumbnail" [wordsm]="word.name" />  </div>  </td>
-          <td class="align-middle">  {{word.name}}</td>
+          <td class="align-middle">  {{word.name}}   <button class="btn p-0 ml-1" (click)="playWordAudio(word.name)"> <i class="fa fa-play text-success"></i> </button> </td>
           <td class="align-middle"> {{word.transcription}}</td>
-          <td class="align-middle">  {{word.translation}}</td>
+          <td class="align-middle">  {{word.translation}}  <button class="btn p-0 ml-1" (click)="playTranslationAudio(word.translation)"> <i class="fa fa-play text-success"></i> </button> </td>
           <td class="align-middle text-right"> <button class="btn btn-danger btn-sm">удалить</button></td>
         </tr>
       </tbody>

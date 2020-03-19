@@ -1,5 +1,7 @@
 ﻿using AngleSharp;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training.ChooseTranslate;
+using LearningEnglishWeb.Models.Training.Shared;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,12 +30,12 @@ namespace LearningEnglishWeb.ViewModels.Training
 
         }
 
-        public ChooseTranslateQuestionModel(ChooseTranslateTraining training, ChooseTranslateQuestion question, string image)
+        public ChooseTranslateQuestionModel(ChooseTranslateTraining training, QuestionWithOptions question, string image)
         {
             TrainingId = training.Id;
             IsReverse = training.IsReverse;
             Word = question.Word;
-            Translations = question.TranslationAnswers.Select(ta => ta.Translation).ToList();
+            Translations = question.Options.Select(ta => ta.Option).ToList();
             QuestionNumber = question.Number.ToString();
 
             ImageSrc = image;

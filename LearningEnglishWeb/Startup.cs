@@ -8,6 +8,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Configuration;
 using LearningEnglishWeb.Infrastructure;
+using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -43,7 +44,7 @@ namespace LearningEnglishWeb
 
             services.AddCustomAuthentication(Configuration);
 
-            services.AddScoped<TrainingFactoryV2>();
+            services.AddScoped<TrainingFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

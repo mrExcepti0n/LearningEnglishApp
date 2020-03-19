@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Infrastructure;
+using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training.TranslateWord;
 using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,8 +18,8 @@ namespace LearningEnglishWeb.Controllers
 
 
 
-        TrainingFactoryV2 _trainingFactory;
-        public TranslateWordTrainingController(TrainingFactoryV2 trainingFactory)
+        TrainingFactory _trainingFactory;
+        public TranslateWordTrainingController(TrainingFactory trainingFactory)
         {
             _trainingFactory = trainingFactory;
         }

@@ -26,8 +26,12 @@ namespace SpeachApi
 
             builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
             builder.RegisterWebApiFilterProvider(config);
+
             builder.RegisterWebApiModelBinderProvider();
-            builder.RegistryServices();
+            builder.RegistryServices();         
+
+         
+
 
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);

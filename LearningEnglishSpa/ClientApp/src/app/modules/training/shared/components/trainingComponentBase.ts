@@ -6,6 +6,9 @@ import { TrainingBase } from "../models/trainingBase.model";
 import { IQuestion } from "../models/iquestion.model";
 import { WordImageService } from "../../../shared/services/wordImage.service";
 import { SafeUrl } from "@angular/platform-browser";
+import { SpeechService } from "../../../shared/services/speech.service";
+import { AudioPlayer } from "../../../shared/audioPlayer";
+import { LanguageEnum } from "../../../shared/models/language.enum";
 
 export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQuestion> implements OnInit  {
 
@@ -22,7 +25,6 @@ export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQ
   private _currentQuestionUrl: SafeUrl = null;
 
 
-
   get currentWordImageUrl(): SafeUrl {
     return this._currentQuestionUrl;
   }
@@ -36,7 +38,8 @@ export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQ
   }
 
 
-  constructor(private configurationService: ConfigurationService, protected trainingDataService: TrainingDataService, protected wordImageService: WordImageService, route: ActivatedRoute) {
+  constructor(private configurationService: ConfigurationService, protected trainingDataService: TrainingDataService,
+    protected wordImageService: WordImageService, private audioPlayer: AudioPlayer, route: ActivatedRoute) {
     route.data.subscribe(data => this.isReverse = data.isReverse);
   }
 
@@ -79,6 +82,22 @@ export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQ
     this.showAnswer = false;
     this.currentQuestion = this.training.getNextQuestion() as Q;
     this.loadImageSrc();
+  }
+
+
+  playWordAudio() {
+    let currentWord: string;
+    let language: LanguageEnum;
+
+    if (this.training.isReverse && this.showAnswer) {
+      currentWord = this.currentQuestion.translation;
+      language = LanguageEnum.English;
+    } else {
+      currentWord = this.currentQuestion.word;
+      language = this.training.isReverse ? LanguageEnum.Russian : LanguageEnum.English
+    }
+
+    this.audioPlayer.playWordAudio(currentWord, language);
   }
 
 }

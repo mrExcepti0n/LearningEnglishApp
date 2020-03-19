@@ -10,6 +10,8 @@ import { DataService } from "./services/data.service";
 import { WordImageService } from "./services/wordImage.service";
 import { WordImageDirective } from "./directives/wordImage.directive";
 import { WordThumbnailDirective } from "./directives/wordThumbnail.directive";
+import { SpeechService } from "./services/speech.service";
+import { AudioPlayer } from "./audioPlayer";
 
 @NgModule({
   imports: [
@@ -20,7 +22,7 @@ import { WordThumbnailDirective } from "./directives/wordThumbnail.directive";
   ],
   declarations: [
     IdentityComponent,
-   WordImageDirective,
+    WordImageDirective,
     WordThumbnailDirective
   ],
   exports: [
@@ -42,7 +44,9 @@ export class SharedModule {
         SecurityService,
         ConfigurationService,
         StorageService,
-        WordImageService
+        WordImageService,
+        SpeechService,
+        AudioPlayer
       ]
     };
   }

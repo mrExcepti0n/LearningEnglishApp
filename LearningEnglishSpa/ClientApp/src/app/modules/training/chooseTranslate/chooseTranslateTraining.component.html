@@ -1,35 +1,36 @@
-
-<div class="container shadow-lg p-5 mb-5 bg-white rounded w-75" data-isreverse="False">
-  <div *ngIf="currentQuestion!== null; else showResultBlock">
-    <div class="row mb-2">
-      <h5 class="col text-center">Вопрос {{currentQuestion.number}} </h5>
-    </div>
-    <div class="row">
-      <div class="col-4">
-        <h4> <span>{{currentQuestion.word}}</span> <button class="audio btn p-0">  <i class="fas audio fa-play"></i> </button></h4>
-
-        <img [src]="currentWordImageUrl" [ngStyle]="wordImageStyles">
-
-        <!--<img id="wordImage" src="" class="w-100 mt-4 pl-0 ml-0" style="filter: blur(8px);">-->
-      </div>
-      <div class="col-8 answerArea ">
-
-        <div *ngIf="!showAnswer; else elseBlock">
-          <button class="btn btn-info btn-block text-left" *ngFor="let answer of currentQuestion.answers" (click)="checkAnswer($event.target.innerText)">{{answer.translation}}</button>
-          <button class="btn btn-danger  btn-block text-left" (click)="checkAnswer(null)">Не знаю</button>
+  <div class="row justify-content-center">
+    <div class="shadow-lg p-5 mb-5 bg-white rounded col  text-center col-lg-8 col-md-12">
+      <div *ngIf="currentQuestion!== null; else showResultBlock">
+        <div class="row mb-2">
+          <h5 class="col text-center">Вопрос {{currentQuestion.number}} </h5>
         </div>
-        <ng-template #elseBlock>
-          <button class="btn btn-block text-left disabled" *ngFor="let answer of currentQuestion.answers"
-                  [ngClass]="answer.isRight ? (answer.userSelect ? 'btn-success' : (answer.question.skippedQuestion ? 'btn-danger' : 'btn-success')) : (answer.userSelect ? 'btn-danger' : '')">
-            {{answer.translation}}
-          </button>
-          <button class="btn btn-primary  btn-block text-left" (click)="nextQuestion()">Следующий вопрос</button>
-        </ng-template>
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-5 col-sm-6">
+            <h4>
+              <span>{{currentQuestion.word}}</span>
+              <button class="btn p-0 ml-1" (click)="playWordAudio()"> <i class="fa fa-play text-success"></i> </button>
+            </h4>
+            <img [src]="currentWordImageUrl" [ngStyle]="wordImageStyles" class="pb-4">
+          </div>
+          <div class="col-lg-7 col-md-7 col-sm-6 col-8 answerArea ">
+
+            <div *ngIf="!showAnswer; else elseBlock">
+              <button class="btn btn-info btn-block text-left" *ngFor="let answer of currentQuestion.answers" (click)="checkAnswer($event.target.innerText)">{{answer.translation}}</button>
+              <button class="btn btn-danger  btn-block text-left" (click)="checkAnswer(null)">Не знаю</button>
+            </div>
+            <ng-template #elseBlock>
+              <button class="btn btn-block text-left disabled" *ngFor="let answer of currentQuestion.answers"
+                      [ngClass]="answer.isRight ? (answer.userSelect ? 'btn-success' : (answer.question.skippedQuestion ? 'btn-danger' : 'btn-success')) : (answer.userSelect ? 'btn-danger' : '')">
+                {{answer.translation}}
+              </button>
+              <button class="btn btn-primary  btn-block text-left" (click)="nextQuestion()">Следующий вопрос</button>
+            </ng-template>
+          </div>
+        </div>
       </div>
+      <ng-template #showResultBlock>
+        <app-training-result *ngIf="training!= null" class="row align-items-center justify-content-center" [results]="training.getResult()" (newGameEvent)="newGame()">
+        </app-training-result>
+      </ng-template>
     </div>
   </div>
-  <ng-template #showResultBlock>
-    <app-training-result *ngIf="training!= null" class="row align-items-center justify-content-center" [results]="training.getResult()" (newGameEvent)="newGame()">
-    </app-training-result>
-  </ng-template>
-</div>
