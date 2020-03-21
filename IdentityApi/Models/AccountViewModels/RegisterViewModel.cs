@@ -10,7 +10,6 @@ namespace IdentityApi.Models.AccountViewModels
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Почтовый ящик")]
         public string Email { get; set; }
 
         [Required]
@@ -19,7 +18,7 @@ namespace IdentityApi.Models.AccountViewModels
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Подтвердите пароли")]
+        [Display(Name = "Подтверждение пароля")]
         [Compare("Password", ErrorMessage = "Пароли должны совпадать")]
         public string ConfirmPassword { get; set; }
 

@@ -14,6 +14,7 @@ namespace IdentityApi.Models.AccountViewModels
 
         [Required]
         [DataType(DataType.Password)]
+        [Display(Name = "Пароль")]
         public string Password { get; set; }
 
         [Display(Name = "Запомнить меня?")]
