@@ -57,6 +57,18 @@ namespace LearningEnglishWeb.Models.Training.Shared
 
             var word = IsReverse ? question.Translation : question.Word;
             return await wordImageService.GetImageSrc(word);
-        }   
+        }
+
+
+        public bool CheckAnswer(string answer)
+        {
+            var question = GetCurrentQuestion();
+            var isRight = question.CheckAnswer(answer);
+            if (isRight)
+            {
+                RightAnsweredQuestions++;
+            }
+            return isRight;
+        }
     }
 }

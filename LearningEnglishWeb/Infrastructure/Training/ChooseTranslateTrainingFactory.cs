@@ -32,35 +32,33 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             for (var i = 0; i < words.Length; i++)
             {
-                var answers = GetAnswers(words, i, 4);
+                var answers = GetOptions(words, i, 4);
                 yield return GetQuestion(i, words[i], answers);
             }
         }
         
-        private QuestionWithOptions GetQuestion(int number, Word word, List<Answer> answers)
+        private QuestionWithOptions GetQuestion(int number, Word word, List<string> options)
         {
             return new QuestionWithOptions
             {
                 Number = number + 1,
                 Word = word.Name,
                 Translation = word.Translation,
-                Options = answers
+                Options = options
             };
         }
      
 
-        private List<Answer> GetAnswers(Word[] words, int currentWordIndex, int size)
+        private List<string> GetOptions(Word[] words, int currentWordIndex, int size)
         {            
 
             var otherWords = words.Where((w,i) => i != currentWordIndex).ToArray();
             ShuffleWords(otherWords);
 
-            var answers = otherWords.Take(size).Select(ow => new Answer { Option = ow.Translation }).ToList();
-            answers.Add(new Answer { Option = words[currentWordIndex].Translation });
-
+            var answers = otherWords.Take(size).Select(ow => ow.Translation).ToList();
+            answers.Add(words[currentWordIndex].Translation);
             var res = answers.ToArray();
             ShuffleWords(res);
-
             return res.ToList();
         }
 

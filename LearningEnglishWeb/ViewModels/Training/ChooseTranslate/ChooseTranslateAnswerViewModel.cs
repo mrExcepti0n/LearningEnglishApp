@@ -1,18 +1,14 @@
-﻿using System;
+﻿using LearningEnglishWeb.ViewModels.Training.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningEnglishWeb.ViewModels.Training
+namespace LearningEnglishWeb.ViewModels.Training.ChooseTranslate
 {
-    public class ChooseTranslateQuestionResult
+    public class ChooseTranslateAnswerViewModel 
     {
-        public string Word { get; set; }
-
         public List<ChooseTranslateAnswerResult> Translations { get; set; }
-
-        public string QuestionNumber { get; set; }
-
 
         public bool CoorectAnswer => Translations.All(tr => tr.UserSelect == tr.IsRight);
        

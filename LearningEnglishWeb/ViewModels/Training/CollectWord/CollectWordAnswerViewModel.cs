@@ -1,11 +1,12 @@
-﻿using System;
+﻿using LearningEnglishWeb.ViewModels.Training.CollectWord;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.ViewModels.Training
 {
-    public class CollectWordQuestionResult
+    public class CollectWordAnswerViewModel
     {
         public List<CollectWordAnswerResult> CollectWordAnswerResults { get; set; }
 

@@ -30,8 +30,9 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             for (var i= 0; i< words.Length; i++)
             {
-                var wordName = words[i].Name.ToLower();
-                yield return new CollectWordQuestion { Number = i + 1, Translation = wordName, AnswerLetters = ShuffleWords(wordName.ToCharArray()),   Word = words[i].Translation };
+                var word = words[i].Name.ToLower();
+                var translation = words[i].Translation.ToLower();
+                yield return new CollectWordQuestion { Number = i + 1, Translation = translation, AnswerLetters = ShuffleWords(translation.ToCharArray()),   Word = word };
             }
         }
     }

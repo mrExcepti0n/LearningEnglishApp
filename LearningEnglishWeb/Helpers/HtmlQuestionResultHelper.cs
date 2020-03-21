@@ -1,5 +1,6 @@
 ﻿using LearningEnglishWeb.Models;
 using LearningEnglishWeb.ViewModels.Training;
+using LearningEnglishWeb.ViewModels.Training.TranslateWord;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -16,7 +17,7 @@ namespace LearningEnglishWeb.Helpers
 {
     public static class HtmlQuestionResultHelper
     {
-        public static HtmlString CreateTranslateWordTrainingAnswerResult(this IHtmlHelper html, TranslateWordAnswerResult answerResult, string checkAnswerUrl)
+        public static HtmlString CreateTranslateWordTrainingAnswerResult(this IHtmlHelper html, TranslateWordAnswerViewModel answerResult, string checkAnswerUrl)
         {
             var area = new TagBuilder("div");
 

@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Data.Core;
+using LearningEnglishWeb.Controllers.Abstraction;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models;
 using LearningEnglishWeb.Models.Training.TranslateWord;
+using LearningEnglishWeb.Services;
 using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,59 +17,38 @@ namespace LearningEnglishWeb.Controllers
 {
     public class TranslateWordTrainingController : Controller
     {
-        static TranslateWordTraining _training;
-
-
-
-        TrainingFactory _trainingFactory;
-        public TranslateWordTrainingController(TrainingFactory trainingFactory)
+        private TranslateWordTrainingFacade _trainingFacade;
+        public TranslateWordTrainingController(TrainingFactory trainingFactory, IWordImageService wordImageService)
         {
-            _trainingFactory = trainingFactory;
+            _trainingFacade = new TranslateWordTrainingFacade(trainingFactory, wordImageService);
         }
 
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
         {
-            _training = await _trainingFactory.GetTranslateTraining();
-            var question = _training.GetNextQuestion();
-            var questionModel = new TranslateWordQuestionModel(_training.Id, question);
-            return View(questionModel);
+            var trainingModel = await _trainingFacade.StartNewGame(HttpContext, isReverseWay, fromLanguage, toLanguage);
+            return View(trainingModel);
         }
 
-        public IActionResult GetNextQuestion()
+        public async Task<IActionResult> GetNextQuestion(Guid trainingId)
         {
-            var question = _training.GetNextQuestion();
-            if (question != null)
+            var nextQuestionModel = await _trainingFacade.GetNextQuestionViewModel(HttpContext, trainingId);
+            if (nextQuestionModel != null)
             {
-                var questionModel = new TranslateWordQuestionModel(_training.Id, question);
-                return PartialView("TranslateWordTrainingQuestion", questionModel);
+                return PartialView("TranslateWordTrainingQuestion", nextQuestionModel);
             }
 
-            var summary = new TrainingSummarizingModel
-            {
-                RightQuestions = _training.RightAnsweredQuestions,
-                TotalQuestions = _training.QuestionsCount
-            };
-
-            return PartialView("../Training/TrainingSummarizing", summary);
+            var trainingSummarizingModel = _trainingFacade.GetTrainingSummarizingModel(HttpContext, trainingId);
+            return PartialView("../Training/TrainingSummarizing", trainingSummarizingModel);
         }
 
 
-        public IActionResult CheckAnswer(string answer)
+        public IActionResult CheckAnswer(Guid trainingId, string answer)
         {
-            var res = _training.CheckAnswer(answer);
-            return PartialView("TranslateWordTrainingAnswerResult", res);
+            var model = _trainingFacade.GetCheckAnswerModel(HttpContext, trainingId, answer);
+            return PartialView("TranslateWordTrainingAnswerResult", model);
         }
-
-
-        public IActionResult SkipQuestion()
-        {
-            var res = _training.CheckAnswer(null);
-            return PartialView("TranslateWordTrainingAnswerResult", res);
-        }
-
-
 
     }
 }

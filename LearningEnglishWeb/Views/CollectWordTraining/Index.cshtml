@@ -1,67 +1,57 @@
-﻿@using LearningEnglishWeb.Models.Training.CollectWord
-@model  CollectWordQuestion
+﻿@using  LearningEnglishWeb.ViewModels.Training.CollectWord
+@using  LearningEnglishWeb.ViewModels.Training.Abstractions
+@model TrainingViewModel<CollectWordQuestionViewModel>
+
 
 @{
     ViewData["Title"] = "Index";
 }
-    <div class="trainingArea shadow-lg p-5 mb-5 bg-white rounded">
-        @await Html.PartialAsync("CollectWordTrainingQuestion", @Model)        
-    </div>
+
+
+<div class="trainingArea container shadow-lg p-5 mb-5 bg-white rounded" data-isreverse="@Model.IsReverse">
+    <input id="trainingId" type="hidden" value="@Model.TrainingId" />
+    @await Html.PartialAsync("CollectWordTrainingQuestion", @Model.CurrentQuestion)
+</div>
 
 
 @section Scripts{
 
-    <script>
-         $(document).on("click", '.newGameBtn', _ => {
-            document.location.reload();
-         });
+    <script type="module">
+        import { TrainingBase } from "../js/training.js";
 
-        $(document).on("click", '.questionArea button.letter', function (evt) {
-            this.classList.add('btn-warning');
-            this.classList.remove('btn-info');
-            document.querySelector(".answerArea").appendChild(this);
-            if (allLettersIsCollect()) {
-                $.ajax({
-                    url: '@Url.Action("CheckAnswer")',
-                    type: 'GET',
-                    data: { answer: getAnswer() },
-                    success: (res) => {
-                        document.querySelector(".trainingArea").innerHTML = res;                        
-                    }
-                });
-            }        
-        });
+        (function () {
 
-        function getAnswer() {
-            var answer = '';
+            let isReverse = document.querySelector('.trainingArea').dataset['isreverse'] == "True";
+            let trainingId = document.querySelector('#trainingId').value;
+            let training = new TrainingBase(trainingId, isReverse);
 
-            document.querySelectorAll('.answerArea button.letter').forEach(el => {
-                answer += el.innerText;
+            $(document).on("click", '.questionArea button.letter', function (evt) {
+                this.classList.add('btn-warning');
+                this.classList.remove('btn-info');
+                document.querySelector(".answerArea").appendChild(this);
+                if (allLettersIsCollect()) {
+
+                    training.checkAnswer('@Url.Action("CheckAnswer")', getAnswer());
+                }
             });
 
-            return answer;
-        }
+            $(document).on("click", '.answerArea button.letter', function (evt) {
+                this.classList.add('btn-info');
+                this.classList.remove('btn-warning');
+                document.querySelector(".questionArea").appendChild(this);
+            });
 
-        $(document).on("click", '.answerArea button.letter', function (evt) {
-            this.classList.add('btn-info');
-            this.classList.remove('btn-warning');
-            document.querySelector(".questionArea").appendChild(this);
-        });
-
-        function allLettersIsCollect() {
-            return document.querySelector(".questionArea").children.length === 0;            
-        }
-
-        $(document).on("click", '.questionArea button.nextAnswerBtn', function (evt) {
-            $.ajax({
-                    url: this.dataset.requestUrl,
-                    type: 'GET',
-                    success: (res) => {
-                        document.querySelector(".trainingArea").innerHTML = res;                        
-                    }
+            function getAnswer() {
+                let answer = '';
+                document.querySelectorAll('.answerArea button.letter').forEach(el => {
+                    answer += el.innerText;
                 });
-            document.querySelector(".questionArea").appendChild(this);
-        });
+                return answer;
+            }
+            function allLettersIsCollect() {
+                return document.querySelector(".questionArea").children.length === 0;
+            }
+        })();
 
-    </script> 
+    </script>
 }

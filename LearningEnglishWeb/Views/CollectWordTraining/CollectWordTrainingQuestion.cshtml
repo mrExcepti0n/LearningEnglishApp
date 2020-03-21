@@ -1,14 +1,27 @@
-﻿@using LearningEnglishWeb.Models.Training.CollectWord
-@model CollectWordQuestion
+﻿@using LearningEnglishWeb.ViewModels.Training.CollectWord
+@model CollectWordQuestionViewModel
 
-<h4 class="text-center">
-    @Model.Word
-</h4>
-<div class="answerArea col"> </div>
-<div class="questionArea">
-    @foreach (char letter in Model.AnswerLetters)
-    {
-        <button class="letter btn text-center btn-info m-1 text-white"> @letter </button>
-    }
+<div class="row mb-2">
+    <h5 class="col text-center">Вопрос @Model.QuestionNumber </h5>
+</div>
 
-</div>      
+<div class="row">
+    <div class="col text-center" id="answerRefreshArea">
+        <h4 class="text-center">
+            <span> @Model.Word </span>
+            <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
+                <i class="fas audio fa-play"></i>
+            </button>
+        </h4>
+        <img id="wordImage" src="@Model.ImageSrc"  />
+
+        <div class="answerArea text-center"> </div>
+        <div class="questionArea">
+            @foreach (char letter in Model.Letters)
+            {
+                <button class="letter btn text-center btn-info m-1 text-white"> @letter </button>
+            }
+
+        </div>
+    </div>
+</div>

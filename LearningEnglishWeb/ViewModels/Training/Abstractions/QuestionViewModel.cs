@@ -5,14 +5,18 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.ViewModels.Training.Abstractions
 {
-    public class QuestionViewModelBase
+    public class QuestionViewModel
     {
-        public Guid TrainingId { get; set; }
+        public QuestionViewModel(string word, int number, string imgSrc)
+        {
+            Word = word;
+            QuestionNumber = number.ToString();
+            ImageSrc = imgSrc;
+        }
+
         public string Word { get; set; }
         public string QuestionNumber { get; set; }
 
         public string ImageSrc { get; set; }
-
-        public bool IsReverse { get; set; }
     }
 }

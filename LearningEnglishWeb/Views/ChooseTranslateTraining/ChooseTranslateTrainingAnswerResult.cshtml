@@ -1,22 +1,12 @@
-﻿@using LearningEnglishWeb.Helpers
-@model LearningEnglishWeb.ViewModels.Training.ChooseTranslateQuestionResult
-@*<div class="row mb-2">
-        <h5 class="col text-center">Вопрос @Model.QuestionNumber </h5>
-    </div>
+﻿@model LearningEnglishWeb.ViewModels.Training.ChooseTranslate.ChooseTranslateAnswerViewModel
 
-    <div class="row">
-        <div class="col-4">
-            <h4> @Model.Word </h4>
-        </div>
-        <div class="col-8">*@
 @foreach (var trans in Model.Translations)
 {
-    <button class="answerBtn btn @(@trans.IsRight ? (Model.Translations.Any(tr => tr.UserSelect) ?
-                "btn-success" : "btn-danger") : trans.UserSelect ? "btn-danger" : "")  " disabled>
+    <button class="text-left btn btn-block m-2 @(@trans.IsRight ? (Model.Translations.Any(tr => tr.UserSelect) ?
+                "btn-success" : "btn-danger") : trans.UserSelect ? "btn-danger" : "btn-info")  " disabled>
         @trans.Option
     </button>
 }
-<button class="nextAnswerBtn btn btn-primary" data-request-url="@Url.Action("GetNextQuestion")">Следующее слово </button>
-@* </div>
-    </div>*@
+<button class="nextAnswerBtn btn btn-block m-2 btn-primary text-left" data-request-url="@Url.Action("GetNextQuestion")">Следующее слово </button>
+
 

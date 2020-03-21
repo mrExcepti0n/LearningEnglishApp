@@ -1,14 +1,23 @@
-﻿@model LearningEnglishWeb.ViewModels.Training.TranslateWordQuestionModel
+﻿@using  LearningEnglishWeb.ViewModels.Training.Abstractions
+@model TrainingViewModel<QuestionViewModel>
 
 
-<div class="trainingArea trainingArea  shadow-lg p-5 mb-5 bg-white rounded">
-    @await Html.PartialAsync("TranslateWordTrainingQuestion", Model)   
+
+<div class="trainingArea container shadow-lg p-5 mb-5 bg-white rounded" data-isreverse="@Model.IsReverse">
+    <input id="trainingId" type="hidden" value="@Model.TrainingId" />
+    @await Html.PartialAsync("TranslateWordTrainingQuestion", Model.CurrentQuestion)
 </div>
 
 
 @section Scripts {
+    <script type="module">
+        import { TrainingBase } from "../js/training.js";
 
-<script src="~/js/training.js">  
-</script>
+        (function () {
 
+            let isReverse = document.querySelector('.trainingArea').dataset['isreverse'] == "True";
+            let trainingId = document.querySelector('#trainingId').value;
+            let training = new TrainingBase(trainingId, isReverse);
+        })();
+    </script>
 }

@@ -1,18 +1,22 @@
-﻿@model LearningEnglishWeb.ViewModels.Training.CollectWordQuestionResult
+﻿@model LearningEnglishWeb.ViewModels.Training.CollectWordAnswerViewModel
 @{
     ViewData["Title"] = "CollectWordTrainingAnswerResult";
 }
 
 <h4 class="text-center">
-    @Model.RigtAnswer
+    <span>@Model.RigtAnswer</span>
+
+    <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
+        <i class="fas audio fa-play"></i>
+    </button>
 </h4>
 
 <div class="answerArea">
 
-  @foreach (var letter in Model.CollectWordAnswerResults)
-  {
-       <button class="letter m-1 btn @(@letter.IsRight ? "btn-success" : "btn-danger") " disabled> @letter.Letter </button>
-  }
+    @foreach (var letter in Model.CollectWordAnswerResults)
+    {
+        <button class="letter m-1 btn @(@letter.IsRight ? "btn-success" : "btn-danger") " disabled> @letter.Letter </button>
+    }
 
 </div>
 <div class="questionArea">

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace LearningEnglishWeb.ViewModels.Training
+namespace LearningEnglishWeb.ViewModels.Training.CollectWord
 {
     public class CollectWordAnswerResult
     {

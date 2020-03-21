@@ -1,68 +1,4 @@
-﻿//(function () {
-
-//    const dontKnowBtnClassName = "dontKnowBtn";
-
-//    $(document).on("click", '.newGameBtn', _ => {
-//        document.location.reload();
-
-//    });
-
-
-//    $(document).on('input', '.trainingArea input[type=\"text\"]', function () {
-//        var button = document.querySelector("button.checkAnswerBtn");
-//        if (this.value.length > 0) {
-//            if (button.classList.contains(dontKnowBtnClassName)) {
-//                button.classList.remove(dontKnowBtnClassName);
-//                button.classList.remove('btn-warning');
-//                button.classList.add('btn-primary');
-//                button.innerText = "Проверить";
-//            }
-//        } else if (!button.classList.contains(dontKnowBtnClassName)) {
-//            button.classList.add(dontKnowBtnClassName);
-
-//            button.classList.remove('btn-primary');
-//            button.classList.add('btn-warning');
-//            button.innerText = "Не знаю";
-//        }
-//    });
-
-
-//    $(document).on('click', '.trainingArea button.checkAnswerBtn ', function () {
-//        checkAnswer(this);
-//    });
-
-
-//    $(document).on('click', '.trainingArea button.nextAnswerBtn ', function () {
-//        getNextAnswer(this);
-//    });
-
-
-//    function checkAnswer(button) {
-//        var input = document.querySelector(".trainingArea input[type=\"text\"]");
-//        $.ajax({
-//            url: button.dataset.requestUrl,
-//            type: 'GET',
-//            data: { answer: input.value },
-//            success: (res) => {
-//                document.querySelector(".trainingArea").innerHTML = res;
-//            }
-//        });
-//    }
-
-//    function getNextAnswer(button) {
-//        $.ajax({
-//            url: button.dataset.requestUrl,
-//            type: 'GET',
-//            success: (res) => {
-//                document.querySelector(".trainingArea").innerHTML = res;
-//            }
-//        });
-//    }
-//})();
-
-
-class TrainingBase {
-
+﻿export class TrainingBase {
     constructor(trainingId, isReverse) {
         this.isReverse = isReverse;
         this.trainingId = trainingId;
@@ -82,6 +18,7 @@ class TrainingBase {
         this.subscribeOnPlayAudioEvent();
         this.subscribeOnCheckAnswerEvent();
         this.subscribeOnGetNextAnswerEvent();
+        this.subscribeOnSkipAnswerEvent();
     }
 
 
@@ -106,7 +43,7 @@ class TrainingBase {
     subscribeOnCheckAnswerEvent() {
         let that = this;
         $(document).on('click', '.trainingArea button.answerBtn ', function () {
-            that.checkAnswer(this);
+            that.checkAnswerOnButton(this);
         });
     }
 
@@ -117,16 +54,28 @@ class TrainingBase {
         });
     }
 
-    checkAnswer(button) {
+    subscribeOnSkipAnswerEvent() {
+        let that = this;
+        $(document).on('click', '.trainingArea button.skipBtn ', function () {
+            that.skipAnswer(this);
+        });
+    }
+
+    checkAnswerOnButton(button) {
+        this.checkAnswer(button.dataset.requestUrl, button.innerText);
+    }
+
+    checkAnswer(requestUrl, userAnswer) {
         $.ajax({
-            url: button.dataset.requestUrl,
+            url: requestUrl,
             type: 'GET',
             data: {
                 trainingId: this.trainingId,
-                answer: button.innerText
+                answer: userAnswer
             },
             success: (res) => {
-                document.querySelector(".answerArea").innerHTML = res;
+                document.querySelector("#answerRefreshArea").innerHTML = res;
+                this.removeImageBlur();
             }
         });
     }
@@ -146,6 +95,10 @@ class TrainingBase {
         });
     }
 
+    skipAnswer(button) {
+        this.checkAnswer(button.dataset.requestUrl, null);
+    }
+
     playAudio(button) {
         if (button.nodeName === "I") {
             button = button.parentElement;
@@ -156,9 +109,9 @@ class TrainingBase {
             type: 'GET',
             data: { word: button.previousElementSibling.innerText, language: lang },
             success: function (res) {
-                audio.src = '';
-                audio.src = res;
-                audio.play();
+                this.audio.src = '';
+                this.audio.src = res;
+                this.audio.play();
             }
         });
     }

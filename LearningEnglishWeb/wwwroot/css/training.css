@@ -12,17 +12,15 @@
     min-height: 200px;
 }
 
-.answerBtn {
+/*.answerBtn {
     margin: 5px;
     display: block;
-    width: 90%;
     text-align: left;
-}
+}*/
 
 .nextAnswerBtn {
     margin: 5px;
     display: block;
-    width: 90%;
     text-align: left;
 }
 

@@ -8,9 +8,12 @@
 
         public string Translation { get; set; }
 
+        public string UserAnswer { get; set; }
+
 
         public virtual bool CheckAnswer(string userAnswer)
         {
+            UserAnswer = userAnswer;
             return Translation == userAnswer;
         } 
     }

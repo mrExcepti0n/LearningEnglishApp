@@ -1,10 +1,8 @@
 ﻿using LearningEnglishWeb.Models.Training.Shared;
-using LearningEnglishWeb.Services;
-using LearningEnglishWeb.ViewModels.Training;
+using LearningEnglishWeb.ViewModels.Training.ChooseTranslate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models.Training.ChooseTranslate
 {
@@ -16,25 +14,23 @@ namespace LearningEnglishWeb.Models.Training.ChooseTranslate
         }
 
 
-        public ChooseTranslateQuestionResult CheckAnswer(string answer)
-        {
-            var question = GetCurrentQuestion();
+        //public ChooseTranslateAnswerViewModel CheckAnswer(string answer)
+        //{
+        //    var question = GetCurrentQuestion();
 
-            var isRight = question.CheckAnswer(answer);
-            if (isRight)
-            {
-                RightAnsweredQuestions++;
-            }
+        //    var isRight = question.CheckAnswer(answer);
+        //    if (isRight)
+        //    {
+        //        RightAnsweredQuestions++;
+        //    }
 
-            var questionResult = new ChooseTranslateQuestionResult
-            {
-                Word = question.Word,
-                QuestionNumber = question.Number.ToString(),
-                Translations = question.Options.Select(ta => new ChooseTranslateAnswerResult(ta, isRight)).ToList()
-            };
+        //    var questionResult = new ChooseTranslateAnswerViewModel
+        //    {
+        //        Translations = question.Options.Select(ta => new ChooseTranslateAnswerResult(ta, isRight)).ToList()
+        //    };
 
-            return questionResult;
-        }
+        //    return questionResult;
+        //}
       
     }
 }
