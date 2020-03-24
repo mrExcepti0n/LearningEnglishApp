@@ -18,6 +18,34 @@
             let isReverse = document.querySelector('.trainingArea').dataset['isreverse'] == "True";
             let trainingId = document.querySelector('#trainingId').value;
             let training = new TrainingBase(trainingId, isReverse);
+
+            $(document).on('input', '.trainingArea input[type=\"text\"]', function () {
+                if (this.value.length > 0) {
+                    let button = document.querySelector("button.skipBtn");
+                    if (button !== null) {
+                        button.classList.add('answerBtn');
+                        button.classList.add('btn-primary');
+                        button.classList.remove('skipBtn');
+                        button.classList.remove('btn-warning');
+                        button.innerText = "Проверить";
+                    }
+                } else {
+                    let button = document.querySelector("button.answerBtn");
+                    if (button !== null) {
+                        button.classList.remove('answerBtn');
+                        button.classList.remove('btn-primary');
+
+                        button.classList.add('skipBtn');
+                        button.classList.add('btn-warning');
+                        button.innerText = "Не знаю";
+                    }
+                }
+            });
+
+            $(document).on('click', '.trainingArea button.answerBtn ', function () {
+                let input  = document.querySelector('.trainingArea input[type =\"text\"]');
+                training.checkAnswer(this.dataset.requestUrl, input.value);
+            });         
         })();
     </script>
 }

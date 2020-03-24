@@ -15,7 +15,7 @@
     <div class="col-8 answerArea" id="answerRefreshArea">        
         @foreach (var trans in Model.Translations)
         {
-            <button class="answerBtn btn-block m-2 btn btn-info text-left" data-request-url="@Url.Action("CheckAnswer")"> @trans</button>
+            <button class="answerBtn btn-block m-2 btn btn-info text-left" data-request-url="@Url.Action("CheckAnswer")">@trans</button>
         }
 
         <button class="skipBtn btn-block m-2 btn btn-danger text-left"  data-request-url="@Url.Action("CheckAnswer")">Не знаю</button>

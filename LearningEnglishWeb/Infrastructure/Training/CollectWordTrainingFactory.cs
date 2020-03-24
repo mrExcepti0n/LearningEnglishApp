@@ -22,7 +22,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             Word[] words = await GetWords();
 
-            return new CollectWordTraining(GetQuestions(words));
+            return new CollectWordTraining(GetQuestions(words), _reverseWay);
         }  
 
 

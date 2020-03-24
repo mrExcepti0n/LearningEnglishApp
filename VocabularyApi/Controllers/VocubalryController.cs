@@ -5,6 +5,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
+using LinqKit;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using VocabularyApi.Dtos;
@@ -16,30 +18,49 @@ namespace VocabularyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VocubalryController : ControllerBase
+    public class VocubalaryController : ControllerBase
     {
         private VocabularyContext _vocabularyContext;
         private IIdentityService _identityService;
+        private IMapper _mapper;
 
 
 
-        public VocubalryController(VocabularyContext vocabularyContext, IIdentityService identityService)
+        public VocubalaryController(VocabularyContext vocabularyContext, IIdentityService identityService, IMapper mapper)
         {
             _vocabularyContext = vocabularyContext;
             _identityService = identityService;
+            _mapper = mapper;
         }
 
 
         private Guid userId => _identityService.GetUserIdentity();
 
-        [HttpGet]
-        public ActionResult<List<TranslationDto>> Get([FromQuery] string mask = null)
-        {
-            var translations = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId);
 
-            if (mask != null) {
-                translations = translations.Where(uv => uv.Word.Contains(mask));
+        [HttpGet]
+        public ActionResult<List<UserVocabularyDto>> Get()
+        {
+            var userVocabularies = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId);
+            return _mapper.Map<List<UserVocabularyDto>>(userVocabularies);
+        }
+
+
+        [HttpGet]
+        public ActionResult<List<TranslationDto>> GetWords(string mask = null, int? vocabularyId = null )
+        {
+            var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId);
+
+            if (vocabularyId.HasValue)
+            {
+                predicateBuilder.And(uvw => uvw.UserVocabularyId == vocabularyId);
+            } 
+            if (!string.IsNullOrWhiteSpace(mask))
+            {
+                predicateBuilder.And(uvw => uvw.Word.Contains(mask));
             }
+            
+            var translations = _vocabularyContext.Set<UserVocabularyWord>().Where(predicateBuilder);
+
             return translations.Select(tr => new TranslationDto { Name = tr.Word, Translation = tr.Translation })
                                .ToList();
         }
@@ -47,10 +68,15 @@ namespace VocabularyApi.Controllers
 
 
         [HttpGet("RequiringStudyWords")]
-        public ActionResult<List<TranslationDto>> GetRequiringStudyWords(int count = 10)
+        public ActionResult<List<TranslationDto>> GetRequiringStudyWords(TrainingTypeEnum trainingType, int count = 10)
         {
-            var userWords = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId).ToList();
-            var requiringStudyWords = userWords.OrderByDescending(uv => uv.GetKnowledgeRatio()).Take(count).ToList();
+            var userWords = _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId).ToList();
+
+            var requiringStudyWords = userWords.Where(uv => uv.NeedToRepeat(trainingType))
+                                                .OrderByDescending(uv => uv.GetKnowledgeRatio(trainingType))
+                                                .Take(count)
+                                                .ToList();
+
             return requiringStudyWords.Select(rsw => new TranslationDto { Name = rsw.Word, Translation = rsw.Translation }).ToList();
         }
 
@@ -66,12 +92,36 @@ namespace VocabularyApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(TranslationDto translation)
+        public ActionResult Post(UserVocabularyWordDto vocabularyWord)
         {
-            _vocabularyContext.Add<UserVocabulary>(new UserVocabulary { Translation = translation.Translation, Word = translation.Name, UserId = userId });
+
+            if (vocabularyWord.UserVocabularyId == null)
+            {
+                vocabularyWord.UserVocabularyId = GetOrCreateDefaultUserVocabulary();
+            }
+
+            _vocabularyContext.Add<UserVocabularyWord>(new UserVocabularyWord { Translation = vocabularyWord.Translation, Word = vocabularyWord.Name, UserVocabularyId = vocabularyWord.UserVocabularyId.Value });
             _vocabularyContext.SaveChanges();
 
             return Ok();
+        }
+
+        private int GetOrCreateDefaultUserVocabulary()
+        {
+            var userVocabularyId = _vocabularyContext.UserVocabularies.FirstOrDefault(uv => uv.UserId == userId && uv.IsDefault)?.Id;
+
+            if (userVocabularyId != null)
+            {
+                return userVocabularyId.Value;
+              
+
+            }
+            var userVocabulary = new UserVocabulary { IsDefault = false, Title = "Пользовательский набор слов", UserId = userId };
+
+            _vocabularyContext.Add(userVocabulary);
+            _vocabularyContext.SaveChanges();
+
+            return userVocabulary.Id;
         }
 
 
@@ -86,9 +136,16 @@ namespace VocabularyApi.Controllers
 
 
         [HttpDelete("{name}/{translation}")]
-        public ActionResult Delete(string name, string translation)
+        public ActionResult Delete(string name, string translation, int? userVocabularyId = null)
         {
-            var word = _vocabularyContext.Set<UserVocabulary>().FirstOrDefault(uv => uv.UserId == userId && uv.Word == name && uv.Translation == translation);
+            var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId && uvw.Word == name && uvw.Translation == translation);
+
+            if (userVocabularyId.HasValue)
+            {
+                predicateBuilder.And(uvw => uvw.UserVocabularyId == userVocabularyId.Value);
+            }
+
+            var word = _vocabularyContext.Set<UserVocabularyWord>().FirstOrDefault(predicateBuilder);
             _vocabularyContext.Remove(word);
             _vocabularyContext.SaveChanges();
             return Ok();

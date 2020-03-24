@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 
 namespace VocabularyApi.Dtos
 {
-    public class TranslationDto
+    public class UserVocabularyWordDto
     {
-        public int UserVocabularyWordId { get; set; }
+        public int Id { get; set; }
 
         public string Name { get; set; }
+
         public string Translation { get; set; }
+
+        public int? UserVocabularyId { get; set; }
     }
 }

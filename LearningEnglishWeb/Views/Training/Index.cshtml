@@ -6,45 +6,36 @@
     <h4> тренировка слов </h4>
 </div>
 
-
-<div class="container mt-4">
+<div class="container mt-5">
     <div class="row">
-        <div class="col-sm card pt-5 pb-5">
-            <div class="card-body text-center">
-                <a asp-action="Index" asp-controller="TranslateWordTraining"> англо-русский перевод</a>
+        <div class="col-6 p-3">
+            <div class="trainingContainer">
+                <a asp-action="Index" asp-controller="TranslateWordTraining" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <button class="trainingDesc" disabled> Перевод слова </button>
+                <a asp-action="Index" asp-controller="TranslateWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
             </div>
         </div>
-        <div class="col-sm card mr-2 pt-5 pb-5">
-            <div class="card-body text-center">
-                <a href="#"> русско-английский перевод</a>
+        <div class="col-6 p-3">
+            <div class="trainingContainer">
+                <a asp-action="Index" asp-controller="ChooseTranslateTraining" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <button class="trainingDesc" disabled> Выбор перевода </button>
+                <a asp-action="Index" asp-controller="ChooseTranslateTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
             </div>
         </div>
-        <div class="col-sm card pt-5 pb-5">
-            <div class="card-body text-center">
-                <a asp-action="Index" asp-controller="ChooseTranslateTraining">выбор перевода англо-русский </a>
+        <div class="col-6 p-3">
+            <div class="trainingContainer">
+                <a asp-action="Index" asp-controller="CollectWordTraining" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <button class="trainingDesc" disabled> Собери слово </button>
+                <a asp-action="Index" asp-controller="CollectWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
             </div>
         </div>
-        <div class="col-sm card pt-5 pb-5">
-            <div class="card-body text-center">
-                <a asp-action="Index" asp-controller="ChooseTranslateTraining" asp-route-isReverseWay="true" class="m-0">выбор перевода русско-английский</a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm card pt-5 pb-5 mt-2 mr-2">
-            <div class="card-body text-center">
-                <a asp-action="Index" asp-controller="CollectWordTraining">cобери слово</a>
-            </div>
-        </div>
-        <div class="col-sm card pt-5 pb-5 mt-2 mr-2">
-            <div class="card-body text-center">
-                <a href="#">тренировка 6</a>
-            </div>
-        </div>
-        <div class="col-sm card pt-5 pb-5 mt-2">
-            <div class="card-body text-center">
-                <a href="#">тренировка 7</a>
+        <div class="col-6 p-3">
+            <div class="trainingContainer">
+                <a href="#" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <button class="trainingDesc" disabled> Аудирование </button>
+                <a href="#" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
             </div>
         </div>
     </div>
 </div>
+

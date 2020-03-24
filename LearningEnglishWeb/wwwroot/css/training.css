@@ -18,11 +18,11 @@
     text-align: left;
 }*/
 
-.nextAnswerBtn {
+/*.nextAnswerBtn {
     margin: 5px;
     display: block;
     text-align: left;
-}
+}*/
 
 .letter {
     /*display: inline-block;
@@ -52,4 +52,109 @@
 }
 
 
+.trainingDesc {
+    background-color: white;
+    text-decoration: none;
+    user-select: none;
+    border: 1px solid transparent;
+    cursor: default;
+    padding: 0;
+    display: block;
+    height: 30px;
+    width: 150px;
+    position: absolute;
+    margin: auto;
+    bottom: 50%;
+    top: 50%;
+    left: 0;
+    right: 0;
+    opacity: 1;
+    z-index: 1;
+}
+.trainingContainer {
+    height: 150px;
 
+}
+
+@keyframes topBtnAnimation {
+    50% {
+        transform: translateY(-10px)
+    }
+    100% {
+        transform: translate(10px, -10px)
+    }
+}
+
+@keyframes botBtnAnimation {
+    50% {
+        transform: translateY(10px)
+    }
+    100% {
+        transform: translate(-10px, 10px)
+    }
+}
+
+.trainingContainer:hover .trainingTopBtn {
+    animation: topBtnAnimation 0.5s;
+    animation-fill-mode: forwards;
+    /*transform: translate(0, -10px) translate(10px, 0);*/
+}
+
+.trainingContainer:hover .trainingBotBtn {
+    animation: botBtnAnimation 0.5s;
+    animation-fill-mode: forwards;
+    /*transform: translate(0, 10px) translate(-10px, 0);*/
+}
+
+.trainingBtn {
+    color: white;
+    height: 50%;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    line-height: 55px;
+    position: relative;
+    z-index: 0;
+    transition: 1.5s;
+}
+
+    .trainingBtn:hover {
+        text-decoration: none;
+        color: white;
+    }
+
+        /*.trainingBtn:hover .trainingTopBtn {
+            transform: translate(0,20px);
+        }
+
+        .trainingBtn:hover .trainingBotBtn {
+            transform: translate(0,-20px);
+        }*/
+
+.trainingTopBtn {
+    border-radius: 50px 50px 0 0;
+    background-color: cornflowerblue;
+}
+
+    .trainingTopBtn:hover {
+        background-color: #427BE3;
+         /*transform: translate(0,-20px);*/
+    }
+
+        /*.trainingTopBtn:hover ~ .trainingBotBtn {
+            transform: translate(0,20px);
+        }*/
+
+.trainingBotBtn {
+    background-color: #FF5F6B;
+    border-radius: 0 0 50px 50px;
+}
+
+    .trainingBotBtn:hover {
+        background-color: #FF3443;
+        /*transform: translate(0,20px);*/
+    }
+
+        /*.trainingBotBtn:hover ~ .trainingTopBtn {
+            transform: translate(0,-20px);
+        }*/

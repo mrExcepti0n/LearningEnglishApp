@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 using LearningEnglishWeb.Services.Dtos;
+using LearningEnglishWeb.Services.Helpers;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 
 namespace LearningEnglishWeb.Services
 {
@@ -14,35 +18,40 @@ namespace LearningEnglishWeb.Services
         public WordSetService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _baseUrl = configuration.GetSection("VocabularyUrl").Value;
+            _baseUrl = configuration.GetSection("WordSetUrl").Value;
         }
 
   
 
-        public void AddWordSet(WordSetSaveDto wordSet)
+        public async Task AddWordSet(WordSetSaveDto wordSet)
         {
-            throw new NotImplementedException();
-          //  _wordSetController.Add(wordSet);
+            string requestUrl = Api.WordSet.AddWordSet(_baseUrl);
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(wordSet), Encoding.UTF8, "application/json");
+            var result = await _httpClient.PostAsync(requestUrl, content);
+            result.EnsureSuccessStatusCode();
         }
 
 
-        public List<WordSetShortDto> GetWordSets()
+        public async Task<List<WordSetShortDto>> GetWordSets()
         {
-            throw new NotImplementedException();
-            //return _wordSetController.Get().Value;
+            string requestUrl = Api.WordSet.GetWordSets(_baseUrl);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<List<WordSetShortDto>>(stringResult);
         }
 
-
-        public WordSetDto GetWordSet(int id)
+        public async Task<WordSetDto> GetWordSet(int id)
         {
-            throw new NotImplementedException();
-            //return _wordSetController.Get(id).Value;
+            var requestUrl = Api.WordSet.GetWordSet(_baseUrl, id);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<WordSetDto>(stringResult);
         }
 
-        public void AddWords(int[] wordSetItems)
+        public async Task AddWords(int[] wordSetItems)
         {
-            throw new NotImplementedException();
-            // _wordSetController.AddWords(wordSetItems);
-        }
+            string requestUrl = Api.WordSet.AddWords(_baseUrl);
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(new { wordSetItems = wordSetItems }), Encoding.UTF8, "application/json");
+            var result = await _httpClient.PostAsync(requestUrl, content);
+            result.EnsureSuccessStatusCode();
+        }      
     }
 }

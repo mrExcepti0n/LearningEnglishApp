@@ -18,6 +18,11 @@
             let isReverse = document.querySelector('.trainingArea').dataset['isreverse'] == "True";
             let trainingId = document.querySelector('#trainingId').value;
             let training = new TrainingBase(trainingId, isReverse);
+
+            $(document).on('click', '.trainingArea button.answerBtn ', function () {
+                training.checkAnswer(this.dataset.requestUrl, this.innerText);
+            });
+
         })();
     </script>
 }

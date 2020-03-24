@@ -3,22 +3,24 @@
     ViewData["Title"] = "CollectWordTrainingAnswerResult";
 }
 
-<h4 class="text-center">
+@*<h4 class="text-center">
     <span>@Model.RigtAnswer</span>
 
     <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
         <i class="fas audio fa-play"></i>
     </button>
-</h4>
+</h4>*@
 
-<div class="answerArea">
-
-    @foreach (var letter in Model.CollectWordAnswerResults)
-    {
-        <button class="letter m-1 btn @(@letter.IsRight ? "btn-success" : "btn-danger") " disabled> @letter.Letter </button>
-    }
-
-</div>
+    <div class="answerArea">
+        @if (Model.CollectWordAnswerResults.Any(ar => !ar.IsRight))
+        {
+           <h4>@Model.RigtAnswer </h4>
+        }
+        @foreach (var letter in Model.CollectWordAnswerResults)
+        {
+            <button class="letter m-1 btn @(@letter.IsRight ? "btn-success" : "btn-danger") " disabled> @letter.Letter </button>
+        }
+    </div>
 <div class="questionArea">
     <button class="nextAnswerBtn btn btn-primary text-center" data-request-url="@Url.Action("GetNextQuestion")"> Следующий вопрос </button>
 </div>

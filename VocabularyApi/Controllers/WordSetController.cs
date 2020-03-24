@@ -33,14 +33,27 @@ namespace VocabularyApi.Controllers
             return wordSets;
         }
 
-        [HttpPost]
-        public void AddWords(int[] wordSetItems)
+        [HttpPost("UserWordSet")]
+        public void AddWords(UserWordSetSaveDto userWordSet)
         {
-            var wordSets = _vocabularyContext.WordSetItem.Where(wsi => wordSetItems.Contains(wsi.Id) 
-                                                            && !_vocabularyContext.UserVocabularies.Any(vw=> vw.UserId == userId && vw.Word == wsi.Word && vw.Translation == wsi.Translation))
-                                                          .ToList();
+            var userWordSetItemIds = new List<int>();
+            var wordSet = _vocabularyContext.Set<WordSet>().Include(ws => ws.WordSetItems).SingleOrDefault(ws => ws.Id == userWordSet.WordSetId);
 
-            _vocabularyContext.AddRange(wordSets.Select(ws => new UserVocabulary { UserId = userId, Translation = ws.Translation, Word = ws.Word }));
+            var selectedWords = wordSet.WordSetItems.Where(wsi => userWordSet.WordSetItemIds.Contains(wsi.Id)).ToList();
+
+            var userVocabulary = _vocabularyContext.Set<UserVocabulary>().SingleOrDefault(uv => uv.WordSetId == userWordSet.WordSetId);
+            if (userVocabulary == null)
+            {              
+                userVocabulary = new UserVocabulary { UserId = userId, WordSetId = userWordSet.WordSetId, Title = wordSet.Title };
+                _vocabularyContext.Add(userVocabulary);
+            }
+
+            List<UserVocabularyWord> userWords = _vocabularyContext.UserVocabularyWords.Where(uvw => uvw.UserVocabulary.UserId == userId).ToList();
+            var wordSets = selectedWords.Where(sw => !userWords.Any(uw => uw.Word == uw.Translation && uw.Translation == sw.Translation)).ToList();
+
+            foreach (var ws in wordSets) {
+                userVocabulary.Words.Add(new UserVocabularyWord {Translation = ws.Translation, Word = ws.Word });
+            }
             _vocabularyContext.SaveChanges();
         }
 

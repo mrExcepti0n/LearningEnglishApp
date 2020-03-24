@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using LearningEnglishWeb.Services.Dtos;
+using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Controllers
 {
@@ -15,19 +16,17 @@ namespace LearningEnglishWeb.Controllers
             _wordSetService = wordSetService;
         }
 
-        [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var wordSets = _wordSetService.GetWordSets();
+            var wordSets = await _wordSetService.GetWordSets();
             return View(wordSets.Select(ws => new WordSetShortModel(ws)));
         }
 
-
-        [HttpGet("{id}")]
-        public IActionResult Index(int id)
+        [HttpGet("[controller]/[action]/{id}")]
+        public async Task<IActionResult> Index(int id)
         {
-            var wordSetDto = _wordSetService.GetWordSet(id);
-            return View("WordSet",new WordSetModel(wordSetDto));
+            var wordSetDto = await _wordSetService.GetWordSet(id);
+            return View("WordSet", new WordSetModel(wordSetDto));
         }
 
 
@@ -40,7 +39,7 @@ namespace LearningEnglishWeb.Controllers
 
 
         [HttpPost]
-        public IActionResult Add(WordSetAddModel wordSetModel)
+        public async Task<IActionResult> Add(WordSetAddModel wordSetModel)
         {
             var wordSetDto = new WordSetSaveDto()
             {
@@ -52,15 +51,15 @@ namespace LearningEnglishWeb.Controllers
             {
                 wordSetDto.Image = binaryReader.ReadBytes((int)wordSetModel.Image.Length);
             }
-            _wordSetService.AddWordSet(wordSetDto);
+            await _wordSetService.AddWordSet(wordSetDto);
             return View();
         }
 
 
         [HttpPost]
-        public void AddWordsToVocabulary(int[] wodsSetItems)
+        public async Task AddWordsToVocabulary(int[] wodsSetItems)
         {
-            _wordSetService.AddWords(wodsSetItems);
+           await _wordSetService.AddWords(wodsSetItems);
         }
 
     }

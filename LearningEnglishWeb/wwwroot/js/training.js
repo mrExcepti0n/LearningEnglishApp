@@ -16,7 +16,6 @@
     subscribeOnEvents() {
         this.subscribeOnNewGameEvent();
         this.subscribeOnPlayAudioEvent();
-        this.subscribeOnCheckAnswerEvent();
         this.subscribeOnGetNextAnswerEvent();
         this.subscribeOnSkipAnswerEvent();
     }
@@ -40,12 +39,6 @@
         });
     }
 
-    subscribeOnCheckAnswerEvent() {
-        let that = this;
-        $(document).on('click', '.trainingArea button.answerBtn ', function () {
-            that.checkAnswerOnButton(this);
-        });
-    }
 
     subscribeOnGetNextAnswerEvent() {
         let that = this;
@@ -59,10 +52,6 @@
         $(document).on('click', '.trainingArea button.skipBtn ', function () {
             that.skipAnswer(this);
         });
-    }
-
-    checkAnswerOnButton(button) {
-        this.checkAnswer(button.dataset.requestUrl, button.innerText);
     }
 
     checkAnswer(requestUrl, userAnswer) {
@@ -104,14 +93,15 @@
             button = button.parentElement;
         }
         let lang = this.isReverse ? 2 : 1;
+        let audio = this.audio;
         $.ajax({
             url: button.dataset.requestUrl,
             type: 'GET',
             data: { word: button.previousElementSibling.innerText, language: lang },
             success: function (res) {
-                this.audio.src = '';
-                this.audio.src = res;
-                this.audio.play();
+                audio.src = '';
+                audio.src = res;
+                audio.play();
             }
         });
     }
@@ -126,6 +116,9 @@
     }
 
     removeImageBlur() {
-        document.getElementById('wordImage').style.filter = 'blur(0px)';   
+        let image = document.getElementById('wordImage');
+        if (image !== null) {
+            image.style.filter = 'blur(0px)';
+        }
     }
 }

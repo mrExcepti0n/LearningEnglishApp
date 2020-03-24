@@ -21,7 +21,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             Word[] words = await GetWords();
 
-            return new TranslateWordTraining(GetQuestions(words).ToList());
+            return new TranslateWordTraining(GetQuestions(words).ToList(), _reverseWay);
         }
 
 

@@ -38,6 +38,7 @@ namespace LearningEnglishWeb.Services.Helpers
             {
                 return baseUrl + "/RequiringStudyWords";
             }
+          
         }
 
 
@@ -46,6 +47,29 @@ namespace LearningEnglishWeb.Services.Helpers
             public static string GetWordImage(string baseUrl, string word)
             {
                 return $"{baseUrl}/{word}";
+            }
+        }
+
+        public static class WordSet
+        {
+            internal static string GetWordSet(string baseUrl, int id)
+            {
+                return $"{baseUrl}/{id}";
+            }
+
+            internal static string AddWordSet(string baseUrl)
+            {
+                return baseUrl;
+            }
+
+            internal static string AddWords(string baseUrl)
+            {
+                return $"{baseUrl}/UserWordSet";
+            }
+
+            internal static string GetWordSets(string baseUrl)
+            {
+                return baseUrl;
             }
         }
     }

@@ -9,6 +9,7 @@ namespace VocabularyApi.Infrastructure.DataAccess
 {
     public class VocabularyContext : DbContext
     {
+        public DbSet<UserVocabularyWord> UserVocabularyWords { get; set; }
         public DbSet<UserVocabulary> UserVocabularies { get; set; }
         public DbSet<VocabularyWord> VocabularyWords { get; set; }
         public DbSet<WordTranslation> WordTranslations { get; set; }

@@ -8,12 +8,12 @@ namespace LearningEnglishWeb.Services
 {
     public interface IWordSetService
     {
-        void AddWordSet(WordSetSaveDto wordSet);
+        Task AddWordSet(WordSetSaveDto wordSet);
 
-        List<WordSetShortDto> GetWordSets();
+        Task<List<WordSetShortDto>> GetWordSets();
 
-        WordSetDto GetWordSet(int id);
+        Task<WordSetDto> GetWordSet(int id);
 
-        void AddWords(int[] wordSetItems);
+        Task AddWords(int[] wordSetItems);
     }
 }

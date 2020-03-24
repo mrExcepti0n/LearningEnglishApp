@@ -9,16 +9,16 @@ namespace VocabularyApi.Models
     {
         public int Id { get; set; }
 
+        public string Title { get; set; }
+        
         public Guid UserId { get; set; }
 
-        public string Word { get; set; }
-
-        public string Translation { get; set; }
+        public int? WordSetId { get; set; }
 
 
-        public int GetKnowledgeRatio()
-        {
-            return 100;
-        }
+        public bool IsDefault { get; set; }
+
+        public ICollection<UserVocabularyWord> Words { get; set; } = new HashSet<UserVocabularyWord>();
+        public WordSet WordSet { get; set; }
     }
 }
