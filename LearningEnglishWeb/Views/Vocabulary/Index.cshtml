@@ -1,25 +1,77 @@
-﻿@using LearningEnglishWeb.Models
-@model IEnumerable<Word>
+﻿@using LearningEnglishWeb.ViewModels.Vocabulary
+@model UserVocabularyViewModel
 @{
     ViewData["Title"] = "Vocabulare Page";
 }
 
+<div class="row justify-content-center">
+    <div class="col-xl-8 col-sm-12 mb-3 mt-3">
+        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner text-center">
 
-<div>
+                @for (var i = 0; i < Model.UserVocabularies.Count(); i += 3)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")  ">
+                        @for (var j = i; j < i + 3; j++)
+                        {
+                            <div class="card d-inline-block" style="width: 12rem;">
+                                <div class="card-header"> @Model.UserVocabularies[j].Title</div>
+                                <div class="card-body"> <a href="#">  количество слов @Model.UserVocabularies[j].WordsCount </a> </div>
+                            </div>
+                            }
+                    </div>
+                }
+            </div>
 
 
-    <div class="form-group">
-        <input id="find-input" type="text" placeholder="Введите слово" class="form-control" />
-        <button class="btn btn-success float-right m-2 add-word-button" type="button"> добавить </button>
-    </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="text-dark carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+        </div>
 
-    <div id="available-words" class="w-50 m-2 text-center shadow-lg p-3 mb-5 bg-white rounded d-none">
-    </div>
-
-    <div id="partial">
-        @await Html.PartialAsync("WordList")
+        @*<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    @foreach (var userWord in Model.UserVocabularies)
+                    {
+                        <div class="carousel-item active">
+                            <div class="d-inline-block"> @userWord.Title </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>*@
     </div>
 </div>
+
+
+<div class="row justify-content-center">
+    <div class="col-xl-8 col-sm-12">
+        <div class="form-group">
+            <input id="find-input" type="text" placeholder="Введите слово" class="form-control" />
+            <button class="btn btn-success float-right m-2 add-word-button" type="button"> добавить </button>
+        </div>
+
+        <div id="available-words" class="w-50 m-2 text-center shadow-lg p-3 mb-5 bg-white rounded d-none">
+        </div>
+    </div>
+    <div id="partial" class="col-xl-8 col-sm-12">
+        @await Html.PartialAsync("WordList", Model.UserWords)
+    </div>
+</div>
+
+
 
 
 <template id="addOwnWordTemplate">
@@ -71,8 +123,7 @@
             refreshArea(this.value);
         }, false);
 
-
-            function playAudio(button) {
+        function playAudio(button) {
 
                 if (button.nodeName == "I") {
                     button = button.parentElement;
@@ -129,7 +180,6 @@
             })
         });
 
-
         $(document).on('click', '.delete-button', function () {
 
             let wordName = this.parentElement.parentElement.querySelector(".wordName").innerText;
@@ -158,8 +208,6 @@
             });
         }
 
-
-
         function toogleButton(str) {
             let button = document.querySelector(".add-word-button");
             if (str.length > 0) {
@@ -179,12 +227,7 @@
                     refreshArea.innerHTML = res;
                 }
             });
-
-            }
-
-
-
-
+        }
     })();
-    </script>
+</script>
 }

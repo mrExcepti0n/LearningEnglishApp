@@ -23,7 +23,8 @@ export class VocabularyService {
   }
 
   getUserWords(): Observable<Word[]> {
-    return this.service.get(this.vocabularyUrl).pipe<Word[]>(tap((response: any) => {
+    let url = this.vocabularyUrl + '/words';
+    return this.service.get(url).pipe<Word[]>(tap((response: any) => {
       return response;
     }));
   }

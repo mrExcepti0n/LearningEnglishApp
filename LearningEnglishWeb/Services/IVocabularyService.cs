@@ -6,7 +6,9 @@ namespace LearningEnglishWeb.Services
 {
     public interface IVocabularyService
     {
-        Task<List<Word>> GetWords(string mask = null);
+        Task<List<UserVocabulary>> GetVocabularies();
+
+        Task<List<UserWord>> GetWords(string mask = null);
 
         Task<List<string>> GetTranslations(string word);
 
@@ -15,7 +17,7 @@ namespace LearningEnglishWeb.Services
         Task RemoveWord(string name, string translation);
 
 
-        Task<List<Word>> GetRequiringStudyWords();
+        Task<List<UserWord>> GetRequiringStudyWords();
 
 
         Task LoadDictionary(byte[] array);

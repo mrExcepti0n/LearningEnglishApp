@@ -20,13 +20,13 @@ namespace LearningEnglishWeb.Infrastructure.Training
 
         public override async Task<CollectWordTraining> GetTraining()
         {
-            Word[] words = await GetWords();
+            UserWord[] words = await GetWords();
 
             return new CollectWordTraining(GetQuestions(words), _reverseWay);
         }  
 
 
-        private IEnumerable<CollectWordQuestion> GetQuestions(Word[] words)
+        private IEnumerable<CollectWordQuestion> GetQuestions(UserWord[] words)
         {
             for (var i= 0; i< words.Length; i++)
             {

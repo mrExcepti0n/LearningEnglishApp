@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Logging;
 
 namespace LearningEnglishWeb
@@ -48,7 +49,7 @@ namespace LearningEnglishWeb
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 
@@ -82,13 +83,10 @@ namespace LearningEnglishWeb
                 endpoints.MapControllerRoute("defaultError", "{controller=Error}/{action=Error}");
                 endpoints.MapControllers();
             });
-
         }
-
-
-
-
     }
+
+
     static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddCustomMvc(this IServiceCollection services, IConfiguration configuration)
@@ -96,8 +94,6 @@ namespace LearningEnglishWeb
             services.AddOptions();
             services.AddSession();
             services.AddDistributedMemoryCache();
-
-
             return services;
         }
         public static IServiceCollection AddHttpClientServices(this IServiceCollection services)

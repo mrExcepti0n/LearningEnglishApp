@@ -24,13 +24,20 @@ namespace LearningEnglishWeb.Services
             _httpClient = httpClient;
             _baseUrl = configuration.GetSection("VocabularyUrl").Value;
         }
-             
 
-        public async Task<List<Word>> GetWords(string mask = null)
+        public async Task<List<UserVocabulary>> GetVocabularies()
+        {
+            var requestUrl = Api.Vocabulary.GetVocabularies(_baseUrl);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<List<UserVocabulary>>(stringResult);
+        }
+
+
+        public async Task<List<UserWord>> GetWords(string mask = null)
         {
             var requestUrl = Api.Vocabulary.GetWords(_baseUrl, mask);
             var stringResult = await _httpClient.GetStringAsync(requestUrl);
-            return JsonConvert.DeserializeObject<List<Word>>(stringResult);  
+            return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);  
         }
 
         public async Task<List<string>> GetTranslations(string word)
@@ -69,11 +76,11 @@ namespace LearningEnglishWeb.Services
 
 
 
-        public async Task<List<Word>> GetRequiringStudyWords()
+        public async Task<List<UserWord>> GetRequiringStudyWords()
         {
             var requestUrl = Api.Vocabulary.GetRequiringStudyWords(_baseUrl);
             var stringResult = await _httpClient.GetStringAsync(requestUrl);
-            return JsonConvert.DeserializeObject<List<Word>>(stringResult);
+            return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);
         }
     }
 }

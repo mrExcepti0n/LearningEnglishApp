@@ -19,24 +19,86 @@ namespace LearningEnglishWeb.Controllers
    
     public class VocabularyController : Controller
     {
-        public VocabularyController(IVocabularyService vocabularyService, ISpeachService speachService)
+        public VocabularyController(IVocabularyService vocabularyService, ISpeachService speachService, IWordImageService wordImageService)
         {
             _vocabularyService = vocabularyService;
 
             _speachService = speachService;
+            _wordImageService = wordImageService;
         }
         private IVocabularyService _vocabularyService { get; set; } 
         private ISpeachService _speachService { get; set; }
+        private IWordImageService _wordImageService { get; set; }
 
         public async Task<IActionResult> Index()
         {
-            var words = await _vocabularyService.GetWords();          
-            return View(words);
+            var words = await _vocabularyService.GetWords();
+            var userVocabularies = await _vocabularyService.GetVocabularies();
+
+            userVocabularies = new List<UserVocabulary>
+            {
+                new UserVocabulary
+                {
+                    Title = "Набор слов 1",
+                    WordsCount = 24
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 2",
+                    WordsCount = 18
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 3",
+                    WordsCount = 14
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 4",
+                    WordsCount = 5
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 5",
+                    WordsCount = 6
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 6",
+                    WordsCount = 33
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 7",
+                    WordsCount = 17
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 8",
+                    WordsCount = 14
+                },
+                new UserVocabulary
+                {
+                    Title = "Набор слов 9",
+                    WordsCount = 50
+                }
+            };
+            await FillImages(words); 
+            return View(new UserVocabularyViewModel {UserVocabularies = userVocabularies, UserWords = words });
+        }
+
+        private async Task FillImages(List<UserWord> words)
+        {
+            foreach (var word in words)
+            {
+                word.ImageSrc = await _wordImageService.GetThumbnailSrc(word.Name);
+            }
         }
 
         public async Task<IActionResult> WordList(string mask)
         {
             var words = await _vocabularyService.GetWords(mask);
+            await FillImages(words);
             return PartialView(words);
         }
 

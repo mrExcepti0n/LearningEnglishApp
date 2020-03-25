@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace VocabularyApi.Dtos
+namespace LearningEnglishWeb.Models
 {
-    public class UserVocabularyDto
+    public class UserVocabulary
     {
         public int Id { get; set; }
+
 
         public string Title { get; set; }
 

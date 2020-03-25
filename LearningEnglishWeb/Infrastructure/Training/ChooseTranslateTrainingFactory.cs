@@ -22,13 +22,13 @@ namespace LearningEnglishWeb.Infrastructure.Training
 
         public override async Task<ChooseTranslateTraining> GetTraining()
         {
-            Word[] words = await GetWords();
+            UserWord[] words = await GetWords();
             return new ChooseTranslateTraining(GetQuestions(words), _reverseWay);
         }
         
 
 
-        private IEnumerable<QuestionWithOptions> GetQuestions(Word[] words)
+        private IEnumerable<QuestionWithOptions> GetQuestions(UserWord[] words)
         {
             for (var i = 0; i < words.Length; i++)
             {
@@ -37,7 +37,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
             }
         }
         
-        private QuestionWithOptions GetQuestion(int number, Word word, List<string> options)
+        private QuestionWithOptions GetQuestion(int number, UserWord word, List<string> options)
         {
             return new QuestionWithOptions
             {
@@ -49,7 +49,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         }
      
 
-        private List<string> GetOptions(Word[] words, int currentWordIndex, int size)
+        private List<string> GetOptions(UserWord[] words, int currentWordIndex, int size)
         {            
 
             var otherWords = words.Where((w,i) => i != currentWordIndex).ToArray();

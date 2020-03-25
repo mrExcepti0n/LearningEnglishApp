@@ -12,9 +12,7 @@ namespace LearningEnglishWeb.ViewModels.Vocabulary
             Translations = translations;         
         }
 
-        public IEnumerable<string> Translations { get; set; }
-
-       
+        public IEnumerable<string> Translations { get; set; }       
 
     }
 }

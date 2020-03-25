@@ -18,19 +18,17 @@ namespace VocabularyApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class VocubalaryController : ControllerBase
+    public class VocabularyController : ControllerBase
     {
         private VocabularyContext _vocabularyContext;
         private IIdentityService _identityService;
-        private IMapper _mapper;
 
 
 
-        public VocubalaryController(VocabularyContext vocabularyContext, IIdentityService identityService, IMapper mapper)
+        public VocabularyController(VocabularyContext vocabularyContext, IIdentityService identityService)
         {
             _vocabularyContext = vocabularyContext;
             _identityService = identityService;
-            _mapper = mapper;
         }
 
 
@@ -40,12 +38,12 @@ namespace VocabularyApi.Controllers
         [HttpGet]
         public ActionResult<List<UserVocabularyDto>> Get()
         {
-            var userVocabularies = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId);
-            return _mapper.Map<List<UserVocabularyDto>>(userVocabularies);
+            var userVocabularies = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId).Select(uv => new UserVocabularyDto { WordsCount = uv.Words.Count,  Title = uv.Title, Id = uv.Id });
+            return userVocabularies.ToList();
         }
 
 
-        [HttpGet]
+        [HttpGet("Words")]
         public ActionResult<List<TranslationDto>> GetWords(string mask = null, int? vocabularyId = null )
         {
             var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId);
@@ -116,7 +114,7 @@ namespace VocabularyApi.Controllers
               
 
             }
-            var userVocabulary = new UserVocabulary { IsDefault = false, Title = "Пользовательский набор слов", UserId = userId };
+            var userVocabulary = new UserVocabulary { IsDefault = true, Title = "Пользовательский набор слов", UserId = userId };
 
             _vocabularyContext.Add(userVocabulary);
             _vocabularyContext.SaveChanges();

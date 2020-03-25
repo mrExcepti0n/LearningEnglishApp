@@ -29,7 +29,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         public abstract Task<T> GetTraining();
 
 
-        protected async Task<Word[]> GetWords()
+        protected async Task<UserWord[]> GetWords()
         {
              var words = await _vocabularyService.GetRequiringStudyWords();
 

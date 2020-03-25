@@ -1,39 +1,38 @@
-﻿@model IEnumerable<LearningEnglishWeb.Models.Word>
+﻿@model IEnumerable<LearningEnglishWeb.Models.UserWord>
 
 
-<table class="table">
+<table class="table table-hover">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-                
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Transcription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Translation)
-              
-            </th>
+            <th style="width:2%"></th>
+            <th class="text-center" colspan="2">Слово</th>
+            <th>Транскрипция</th>
+            <th>Перевод</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
-        <tr>
-            <td class="wordName">
-                <span>@item.Name</span>
-                <button class="audio btn p-0">  <i class="fas audio fa-play"></i> </button>
+        <tr class="align-middle">
+            <td class="align-middle"> <input type="checkbox" /> </td>
+            <td style="width:2%" class="align-middle p-0">
+                <div style="width:60px; height:60px; position:relative"  >
+                    <img class="img-thumbnail" src=@item.ImageSrc>
+                </div>
             </td>
-            <td class="wordTranscription">
+            <td  class="align-middle">
+                <span>@item.Name</span>
+                <button class="audio btn p-0">  <i class="fa audio fa-play text-success"></i> </button>
+            </td>
+            <td  class="align-middle">
                @item.Transcription
             </td>
-            <td class="wordTranslation">
+            <td  class="align-middle">
                 <span>@item.Translation</span>
-                <button class="audio btn p-0 translation">  <i class="fas audio fa-play"></i> </button>
+                <button class="audio btn p-0 translation">  <i class="fa audio fa-play text-success"></i> </button>
             </td>   
-            <td class="text-right">
-                <button class="btn btn-danger delete-button"> удалить </button>
+            <td class="text-right align-middle">
+                <button class="btn btn-danger btn-sm delete-button"> удалить </button>
             </td>
         </tr>
 }

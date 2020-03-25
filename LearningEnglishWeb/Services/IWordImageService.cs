@@ -10,5 +10,9 @@ namespace LearningEnglishWeb.Services
         Task<byte[]> GetImage(string word);
 
         Task<string> GetImageSrc(string word);
+
+        Task<string> GetThumbnailSrc(string word);
+
+        Task<byte[]> GetThumbnail(string word);
     }
 }
