@@ -1,6 +1,8 @@
-﻿using System;
+﻿using LearningEnglishWeb.Models.Training;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Services.Helpers
@@ -9,13 +11,27 @@ namespace LearningEnglishWeb.Services.Helpers
     {
         public static class Vocabulary
         {
-            public static string GetWords(string baseUrl, string mask)
+            public static string GetWords(string baseUrl, string mask, int? vocabularyId)
             {     
                 var url = $"{baseUrl}/words";
+
+                List<string> parameters = new List<string>();
+                if (vocabularyId != null)
+                {
+                    parameters.Add($"vocabularyId={vocabularyId.Value}");
+                }
+
                 if (!string.IsNullOrWhiteSpace(mask))
                 {
-                    url += $"?mask={mask}";
+                    parameters.Add($"mask={mask}");
                 }
+
+                if (parameters.Any())
+                {
+                    url += "?" + string.Join('&', parameters);
+                }
+               
+
                 return url;
             }
 
@@ -28,9 +44,11 @@ namespace LearningEnglishWeb.Services.Helpers
             {
                 return baseUrl;
             }
-            public static string RemoveWord(string baseUrl, string name, string translation)
+
+            public static string RemoveWord(string baseUrl, int wordId)
             {
-                return $"{baseUrl}/{name}/{translation}";
+                var url = $"{baseUrl}/words/{wordId}";
+                return url;
             }
 
             internal static string GetVocabularies(string baseUrl)
@@ -38,16 +56,17 @@ namespace LearningEnglishWeb.Services.Helpers
                 return baseUrl;
             }
 
+            internal static string GetVocabulary(string baseUrl, int id)
+            {
+                return $"{baseUrl}/{id}";
+            }
+
+
             public static string LoadDictionary(string baseUrl)
             {
                 return baseUrl + "/Load";
             }
 
-            public static string GetRequiringStudyWords(string baseUrl)
-            {
-                return baseUrl + "/RequiringStudyWords";
-            }
-          
         }
 
 
@@ -81,6 +100,39 @@ namespace LearningEnglishWeb.Services.Helpers
             }
 
             internal static string GetWordSets(string baseUrl)
+            {
+                return baseUrl;
+            }
+        }
+
+        public static class Training
+        {
+
+            public static string GetRequiringStudyWords(string baseUrl, TrainingTypeEnum trainingType, bool isReverseTraining)
+            {
+                return $"{baseUrl}/RequiringStudyWords?trainingType={trainingType}&isReverseTraining={isReverseTraining}";
+            }
+
+            internal static string GetAvailibleTrainingWordsCount(string baseUrl)
+            {
+                return $"{baseUrl}/AvailibleTrainingWordsCount";
+            }
+
+            internal static string GetTrainingWordsRatio(string baseUrl, ICollection<int> userWordIs)
+            {
+                var urlBulder = new StringBuilder($"{baseUrl}/TrainingWordsRatio");
+
+                if (userWordIs.Any()) {
+                    var parameters = string.Join('&', userWordIs.Select(uw => $"userWordIds={uw}"));
+                    urlBulder.Append('?');
+                    urlBulder.Append(parameters);
+                }
+
+                return urlBulder.ToString();
+            }
+
+
+            internal static string SaveTrainingResult(string baseUrl)
             {
                 return baseUrl;
             }

@@ -9,6 +9,7 @@ using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models;
 using LearningEnglishWeb.Models.Training.TranslateWord;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,9 @@ namespace LearningEnglishWeb.Controllers
     public class TranslateWordTrainingController : Controller
     {
         private TranslateWordTrainingFacade _trainingFacade;
-        public TranslateWordTrainingController(TrainingFactory trainingFactory, IWordImageService wordImageService)
+        public TranslateWordTrainingController(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService)
         {
-            _trainingFacade = new TranslateWordTrainingFacade(trainingFactory, wordImageService);
+            _trainingFacade = new TranslateWordTrainingFacade(trainingFactory, wordImageService, trainingService);
         }
 
 
@@ -39,7 +40,7 @@ namespace LearningEnglishWeb.Controllers
                 return PartialView("TranslateWordTrainingQuestion", nextQuestionModel);
             }
 
-            var trainingSummarizingModel = _trainingFacade.GetTrainingSummarizingModel(HttpContext, trainingId);
+            var trainingSummarizingModel = await _trainingFacade.GetTrainingSummarizingModelAsync(HttpContext, trainingId);
             return PartialView("../Training/TrainingSummarizing", trainingSummarizingModel);
         }
 

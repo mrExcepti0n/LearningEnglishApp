@@ -1,5 +1,7 @@
 ﻿using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
+using LearningEnglishWeb.Services.Dtos;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -21,13 +23,16 @@ namespace LearningEnglishWeb.Models.Training.Shared
 
         public int RightAnsweredQuestions { get; set; }
 
+        protected TrainingTypeEnum TrainingType { get; private set; }
+
 
         [JsonProperty]
         protected TQ[] Questions { get; set; }
 
 
-        public TrainingBase(IEnumerable<TQ> questions, bool isReverse = false)
+        public TrainingBase(IEnumerable<TQ> questions, TrainingTypeEnum trainingType, bool isReverse = false)
         {
+            TrainingType = trainingType;
             IsReverse = isReverse;
 
             Id = Guid.NewGuid();
@@ -35,6 +40,16 @@ namespace LearningEnglishWeb.Models.Training.Shared
 
             CurrentQuestionNumber = 0;
             RightAnsweredQuestions = 0;
+        }
+
+        public TrainingResultDto GetResults()
+        {
+            return new TrainingResultDto
+            {
+                TrainingType = TrainingType,
+                IsReverseTraining = IsReverse,
+                TrainingWordResults = Questions.Select(q => new TrainingWordResultDto { UserWordId = q.UserWordId, IsRightAnswer = q.IsRightAnswer, UserAnswer = q.UserAnswer }).ToList()
+            };
         }
 
 

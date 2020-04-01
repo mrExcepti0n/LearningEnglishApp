@@ -5,36 +5,50 @@
     <thead>
         <tr>
             <th style="width:2%"></th>
-            <th class="text-center" colspan="2">Слово</th>
+            <th class="text-center" colspan="3">Слово</th>
             <th>Транскрипция</th>
             <th>Перевод</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+        @foreach (var item in Model)
+        {
         <tr class="align-middle">
-            <td class="align-middle"> <input type="checkbox" /> </td>
+            <td class="align-middle">
+                <input type="checkbox" />
+                <input type="hidden" value="@item.Id" name="wordId" />
+            </td>
             <td style="width:2%" class="align-middle p-0">
-                <div style="width:60px; height:60px; position:relative"  >
+                <div style="width:60px; height:60px; position:relative">
                     <img class="img-thumbnail" src=@item.ImageSrc>
                 </div>
             </td>
-            <td  class="align-middle">
-                <span>@item.Name</span>
+            <td class="align-middle pl-1 pr-1" style="width:6%;">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-striped @item.KnowledgeRatioClassName" role="progressbar" style="width: @item.KnowledgeRatio%" aria-valuenow="@item.KnowledgeRatio" aria-valuemin="0" aria-valuemax="100">
+                    </div>
+                </div>
+            </td>
+            <td class="align-middle pl-0">
+                <span>@item.Word</span>
                 <button class="audio btn p-0">  <i class="fa audio fa-play text-success"></i> </button>
             </td>
-            <td  class="align-middle">
-               @item.Transcription
+
+            <td class="align-middle">
+                @item.Transcription
             </td>
-            <td  class="align-middle">
+            <td class="align-middle">
                 <span>@item.Translation</span>
                 <button class="audio btn p-0 translation">  <i class="fa audio fa-play text-success"></i> </button>
-            </td>   
+            </td>
             <td class="text-right align-middle">
                 <button class="btn btn-danger btn-sm delete-button"> удалить </button>
             </td>
         </tr>
-}
+        }
     </tbody>
 </table>
+
+
+

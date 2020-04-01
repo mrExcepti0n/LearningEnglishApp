@@ -6,8 +6,9 @@ namespace LearningEnglishWeb.Models.Training.TranslateWord
 {
     public class TranslateWordTraining : TrainingBase<Question>
     {
-        public TranslateWordTraining(IEnumerable<Question> questions, bool isReverse = false) : base(questions, isReverse)
+        public TranslateWordTraining(IEnumerable<Question> questions, bool isReverse = false) : base(questions, TrainingTypeEnum.TranslateWord, isReverse)
         {
+           
         }    
 
 

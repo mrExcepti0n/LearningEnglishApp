@@ -4,6 +4,7 @@ using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Models.Training.CollectWord;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using LearningEnglishWeb.ViewModels.Training;
 using LearningEnglishWeb.ViewModels.Training.Abstractions;
 using LearningEnglishWeb.ViewModels.Training.ChooseTranslate;
@@ -18,7 +19,7 @@ namespace LearningEnglishWeb.Controllers.Abstraction
 {
     public class CollectWordTrainingFacade : TrainingFacade<CollectWordTraining, CollectWordQuestion>
     {
-        public CollectWordTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService) : base(trainingFactory, wordImageService)
+        public CollectWordTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService) : base(trainingFactory, wordImageService, trainingService)
         {
         }
         public async Task<TrainingViewModel<CollectWordQuestionViewModel>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)

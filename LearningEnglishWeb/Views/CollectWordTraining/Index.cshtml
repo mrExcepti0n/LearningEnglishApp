@@ -8,7 +8,7 @@
 }
 
 
-<div class="trainingArea container shadow-lg p-5 mb-5 bg-white rounded" data-isreverse="@Model.IsReverse">
+<div class="trainingArea cwTrainingArea" data-isreverse="@Model.IsReverse">
     <input id="trainingId" type="hidden" value="@Model.TrainingId" />
     @await Html.PartialAsync("CollectWordTrainingQuestion", @Model.CurrentQuestion)
 </div>
@@ -25,31 +25,30 @@
             let trainingId = document.querySelector('#trainingId').value;
             let training = new TrainingBase(trainingId, isReverse);
 
-            $(document).on("click", '.questionArea button.letter', function (evt) {
+            $(document).on("click", '.optionsArea button.letter', function (evt) {
                 this.classList.add('btn-warning');
                 this.classList.remove('btn-info');
-                document.querySelector(".answerArea").appendChild(this);
+                document.querySelector(".userAnswerArea").appendChild(this);
                 if (allLettersIsCollect()) {
-
                     training.checkAnswer('@Url.Action("CheckAnswer")', getAnswer());
                 }
             });
 
-            $(document).on("click", '.answerArea button.letter', function (evt) {
+            $(document).on("click", '.userAnswerArea button.letter', function (evt) {
                 this.classList.add('btn-info');
                 this.classList.remove('btn-warning');
-                document.querySelector(".questionArea").appendChild(this);
+                document.querySelector(".optionsArea").appendChild(this);
             });
 
             function getAnswer() {
                 let answer = '';
-                document.querySelectorAll('.answerArea button.letter').forEach(el => {
+                document.querySelectorAll('.userAnswerArea button.letter').forEach(el => {
                     answer += el.innerText;
                 });
                 return answer;
             }
             function allLettersIsCollect() {
-                return document.querySelector(".questionArea").children.length === 0;
+                return document.querySelector(".optionsArea").children.length === 0;
             }
         })();
 

@@ -8,10 +8,7 @@ namespace VocabularyApi.Models
     public enum TrainingTypeEnum
     {
         TranslateWord = 1,
-        ReverseTranslateWord = 2,
-        ChooseTranslate = 3,
-        ReverseChooseTranslate = 4,
-        CollectWord = 5,
-        ReverseCollectWord = 6
+        ChooseTranslate = 2,
+        CollectWord = 3
     }
 }

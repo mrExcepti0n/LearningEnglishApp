@@ -3,6 +3,8 @@ using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
+using LearningEnglishWeb.Services.Dtos;
 using LearningEnglishWeb.ViewModels.Training;
 using LearningEnglishWeb.ViewModels.Training.Abstractions;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +20,13 @@ namespace LearningEnglishWeb.Controllers.Abstraction
     {
         protected TrainingFactory _trainingFactory;
         protected IWordImageService _wordImageService;
+        private ITrainingService _trainingService;
 
-        public TrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService)
+        public TrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService)
         {
             _trainingFactory = trainingFactory;
             _wordImageService = wordImageService;
+            _trainingService = trainingService;
         }
 
         protected void SaveTraining(HttpContext htppContext, T training)
@@ -37,10 +41,19 @@ namespace LearningEnglishWeb.Controllers.Abstraction
         }
 
 
-        public TrainingSummarizingModel GetTrainingSummarizingModel(HttpContext htppContext, Guid trainingId)
+        private async Task SaveResultsAsync(T training)
+        {
+            var results = training.GetResults();
+            await _trainingService.SaveTrainingResult(results);
+        }
+
+        public async Task<TrainingSummarizingModel> GetTrainingSummarizingModelAsync(HttpContext htppContext, Guid trainingId)
         {
             var training = GetTraining(htppContext, trainingId);
+            await SaveResultsAsync(training);
             htppContext.Session.Remove(trainingId.ToString());
+
+            
 
             return new TrainingSummarizingModel
             {

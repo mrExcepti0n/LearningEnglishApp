@@ -1,0 +1,29 @@
+﻿@model IEnumerable<LearningEnglishWeb.Models.UserWord>
+
+
+
+<div class="col-xl-8 col-sm-12">
+    <div class="form-group">
+        <input id="find-input" type="text" placeholder="Введите слово" class="form-control" />
+        <button class="btn btn-success float-right m-2 add-word-button" type="button"> добавить </button>
+    </div>
+
+    <div id="available-words" class="w-50 m-2 text-center shadow-lg p-3 mb-5 bg-white rounded d-none">
+    </div>
+</div>
+
+<template id="addOwnWordTemplate">
+    <div>
+        <input type="text" class="form-control" />
+        <button class="btn add-new-word btn-sm btn-warning text-white mt-1"> Добавить новое слово </button>
+    </div>
+</template>
+
+
+
+<div id="wordList" class="col-xl-8 col-sm-12">
+    @await Html.PartialAsync("WordList", Model)    
+</div>
+
+
+

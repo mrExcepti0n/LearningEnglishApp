@@ -9,8 +9,9 @@ namespace LearningEnglishWeb.Models.Training.ChooseTranslate
     public class ChooseTranslateTraining : TrainingBase<QuestionWithOptions>
     {
         public ChooseTranslateTraining(IEnumerable<QuestionWithOptions> questions, bool isReverse = false) 
-            : base(questions, isReverse)
+            : base(questions, TrainingTypeEnum.ChooseTranslate, isReverse)
         {
+          
         }
 
 

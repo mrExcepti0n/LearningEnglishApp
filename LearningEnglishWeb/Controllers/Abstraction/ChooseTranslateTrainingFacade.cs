@@ -3,6 +3,7 @@ using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using LearningEnglishWeb.ViewModels.Training;
 using LearningEnglishWeb.ViewModels.Training.Abstractions;
 using LearningEnglishWeb.ViewModels.Training.ChooseTranslate;
@@ -15,7 +16,7 @@ namespace LearningEnglishWeb.Controllers.Abstraction
 {
     public class ChooseTranslateTrainingFacade : TrainingFacade<ChooseTranslateTraining, QuestionWithOptions>
     {
-        public ChooseTranslateTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService) : base(trainingFactory, wordImageService)
+        public ChooseTranslateTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService) : base(trainingFactory, wordImageService, trainingService)
         {
         }
 

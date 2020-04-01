@@ -10,6 +10,7 @@ namespace VocabularyApi.Models
         public int Id { get; set; }
         
         public TrainingTypeEnum TrainingType { get; set; }
+        public bool IsReverseTraining { get; set; }
 
         public int UserVocabularyWordId { get; set; }
 
@@ -21,5 +22,11 @@ namespace VocabularyApi.Models
 
         public int WrongAnswerCount { get; set; }
         public int RightAnswerCount { get; set; }
+
+
+        public bool NeedToRepeat()
+        {
+            return !(LastRightAnswerDate.HasValue && LastRightAnswerDate.Value.ToShortDateString() == DateTime.Now.ToShortDateString());
+        }
     }
 }

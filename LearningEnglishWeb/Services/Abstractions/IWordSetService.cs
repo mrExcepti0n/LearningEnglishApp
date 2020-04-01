@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Services.Dtos;
 
-namespace LearningEnglishWeb.Services
+namespace LearningEnglishWeb.Services.Abstractions
 {
     public interface IWordSetService
     {

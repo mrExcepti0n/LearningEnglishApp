@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Services.Abstractions;
 using LearningEnglishWeb.Services.Dtos;
 using LearningEnglishWeb.Services.Helpers;
 using Microsoft.Extensions.Configuration;
@@ -32,10 +33,17 @@ namespace LearningEnglishWeb.Services
             return JsonConvert.DeserializeObject<List<UserVocabulary>>(stringResult);
         }
 
-
-        public async Task<List<UserWord>> GetWords(string mask = null)
+        public async Task<UserVocabulary> GetVocabulary(int id)
         {
-            var requestUrl = Api.Vocabulary.GetWords(_baseUrl, mask);
+            var requestUrl = Api.Vocabulary.GetVocabulary(_baseUrl, id);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<UserVocabulary>(stringResult);
+        }
+
+
+        public async Task<List<UserWord>> GetWords(string mask = null, int? vocabularyId = null)
+        {
+            var requestUrl = Api.Vocabulary.GetWords(_baseUrl, mask, vocabularyId);
             var stringResult = await _httpClient.GetStringAsync(requestUrl);
             return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);  
         }
@@ -47,19 +55,19 @@ namespace LearningEnglishWeb.Services
             return JsonConvert.DeserializeObject<List<string>>(stringResult);
         }
 
-        public async Task AddWord(string name, string translation)
+        public async Task AddWord(string name, string translation, int? vocabularyId = null)
         {
             var requestUrl = Api.Vocabulary.AddWord(_baseUrl);
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(new TranslationDto { Name = name, Translation = translation }), Encoding.UTF8, "application/json");
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(new { Name = name, Translation = translation, UserVocabularyId = vocabularyId }), Encoding.UTF8, "application/json");
 
             var result = await _httpClient.PostAsync(requestUrl, content);
             result.EnsureSuccessStatusCode();
         }
 
 
-        public async Task RemoveWord(string name, string translation)
+        public async Task RemoveWord(int wordId)
         {
-            var requestUrl = Api.Vocabulary.RemoveWord(_baseUrl, name, translation);
+            var requestUrl = Api.Vocabulary.RemoveWord(_baseUrl, wordId);
             var result = await _httpClient.DeleteAsync(requestUrl);
             result.EnsureSuccessStatusCode();
         }
@@ -72,15 +80,7 @@ namespace LearningEnglishWeb.Services
             content.Add(new StreamContent(new MemoryStream(array)), "fromFile", "vocabulary.xdxf");
             var result = await _httpClient.PostAsync(requestUrl, content);
             result.EnsureSuccessStatusCode();          
-        }
+        }    
 
-
-
-        public async Task<List<UserWord>> GetRequiringStudyWords()
-        {
-            var requestUrl = Api.Vocabulary.GetRequiringStudyWords(_baseUrl);
-            var stringResult = await _httpClient.GetStringAsync(requestUrl);
-            return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);
-        }
     }
 }

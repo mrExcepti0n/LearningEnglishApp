@@ -1,46 +1,16 @@
 ﻿@using LearningEnglishWeb.ViewModels.Vocabulary
-@model UserVocabulariesViewModel
+@model UserVocabularyViewModel
 @{
-    ViewData["Title"] = "Vocabulare Page";
+    ViewData["Title"] = "UserVocabulary";
 }
 
-<div class="row justify-content-center">
-    <div class="col-xl-8 col-sm-12 mb-3 mt-3">
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner text-center">
-                @for (var i = 0; i < Model.UserVocabularies.Count(); i += 3)
-                {
-                    <div class="carousel-item @(i == 0 ? "active" : "")  ">
-                        @for (var j = i; j < i + 3 && j <Model.UserVocabularies.Count(); j++)
-                        {
-                            <div class="card d-inline-block" style="width: 12rem;">
-                                <div class="card-header">  <a asp-action="UserVocabulary" asp-controller="Vocabulary" asp-route-vocabularyId="@Model.UserVocabularies[j].Id">@Model.UserVocabularies[j].Title  </a></div>
-                                <div class="card-body">   количество слов @Model.UserVocabularies[j].WordsCount </div>
-                            </div>
-                            }
-                    </div>
-                }
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="text-dark carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
-</div>
+<input type="hidden" value="@Model.UserVocabulary.Id" id="vocabularyId"/>
+<h3 class="text-center m-3"> @Model.UserVocabulary.Title </h3>
 
 
 <div class="row justify-content-center">
-        @await Html.PartialAsync("VocabularyWords", Model.UserWords)
+    @await Html.PartialAsync("VocabularyWords", Model.UserWords)
 </div>
-
-
-
-
 
 
 @section Scripts {
@@ -48,6 +18,9 @@
         (function () {
 
             let audio = new Audio();
+
+
+            let vocabularyId = document.querySelector('#vocabularyId').value;
 
             let availableWordsArea = document.getElementById('available-words');
 
@@ -107,9 +80,6 @@
 
         function addOwnWordButton(btn) {
             var template = document.getElementById('addOwnWordTemplate').cloneNode(true);
-            console.log(btn);
-            console.log(btn.parentElement);
-            console.log(template.content);
             btn.parentElement.replaceChild(template.content, btn);
         }
 
@@ -122,7 +92,7 @@
             $.ajax({
                 url: '@Url.Action("AddOwnTranslation", "Vocabulary")',
                 type: 'POST',
-                data: { word: input.value, translation: translation },
+                data: { word: input.value, translation: translation, vocabularyId: vocabularyId },
                 success: function (res) {
                      location.reload();
                 }
@@ -135,13 +105,14 @@
             $.ajax({
                 url: '@Url.Action("AddWord", "Vocabulary")',
                 type: 'POST',
-                data: { word: input.value, translation: this.innerText },
+                data: { word: input.value, translation: this.innerText, vocabularyId: vocabularyId },
                 success: function (res) {
                      location.reload();
                 }
             })
         });
 
+     
         $(document).on('click', '.delete-button', function () {
             let wordId = this.parentElement.parentElement.querySelector('input[name="wordId"]').value;
             $.ajax({
@@ -161,7 +132,7 @@
             $.ajax({
                 url: '@Url.Action("TranslationList", "Vocabulary")',
                 type: 'GET',
-                data: { word: input.value },
+                data: { word: input.value, vocabularyId: vocabularyId },
                 success: (res) => {
                     var area = document.querySelector('#available-words');
                     area.innerHTML = res;
@@ -182,7 +153,7 @@
             $.ajax({
                 url: '@Url.Action("WordList", "Vocabulary")',
                 type: 'GET',
-                data: { mask: str },
+                data: { mask: str, vocabularyId: vocabularyId },
                 success: (res) => {
                     var refreshArea = document.querySelector("#wordList");
                     refreshArea.innerHTML = res;
@@ -190,5 +161,6 @@
             });
         }
     })();
-</script>
+    </script>
 }
+

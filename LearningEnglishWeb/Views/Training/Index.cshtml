@@ -1,4 +1,7 @@
-﻿@{
+﻿@using LearningEnglishWeb.ViewModels.Training
+@using LearningEnglishWeb.Models.Training
+@model ChooseTrainingViewModel
+@{
     ViewData["Title"] = "Training Page";
 }
 
@@ -10,23 +13,78 @@
     <div class="row">
         <div class="col-6 p-3">
             <div class="trainingContainer">
-                <a asp-action="Index" asp-controller="TranslateWordTraining" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <a asp-action="Index" asp-controller="TranslateWordTraining" class="trainingBtn trainingTopBtn @(Model.IsTrainingActive(TrainingTypeEnum.TranslateWord, false) ? "" : "notActive")">
+                    <div>
+                        <p>  Русский </p>
+                        @{ var twTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.TranslateWord, false); }
+                        @if (twTrainingWordCount != null)
+                        {
+                            <p> Количество слов: @twTrainingWordCount</p>
+                        }
+                    </div>
+                </a>
                 <button class="trainingDesc" disabled> Перевод слова </button>
-                <a asp-action="Index" asp-controller="TranslateWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
+                <a asp-action="Index" asp-controller="TranslateWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn @(Model.IsTrainingActive(TrainingTypeEnum.TranslateWord, true) ? "" : "notActive")">
+                    <div>
+                        <p>  Английский </p>
+                        @{var twInverseTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.TranslateWord, true); }
+                        @if (twInverseTrainingWordCount != null)
+                        {
+                            <p> Количество слов: @twInverseTrainingWordCount</p>
+                        }
+                    </div>
+                </a>
             </div>
         </div>
         <div class="col-6 p-3">
             <div class="trainingContainer">
-                <a asp-action="Index" asp-controller="ChooseTranslateTraining" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <a asp-action="Index" asp-controller="ChooseTranslateTraining" class="trainingBtn trainingTopBtn  @(Model.IsTrainingActive(TrainingTypeEnum.ChooseTranslate, false) ? "" : "notActive")">
+                    <div>
+                        <p>  Русский </p>
+                        @{ var ctTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.ChooseTranslate, false); }
+                        @if (ctTrainingWordCount != null)
+                        {
+                            <p> Количество слов: @ctTrainingWordCount</p>
+                        }
+                    </div>
+                </a>
                 <button class="trainingDesc" disabled> Выбор перевода </button>
-                <a asp-action="Index" asp-controller="ChooseTranslateTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
+                <a asp-action="Index" asp-controller="ChooseTranslateTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn  @(Model.IsTrainingActive(TrainingTypeEnum.ChooseTranslate, true) ? "" : "notActive")">
+                    <div>
+                        <p>  Английский </p>
+                        @{ var ctInverseTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.ChooseTranslate, true); }
+                        @if (ctInverseTrainingWordCount != null)
+                        {
+                            <p> Количество слов: @ctInverseTrainingWordCount</p>
+                        }
+                    </div>
+                </a>
             </div>
         </div>
         <div class="col-6 p-3">
             <div class="trainingContainer">
-                <a asp-action="Index" asp-controller="CollectWordTraining" class="trainingBtn trainingTopBtn"> <span>  Русский </span> </a>
+                <a asp-action="Index" asp-controller="CollectWordTraining" class="trainingBtn trainingTopBtn @(Model.IsTrainingActive(TrainingTypeEnum.CollectWord, false) ? "" : "notActive")">
+                    <div>
+                        <p>  Русский </p>
+
+                        @{ var cwTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.CollectWord, false); }
+                        @if (cwTrainingWordCount != null)
+                        {
+                            <p> Количество слов: @cwTrainingWordCount</p>
+                        }
+                    </div>
+                </a>
                 <button class="trainingDesc" disabled> Собери слово </button>
-                <a asp-action="Index" asp-controller="CollectWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn"> <span>  Английский </span> </a>
+                <a asp-action="Index" asp-controller="CollectWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn @(Model.IsTrainingActive(TrainingTypeEnum.CollectWord, true) ? "" : "notActive")">
+                    <div>
+                        <p>  Английский </p>
+                        @{var cwInverseTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.CollectWord, true); }
+                        @if (cwInverseTrainingWordCount != null)
+                        {
+                            <p> Количество слов: @cwInverseTrainingWordCount</p>
+                        }
+                    </div>
+                </a>
             </div>
         </div>
         <div class="col-6 p-3">

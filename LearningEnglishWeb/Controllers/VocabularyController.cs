@@ -9,6 +9,7 @@ using AngleSharp;
 using Data.Core;
 using LearningEnglishWeb.Models;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using LearningEnglishWeb.ViewModels;
 using LearningEnglishWeb.ViewModels.Vocabulary;
 using Microsoft.AspNetCore.Authorization;
@@ -19,8 +20,9 @@ namespace LearningEnglishWeb.Controllers
    
     public class VocabularyController : Controller
     {
-        public VocabularyController(IVocabularyService vocabularyService, ISpeachService speachService, IWordImageService wordImageService)
+        public VocabularyController(IVocabularyService vocabularyService, ISpeachService speachService, IWordImageService wordImageService, ITrainingService trainingService)
         {
+            _trainingService = trainingService;
             _vocabularyService = vocabularyService;
 
             _speachService = speachService;
@@ -30,75 +32,52 @@ namespace LearningEnglishWeb.Controllers
         private ISpeachService _speachService { get; set; }
         private IWordImageService _wordImageService { get; set; }
 
+        private ITrainingService _trainingService { get; set; }
+
         public async Task<IActionResult> Index()
         {
             var words = await _vocabularyService.GetWords();
-            var userVocabularies = await _vocabularyService.GetVocabularies();
-
-            userVocabularies = new List<UserVocabulary>
-            {
-                new UserVocabulary
-                {
-                    Title = "Набор слов 1",
-                    WordsCount = 24
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 2",
-                    WordsCount = 18
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 3",
-                    WordsCount = 14
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 4",
-                    WordsCount = 5
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 5",
-                    WordsCount = 6
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 6",
-                    WordsCount = 33
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 7",
-                    WordsCount = 17
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 8",
-                    WordsCount = 14
-                },
-                new UserVocabulary
-                {
-                    Title = "Набор слов 9",
-                    WordsCount = 50
-                }
-            };
-            await FillImages(words); 
-            return View(new UserVocabularyViewModel {UserVocabularies = userVocabularies, UserWords = words });
+            var userVocabularies = await _vocabularyService.GetVocabularies();          
+            await FillImages(words);
+            await FillTrainingRatio(words);
+            return View(new UserVocabulariesViewModel {UserVocabularies = userVocabularies, UserWords = words });
         }
 
         private async Task FillImages(List<UserWord> words)
         {
             foreach (var word in words)
             {
-                word.ImageSrc = await _wordImageService.GetThumbnailSrc(word.Name);
+                word.ImageSrc = await _wordImageService.GetThumbnailSrc(word.Word);
             }
         }
 
-        public async Task<IActionResult> WordList(string mask)
+
+        private async Task FillTrainingRatio(List<UserWord> words)
         {
-            var words = await _vocabularyService.GetWords(mask);
+            var trainingWordsRatio = await _trainingService.GetTrainingWordsRatio(words.Select(w => w.Id).ToList());
+
+            foreach (var word in words)
+            {
+                word.SetKnotledgeRatio(trainingWordsRatio[word.Id]);
+            }
+        }
+
+
+        public async Task<IActionResult> UserVocabulary(int vocabularyId)
+        {
+            var words = await _vocabularyService.GetWords(vocabularyId : vocabularyId);
+            var userVocabulary = await _vocabularyService.GetVocabulary(vocabularyId);
             await FillImages(words);
+            await FillTrainingRatio(words);
+            return View(new UserVocabularyViewModel { UserVocabulary = userVocabulary, UserWords = words });
+        }
+
+
+        public async Task<IActionResult> WordList(string mask, int? vocabularyId)
+        {
+            var words = await _vocabularyService.GetWords(mask, vocabularyId);
+            await FillImages(words);
+            await FillTrainingRatio(words);
             return PartialView(words);
         }
 
@@ -111,24 +90,24 @@ namespace LearningEnglishWeb.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AddWord(string word, string translation)
+        public async Task<IActionResult> AddWord(string word, string translation, int? vocabularyId)
         {
-            await _vocabularyService.AddWord(word, translation);
+            await _vocabularyService.AddWord(word, translation, vocabularyId);
             return Ok();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddOwnTranslation(string word, string translation)
+        public async Task<IActionResult> AddOwnTranslation(string word, string translation, int? vocabularyId)
         {
-            await _vocabularyService.AddWord(word, translation);
+            await _vocabularyService.AddWord(word, translation, vocabularyId);
             return Ok();
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> RemoveWord(string word, string translation)
+        public async Task<IActionResult> RemoveWord(int wordId)
         {
-            await _vocabularyService.RemoveWord(word, translation);
+            await _vocabularyService.RemoveWord(wordId);
             return Ok();
         }
 

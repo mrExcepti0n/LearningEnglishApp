@@ -10,6 +10,7 @@ using LearningEnglishWeb.Configuration;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -104,6 +105,7 @@ namespace LearningEnglishWeb
             services.AddHttpClient<IVocabularyService, VocabularyService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<IWordSetService, WordSetService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<IWordImageService, WordImageService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            services.AddHttpClient<ITrainingService, TrainingService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<ISpeachService, SpeachService>();
 
             return services;

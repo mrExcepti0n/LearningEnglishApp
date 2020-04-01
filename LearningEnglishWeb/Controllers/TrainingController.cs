@@ -1,5 +1,8 @@
 ﻿using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
+using LearningEnglishWeb.Services.Abstractions;
+using LearningEnglishWeb.ViewModels.Training;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,9 +13,18 @@ namespace LearningEnglishWeb.Controllers
 {
     public class TrainingController : Controller
     {
-        public IActionResult Index()
+        private ITrainingService _trainingService;
+        public TrainingController(ITrainingService trainingService)
         {
-            return View();
-        }      
+            _trainingService = trainingService;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var availibleTrainingWords = await _trainingService.GetAvailibleTrainingWordsCount();
+            var viewModel = new ChooseTrainingViewModel(availibleTrainingWords);
+            return View(viewModel);
+        }
+
     }
 }

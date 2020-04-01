@@ -1,7 +1,9 @@
 ﻿using Data.Core;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Models.Training.CollectWord;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +14,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
     public class CollectWordTrainingFactory : TrainingFactoryBase<CollectWordTraining>
     {
 
-        public CollectWordTrainingFactory(IVocabularyService vocabularyService,  LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
-            : base(vocabularyService, fromLanguage, toLanguage, reverseWay)
+        public CollectWordTrainingFactory(ITrainingService trainingService,  LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
+            : base(trainingService, TrainingTypeEnum.CollectWord, fromLanguage, toLanguage, reverseWay)
         {
             
         }
@@ -30,9 +32,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             for (var i= 0; i< words.Length; i++)
             {
-                var word = words[i].Name.ToLower();
                 var translation = words[i].Translation.ToLower();
-                yield return new CollectWordQuestion { Number = i + 1, Translation = translation, AnswerLetters = ShuffleWords(translation.ToCharArray()),   Word = word };
+                yield return new CollectWordQuestion(i + 1, words[i], ShuffleWords(translation.ToCharArray()));
             }
         }
     }

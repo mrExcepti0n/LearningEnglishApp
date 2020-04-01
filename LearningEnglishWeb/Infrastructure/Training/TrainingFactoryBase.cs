@@ -1,6 +1,8 @@
 ﻿using Data.Core;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using System;
 using System.Threading.Tasks;
 
@@ -9,19 +11,21 @@ namespace LearningEnglishWeb.Infrastructure.Training
     public abstract class TrainingFactoryBase<T>
     {
 
-        protected IVocabularyService _vocabularyService;
+        protected ITrainingService _trainingService;
         protected readonly LanguageEnum _fromLanguage;
         protected readonly LanguageEnum _toLanguage;
         protected readonly bool _reverseWay;
+        protected readonly TrainingTypeEnum _trainingType;
 
         private Random _random;
 
-        protected TrainingFactoryBase(IVocabularyService vocabularyService, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay)
+        protected TrainingFactoryBase(ITrainingService trainingService, TrainingTypeEnum trainingType, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay)
         {
-            _vocabularyService = vocabularyService;
+            _trainingService = trainingService;
             _fromLanguage = fromLanguage;
             _toLanguage = toLanguage;
             _reverseWay = reverseWay;
+            _trainingType = trainingType;
 
             _random = new Random();
         }
@@ -31,13 +35,13 @@ namespace LearningEnglishWeb.Infrastructure.Training
 
         protected async Task<UserWord[]> GetWords()
         {
-             var words = await _vocabularyService.GetRequiringStudyWords();
+             var words = await _trainingService.GetRequiringStudyWords(_trainingType, _reverseWay);
 
             if (_reverseWay)
             {
                 words.ForEach(word => {
-                    var tmp = word.Name;
-                    word.Name = word.Translation;
+                    var tmp = word.Word;
+                    word.Word = word.Translation;
                     word.Translation = tmp;
                 });
             }

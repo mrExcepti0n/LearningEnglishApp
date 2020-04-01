@@ -1,8 +1,10 @@
 ﻿using Data.Core;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +15,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
     public class ChooseTranslateTrainingFactory : TrainingFactoryBase<ChooseTranslateTraining>
     {
 
-        public ChooseTranslateTrainingFactory(IVocabularyService vocabularyService,  LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay)
-            :base(vocabularyService, fromLanguage, toLanguage, reverseWay)
+        public ChooseTranslateTrainingFactory(ITrainingService trainingService,  LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay)
+            :base(trainingService, TrainingTypeEnum.ChooseTranslate, fromLanguage, toLanguage, reverseWay)
         {
           
            
@@ -39,13 +41,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         
         private QuestionWithOptions GetQuestion(int number, UserWord word, List<string> options)
         {
-            return new QuestionWithOptions
-            {
-                Number = number + 1,
-                Word = word.Name,
-                Translation = word.Translation,
-                Options = options
-            };
+            return new QuestionWithOptions(number + 1, word, options);
         }
      
 

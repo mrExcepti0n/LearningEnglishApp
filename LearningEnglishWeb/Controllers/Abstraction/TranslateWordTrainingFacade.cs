@@ -3,6 +3,7 @@ using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Models.Training.TranslateWord;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using LearningEnglishWeb.ViewModels.Training.Abstractions;
 using LearningEnglishWeb.ViewModels.Training.TranslateWord;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +16,7 @@ namespace LearningEnglishWeb.Controllers.Abstraction
 {
     public class TranslateWordTrainingFacade : TrainingFacade<TranslateWordTraining, Question>
     {
-        public TranslateWordTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService) : base(trainingFactory, wordImageService)
+        public TranslateWordTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService) : base(trainingFactory, wordImageService, trainingService)
         {
         }
 

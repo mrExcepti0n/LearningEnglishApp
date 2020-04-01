@@ -1,8 +1,10 @@
 ﻿using Data.Core;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Models.Training.TranslateWord;
 using LearningEnglishWeb.Services;
+using LearningEnglishWeb.Services.Abstractions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,8 +13,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
 {
     internal class TranslateWordTrainingFactory : TrainingFactoryBase<TranslateWordTraining>
     {
-        public TranslateWordTrainingFactory(IVocabularyService vocabularyService, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
-            : base(vocabularyService, fromLanguage, toLanguage, reverseWay)
+        public TranslateWordTrainingFactory(ITrainingService trainingService, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
+            : base(trainingService, TrainingTypeEnum.TranslateWord, fromLanguage, toLanguage, reverseWay)
         {
 
         }
@@ -29,7 +31,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             for (var i = 0; i < words.Length; i++)
             {
-                yield return new Question { Number = i + 1, Word = words[i].Name, Translation = words[i].Translation };
+                yield return new Question(i + 1, words[i]);
             }
         }
     }

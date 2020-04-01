@@ -10,8 +10,9 @@ namespace LearningEnglishWeb.Models.Training.CollectWord
 {
     public class CollectWordTraining : TrainingBase<CollectWordQuestion>
     {
-        public CollectWordTraining(IEnumerable<CollectWordQuestion> questions, bool isReverse = false) : base(questions, isReverse)
+        public CollectWordTraining(IEnumerable<CollectWordQuestion> questions, bool isReverse = false) : base(questions, TrainingTypeEnum.CollectWord, isReverse )
         {
+
         }
      
     }

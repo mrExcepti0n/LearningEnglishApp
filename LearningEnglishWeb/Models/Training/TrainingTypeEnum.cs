@@ -7,9 +7,8 @@ namespace LearningEnglishWeb.Models.Training
 {
     public enum TrainingTypeEnum
     {
-        ChooseTranslate = 1,
-        CollectWord = 2,
-        TranslateWord = 3
-        
+        TranslateWord = 1,
+        ChooseTranslate = 2,
+        CollectWord = 3
     }
 }

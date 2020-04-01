@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.ViewModels.Vocabulary
 {
-    public class UserVocabularyViewModel
+    public class UserVocabulariesViewModel
     {
         public IEnumerable<UserWord> UserWords { get; set; }
 
-        public UserVocabulary UserVocabulary { get; set; }
+        public IList<UserVocabulary> UserVocabularies { get; set; }
     }
 }

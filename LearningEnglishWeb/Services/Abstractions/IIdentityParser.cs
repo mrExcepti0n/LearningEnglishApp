@@ -1,6 +1,6 @@
 ﻿using System.Security.Principal;
 
-namespace LearningEnglishWeb.Services
+namespace LearningEnglishWeb.Services.Abstractions
 {
     public interface IIdentityParser<T>
     {

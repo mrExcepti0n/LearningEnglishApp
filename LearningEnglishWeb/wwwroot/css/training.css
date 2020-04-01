@@ -1,15 +1,25 @@
-﻿
-.wrongAnswer {
-    color: red;
+﻿.trainingArea {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 5px;
+    padding: 15px 5px;
+    box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+    border-radius: 0.25rem;
+    background-color: white;
 }
 
-.rightAnswer {
-    color: green;
+.cwTrainingArea {
+    height: 500px;
 }
 
+.cwQuestionArea {
+   height: 300px;
+}
 
-.trainingArea {
-    min-height: 200px;
+.cwQuestionArea h5{
+    text-align: right;
+    padding-right: 15px;
 }
 
 /*.answerBtn {
@@ -33,23 +43,24 @@
     margin: 5px;*/
 }
 
-.questionArea {
+/*.questionArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: central;
+    text-align: center;
+    height: 4rem;
+}*/
+
+/*.answerArea {
+    height: 4rem;
     display: flex;
     align-items: center;
     justify-content: center;
     vertical-align: central;
     text-align: center;
     min-height: 100px;
-}
-
-.answerArea {
-    /*display: flex;
-    align-items: center;
-    justify-content: center;
-    vertical-align: central;
-    text-align: center;
-    min-height: 100px;*/
-}
+}*/
 
 
 .trainingDesc {
@@ -109,27 +120,25 @@
 .trainingBtn {
     color: white;
     height: 50%;
-    display: block;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
     text-align: center;
     text-decoration: none;
-    line-height: 55px;
     position: relative;
     z-index: 0;
     transition: 1.5s;
+    cursor: pointer;
 }
 
+
+.trainingBtn p {
+    margin: 0;
+}
     .trainingBtn:hover {
         text-decoration: none;
         color: white;
     }
-
-        /*.trainingBtn:hover .trainingTopBtn {
-            transform: translate(0,20px);
-        }
-
-        .trainingBtn:hover .trainingBotBtn {
-            transform: translate(0,-20px);
-        }*/
 
 .trainingTopBtn {
     border-radius: 50px 50px 0 0;
@@ -138,23 +147,25 @@
 
     .trainingTopBtn:hover {
         background-color: #427BE3;
-         /*transform: translate(0,-20px);*/
     }
 
-        /*.trainingTopBtn:hover ~ .trainingBotBtn {
-            transform: translate(0,20px);
-        }*/
 
 .trainingBotBtn {
-    background-color: #FF5F6B;
     border-radius: 0 0 50px 50px;
+    background-color: #FF5F6B;
 }
-
     .trainingBotBtn:hover {
         background-color: #FF3443;
-        /*transform: translate(0,20px);*/
     }
 
-        /*.trainingBotBtn:hover ~ .trainingTopBtn {
-            transform: translate(0,-20px);
-        }*/
+.trainingBtn.notActive {
+    background-color: lightgreen;
+    pointer-events: none;
+    cursor: default;
+}
+
+/*не работает с pointer-events: none;*/
+.trainingBtn.notActive:hover {
+    background-color: lawngreen;
+}
+

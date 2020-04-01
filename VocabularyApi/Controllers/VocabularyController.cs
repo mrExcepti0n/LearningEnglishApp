@@ -42,9 +42,23 @@ namespace VocabularyApi.Controllers
             return userVocabularies.ToList();
         }
 
+        [HttpGet("{id}")]
+        public ActionResult<UserVocabularyDto> Get(int id)
+        {
+            var userVocabulary = _vocabularyContext.Set<UserVocabulary>()
+                .Select(uv => new { 
+                    Id = uv.Id, 
+                    WordsCount = uv.Words.Count,
+                    Title = uv.Title,
+                    UserId = uv.UserId
+                }).SingleOrDefault(uv => uv.UserId == userId && uv.Id == id);
+
+
+            return new UserVocabularyDto { WordsCount = userVocabulary.WordsCount, Title = userVocabulary.Title, Id = userVocabulary.Id };
+        }
 
         [HttpGet("Words")]
-        public ActionResult<List<TranslationDto>> GetWords(string mask = null, int? vocabularyId = null )
+        public ActionResult<List<UserWordDto>> GetWords(string mask = null, int? vocabularyId = null )
         {
             var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId);
 
@@ -59,24 +73,12 @@ namespace VocabularyApi.Controllers
             
             var translations = _vocabularyContext.Set<UserVocabularyWord>().Where(predicateBuilder);
 
-            return translations.Select(tr => new TranslationDto { Name = tr.Word, Translation = tr.Translation })
-                               .ToList();
+            return translations.Select(tr => new UserWordDto { Id = tr.Id, Word = tr.Word, Translation = tr.Translation })
+                             .ToList();
         }
 
 
 
-        [HttpGet("RequiringStudyWords")]
-        public ActionResult<List<TranslationDto>> GetRequiringStudyWords(TrainingTypeEnum trainingType, int count = 10)
-        {
-            var userWords = _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId).ToList();
-
-            var requiringStudyWords = userWords.Where(uv => uv.NeedToRepeat(trainingType))
-                                                .OrderByDescending(uv => uv.GetKnowledgeRatio(trainingType))
-                                                .Take(count)
-                                                .ToList();
-
-            return requiringStudyWords.Select(rsw => new TranslationDto { Name = rsw.Word, Translation = rsw.Translation }).ToList();
-        }
 
 
 
@@ -90,15 +92,17 @@ namespace VocabularyApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post(UserVocabularyWordDto vocabularyWord)
+        public ActionResult Post(UserVocabularyWordDto vocabularyWordDto)
         {
+            var vocabularyWord = vocabularyWordDto.ToVocabularyWord();
 
-            if (vocabularyWord.UserVocabularyId == null)
+
+            if (vocabularyWord.UserVocabularyId == default)
             {
                 vocabularyWord.UserVocabularyId = GetOrCreateDefaultUserVocabulary();
             }
 
-            _vocabularyContext.Add<UserVocabularyWord>(new UserVocabularyWord { Translation = vocabularyWord.Translation, Word = vocabularyWord.Name, UserVocabularyId = vocabularyWord.UserVocabularyId.Value });
+            _vocabularyContext.Add(vocabularyWord);
             _vocabularyContext.SaveChanges();
 
             return Ok();
@@ -133,19 +137,18 @@ namespace VocabularyApi.Controllers
 
 
 
-        [HttpDelete("{name}/{translation}")]
-        public ActionResult Delete(string name, string translation, int? userVocabularyId = null)
+        [HttpDelete("Words/{wordId}")]
+        public ActionResult Delete(int wordId)
         {
-            var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId && uvw.Word == name && uvw.Translation == translation);
+            var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId && uvw.Id == wordId);
 
-            if (userVocabularyId.HasValue)
+            var word = _vocabularyContext.Set<UserVocabularyWord>().SingleOrDefault(predicateBuilder);
+
+            if (word != null)
             {
-                predicateBuilder.And(uvw => uvw.UserVocabularyId == userVocabularyId.Value);
+                _vocabularyContext.Remove(word);
+                _vocabularyContext.SaveChanges();
             }
-
-            var word = _vocabularyContext.Set<UserVocabularyWord>().FirstOrDefault(predicateBuilder);
-            _vocabularyContext.Remove(word);
-            _vocabularyContext.SaveChanges();
             return Ok();
         }
     }

@@ -19,10 +19,12 @@ namespace VocabularyApi.Models
 
         public ICollection<TrainingStatistic> TrainingStatistics { get; set; }
 
+        private TrainingStatistic GetTrainingStatistic(TrainingTypeEnum trainingType, bool isReverseTraining) => TrainingStatistics.SingleOrDefault(ts => ts.TrainingType == trainingType && ts.IsReverseTraining == isReverseTraining);
 
-        public decimal GetKnowledgeRatio(TrainingTypeEnum languageEnum)
+
+        public decimal GetKnowledgeRatio(TrainingTypeEnum trainingType, bool isReverseTraining)
         {
-            var trainingStatistic = TrainingStatistics.SingleOrDefault(ts => ts.TrainingType == languageEnum);
+            var trainingStatistic = GetTrainingStatistic(trainingType, isReverseTraining);
             if (trainingStatistic == null)
             {
                 return 0;
@@ -31,14 +33,43 @@ namespace VocabularyApi.Models
             return trainingStatistic.RightAnswerCount - trainingStatistic.WrongAnswerCount;
         }
 
-        public bool NeedToRepeat(TrainingTypeEnum languageEnum)
+        public int GetKnowledgeRatio()
         {
-            var trainingStatistic = TrainingStatistics.SingleOrDefault(ts => ts.TrainingType == languageEnum);
-            if (trainingStatistic != null && trainingStatistic.LastRightAnswerDate.HasValue && trainingStatistic.LastRightAnswerDate.Value.ToShortDateString() == DateTime.Now.ToShortDateString())
+            var succesfullTrainings = TrainingStatistics.Count(ts => !ts.NeedToRepeat());
+
+            var totalTrainings = Enum.GetValues(typeof(TrainingTypeEnum)).Length * 2;
+
+            return succesfullTrainings *100 / totalTrainings ;
+        }
+
+        public bool NeedToRepeat(TrainingTypeEnum trainingType, bool isReverseTraining)
+        {
+            var trainingStatistic = GetTrainingStatistic(trainingType, isReverseTraining);
+            if (trainingStatistic != null && !trainingStatistic.NeedToRepeat())
             {
-                return true;
+                return false;
             }
-            return false;
+            return true;
+        }
+
+        public void SetTrainingResult(TrainingTypeEnum trainingType, bool isReverseTraining, bool isRight, string userOption)
+        {
+            var trainingStatistic = GetTrainingStatistic(trainingType, isReverseTraining);
+            if (trainingStatistic == null)
+            {
+                trainingStatistic = new TrainingStatistic { TrainingType = trainingType, IsReverseTraining = isReverseTraining, UserVocabularyWordId = Id };
+                TrainingStatistics.Add(trainingStatistic);
+            }
+
+            if (isRight)
+            {
+                trainingStatistic.RightAnswerCount++;
+                trainingStatistic.LastRightAnswerDate = DateTime.Now;
+            } else
+            {
+                trainingStatistic.WrongAnswerCount++;
+                trainingStatistic.LastWrongAnswerDate = DateTime.Now;
+            }
         }
     }
 }
