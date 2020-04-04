@@ -7,15 +7,13 @@
 
 
 
-<div></div>
 @foreach (var item in Model.Translations)
 {
-    <a class="translation-word">@item </a>
-    <br />
+    <h5> <a class="add-word-btn" href="#" data-request-url="@Url.Action("AddWord", "Vocabulary")">@item </a> </h5>
 }
 
-<button class="add-own-word-button btn btn-sm btn-secondary w-50 text-center">
-    другое
+<button class="switch-own-word-btn btn btn-secondary">
+      Другое 
 </button>
 
 

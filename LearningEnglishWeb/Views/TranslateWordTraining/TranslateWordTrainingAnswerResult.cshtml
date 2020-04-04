@@ -2,7 +2,7 @@
 
 
 
-<div class="m-4 text-center">
+<div class="userAnswerArea">
 
 
     @if (@Model.UserTranslation != @Model.RightTranslation)
@@ -19,7 +19,7 @@
     }
 </div>
 
-<div class="text-center">
+<div class="actionArea">
     <button data-request-url="@Url.Action("GetNextQuestion")" class="btn btn-primary w-50 nextAnswerBtn"> Следующий вопрос</button>
 </div>
 

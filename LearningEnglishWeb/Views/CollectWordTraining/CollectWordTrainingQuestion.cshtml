@@ -3,26 +3,28 @@
 
 <div class="row">
     <div class="col text-center">
-        <div class="cwQuestionArea">
+        <div class="questionArea cw">
             <h5>Вопрос @Model.QuestionNumber </h5>
             <h4>
                 <span>@Model.Word</span>
                 <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
-                    <i class="fa audio fa-play"></i>
+                    <i class="fas audio fa-play"></i>
                 </button>
             </h4>
-            <img id="wordImage" src="@Model.ImageSrc" />
+            <div class="imageWrapper">
+                <img id="wordImage" src="@Model.ImageSrc" />
+            </div>
         </div>
-        <div id="answerRefreshArea">
-            <div class="userAnswerArea"> </div>
-            <div class="optionsArea">
+        <div id="answerRefreshArea" class="answerWrapper cw">
+            <div class="userAnswerArea cw"> </div>
+            <div class="cwOptionsArea">
                 @foreach (char letter in Model.Letters)
                 {
                     <button class="letter btn text-center btn-info m-1 text-white">@letter</button>
                 }
             </div>
-            <div>
-                <button class="btn btn-danger skipBtn">Не знаю</button>
+            <div class="actionArea">
+                <button class="btn btn-danger btn-lg pr-5 pl-5 skipBtn"  data-request-url="@Url.Action("CheckAnswer")">Не знаю</button>
             </div>
         </div>
     </div>

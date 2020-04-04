@@ -25,6 +25,12 @@ namespace LearningEnglishWeb.Controllers.Abstraction
         public async Task<TrainingViewModel<CollectWordQuestionViewModel>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
         {
             var training = await _trainingFactory.GetCollectWordTraining(isReverseWay, fromLanguage, toLanguage);
+
+            if (training.QuestionsCount == 0)
+            {
+                return null;
+            }
+
             SaveTraining(htppContext, training);
             var question = training.GetCurrentQuestion();
             var image = await training.GetCurrentWordImageSrc(_wordImageService);
@@ -59,22 +65,29 @@ namespace LearningEnglishWeb.Controllers.Abstraction
             SaveTraining(htppContext, training);
 
             var question = training.GetCurrentQuestion();
-            var collectWordAnswerResults = new List<CollectWordAnswerResult> { };
-
-            for (int i = 0; i < question.UserLetters.Length; i++)
-            {
-                var ch = question.UserLetters[i];
-                collectWordAnswerResults.Add(new CollectWordAnswerResult { Letter = ch, IsRight = ch == question.Translation[i] });
-            }
+            var collectWordAnswerResults = GetCheckedUserAnswerLetters(question).ToList();
 
             var questionResult = new CollectWordAnswerViewModel
             {
                 CollectWordAnswerResults = collectWordAnswerResults,
+                IsCorrectAnswer = isRight,
                 RigtAnswer = question.Translation
             };
 
 
             return questionResult;
+        }
+
+        private IEnumerable<CollectWordAnswerResult> GetCheckedUserAnswerLetters(CollectWordQuestion question)
+        {
+            if (question.UserLetters != null)
+            {
+                for (int i = 0; i < question.UserLetters.Length; i++)
+                {
+                    var ch = question.UserLetters[i];
+                    yield return new CollectWordAnswerResult { Letter = ch, IsRight = ch == question.Translation[i] };
+                }
+            }
         }
     }
 }

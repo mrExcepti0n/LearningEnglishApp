@@ -1,6 +1,12 @@
 ﻿@model IEnumerable<LearningEnglishWeb.Models.UserWord>
 
 
+<div class="mb-4 mt-4">
+    <input type="checkbox" id="checkAll" />
+    <span> Выбрать все слова </span>
+    <button class="btn btn-sm btn-primary float-right"> Тренировать</button>
+</div>
+
 <table class="table table-hover">
     <thead>
         <tr>
@@ -14,38 +20,38 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr class="align-middle">
-            <td class="align-middle">
-                <input type="checkbox" />
-                <input type="hidden" value="@item.Id" name="wordId" />
-            </td>
-            <td style="width:2%" class="align-middle p-0">
-                <div style="width:60px; height:60px; position:relative">
-                    <img class="img-thumbnail" src=@item.ImageSrc>
-                </div>
-            </td>
-            <td class="align-middle pl-1 pr-1" style="width:6%;">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-striped @item.KnowledgeRatioClassName" role="progressbar" style="width: @item.KnowledgeRatio%" aria-valuenow="@item.KnowledgeRatio" aria-valuemin="0" aria-valuemax="100">
+            <tr class="align-middle">
+                <td class="align-middle">
+                    <input type="checkbox" />
+                    <input type="hidden" value="@item.Id" name="wordId" />
+                </td>
+                <td style="width:2%" class="align-middle p-0">
+                    <div style="width:60px; height:60px; position:relative">
+                        <img class="img-thumbnail" src=@item.ImageSrc>
                     </div>
-                </div>
-            </td>
-            <td class="align-middle pl-0">
-                <span>@item.Word</span>
-                <button class="audio btn p-0">  <i class="fa audio fa-play text-success"></i> </button>
-            </td>
+                </td>
+                <td class="align-middle pl-1 pr-1" style="width:6%;">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped @item.KnowledgeRatioClassName" role="progressbar" style="width: @item.KnowledgeRatio%" aria-valuenow="@item.KnowledgeRatio" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                    </div>
+                </td>
+                <td class="align-middle pl-0">
+                    <span>@item.Word</span>
+                    <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">  <i class="fa audio fa-play text-success"></i> </button>
+                </td>
 
-            <td class="align-middle">
-                @item.Transcription
-            </td>
-            <td class="align-middle">
-                <span>@item.Translation</span>
-                <button class="audio btn p-0 translation">  <i class="fa audio fa-play text-success"></i> </button>
-            </td>
-            <td class="text-right align-middle">
-                <button class="btn btn-danger btn-sm delete-button"> удалить </button>
-            </td>
-        </tr>
+                <td class="align-middle">
+                    @item.Transcription
+                </td>
+                <td class="align-middle">
+                    <span>@item.Translation</span>
+                    <button class="audio btn p-0 translation" data-request-url="@Url.Action("GetAudio", "Vocabulary")">  <i class="fas audio fa-play text-success"></i> </button>
+                </td>
+                <td class="text-right align-middle">
+                    <button class="btn btn-danger btn-sm delete-button" data-request-url="@Url.Action("RemoveWord", "Vocabulary")"> удалить </button>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

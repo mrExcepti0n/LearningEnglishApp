@@ -58,7 +58,7 @@ namespace LearningEnglishWeb.Services
         public async Task AddWord(string name, string translation, int? vocabularyId = null)
         {
             var requestUrl = Api.Vocabulary.AddWord(_baseUrl);
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(new { Name = name, Translation = translation, UserVocabularyId = vocabularyId }), Encoding.UTF8, "application/json");
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(new { Word = name, Translation = translation, UserVocabularyId = vocabularyId }), Encoding.UTF8, "application/json");
 
             var result = await _httpClient.PostAsync(requestUrl, content);
             result.EnsureSuccessStatusCode();

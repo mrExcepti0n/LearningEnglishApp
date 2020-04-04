@@ -3,9 +3,16 @@
 @model TrainingViewModel<ChooseTranslateQuestionViewModel>
 
 
-    <div class="trainingArea container shadow-lg p-5 mb-5 bg-white rounded" data-isreverse="@Model.IsReverse">
-        <input id="trainingId" type="hidden" value="@Model.TrainingId" />
-        @await Html.PartialAsync("ChooseTranslateTrainingQuestion", Model.CurrentQuestion)
+    <div class="trainingArea container ct" data-isreverse="@Model?.IsReverse">
+        @if (Model != null)
+        {
+            <input id="trainingId" type="hidden" value="@Model.TrainingId" />
+            @await Html.PartialAsync("ChooseTranslateTrainingQuestion", Model.CurrentQuestion)
+        }
+        else
+        {
+            @await Html.PartialAsync("../Training/TrainingComplete")
+        }
     </div>
 
 

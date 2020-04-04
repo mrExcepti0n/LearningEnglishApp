@@ -12,6 +12,6 @@ namespace LearningEnglishWeb.ViewModels.Training
 
         public string RigtAnswer { get; set; }
 
-        public bool IsCorrectAnswer => CollectWordAnswerResults.All(cwa => cwa.IsRight);
+        public bool IsCorrectAnswer { get; set; }
     }
 }

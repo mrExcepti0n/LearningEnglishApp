@@ -30,6 +30,7 @@ namespace LearningEnglishWeb.Controllers
 
         public async Task<IActionResult> Index(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
         {
+
             var trainingModel = await _trainingFacade.StartNewGame(HttpContext, isReverseWay, fromLanguage, toLanguage);
             return View(trainingModel);
         }

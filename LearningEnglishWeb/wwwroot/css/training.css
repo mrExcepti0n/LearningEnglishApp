@@ -1,47 +1,102 @@
 ﻿.trainingArea {
     width: 100%;
-    margin-right: auto;
-    margin-left: auto;
-    margin-bottom: 5px;
-    padding: 15px 5px;
+    margin: 50px auto;
     box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
     border-radius: 0.25rem;
     background-color: white;
+    padding: 25px;
 }
 
-.cwTrainingArea {
-    height: 500px;
+    .trainingArea.cw {
+        height: 550px;
+    }
+
+    .trainingArea.ct {
+        height: 400px;
+    }
+
+    .trainingArea.tw {
+        height: 500px;
+    }
+
+.imageWrapper {
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-grow: 1;
 }
 
-.cwQuestionArea {
-   height: 300px;
+
+.questionArea {
+    overflow: hidden;
+    display: flex;
+    flex-flow: column;
 }
 
-.cwQuestionArea h5{
-    text-align: right;
-    padding-right: 15px;
+
+
+.questionArea.cw, .questionArea.tw {
+    height: 300px;
 }
+
+    .questionArea.cw h5, .questionArea.tw h5 {
+        text-align: right;
+    }
+
+.userAnswerArea  {
+    height: 60px;
+   
+}
+    .userAnswerArea.cw {
+        flex: 1 0 auto;
+    }
+    .userAnswerArea input {
+        margin: auto;
+    }
+
+.cwOptionsArea {
+    height: 60px;
+    flex: 2 0 auto;
+}
+
+.cwRightAnswerArea {
+    height: 60px;
+}
+
+.answerWrapper {
+    display: flex;
+    flex-direction: column;
+}
+
+    .answerWrapper.cw {
+        height: 200px;
+    }
+    .answerWrapper.tw {
+        height: 100px;
+    }
+
+.actionArea {
+    flex: 0 0 auto;
+    margin-bottom: 15px;
+}
+
+.letter {
+    width: 50px;
+    height: 50px;
+}
+
 
 /*.answerBtn {
     margin: 5px;
     display: block;
     text-align: left;
 }*/
-
 /*.nextAnswerBtn {
     margin: 5px;
     display: block;
     text-align: left;
 }*/
 
-.letter {
-    /*display: inline-block;
-    text-align: center;
-    border: 1px solid black;
-    width: 30px;
-    height: 30px;
-    margin: 5px;*/
-}
 
 /*.questionArea {
     display: flex;
@@ -169,3 +224,14 @@
     background-color: lawngreen;
 }
 
+
+#available-words button {
+    display: block;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    line-height: 1.1;
+    color: white;
+    width: 100%;
+}

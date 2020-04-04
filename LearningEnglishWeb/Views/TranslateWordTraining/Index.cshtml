@@ -3,10 +3,17 @@
 
 
 
-<div class="trainingArea container shadow-lg p-5 mb-5 bg-white rounded" data-isreverse="@Model.IsReverse">
-    <input id="trainingId" type="hidden" value="@Model.TrainingId" />
-    @await Html.PartialAsync("TranslateWordTrainingQuestion", Model.CurrentQuestion)
-</div>
+    <div class="trainingArea container tw" data-isreverse="@Model?.IsReverse">
+        @if (Model != null)
+        {
+            <input id="trainingId" type="hidden" value="@Model.TrainingId" />
+            @await Html.PartialAsync("TranslateWordTrainingQuestion", Model.CurrentQuestion)
+        }
+        else
+        {
+            @await Html.PartialAsync("../Training/TrainingComplete")
+        }
+    </div>
 
 
 @section Scripts {

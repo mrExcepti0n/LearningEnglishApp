@@ -24,6 +24,11 @@ namespace LearningEnglishWeb.Controllers.Abstraction
         {
             TranslateWordTraining training = await _trainingFactory.GetTranslateTraining(isReverseWay, fromLanguage, toLanguage);
 
+            if (training.QuestionsCount == 0)
+            {
+                return null;
+            }
+
             SaveTraining(htppContext, training);
             var question = training.GetCurrentQuestion();
             var image = await training.GetCurrentWordImageSrc(_wordImageService);

@@ -4,18 +4,19 @@
 
 <div class="col-xl-8 col-sm-12">
     <div class="form-group">
-        <input id="find-input" type="text" placeholder="Введите слово" class="form-control" />
-        <button class="btn btn-success float-right m-2 add-word-button" type="button"> добавить </button>
+        <input id="find-input" type="text" placeholder="Введите слово" class="form-control" data-request-url="@Url.Action("WordList", "Vocabulary")" />
+        <button class="btn btn-success float-right m-2 show-translations-btn" type="button" data-request-url="@Url.Action("TranslationList", "Vocabulary")"> добавить </button>
     </div>
 
-    <div id="available-words" class="w-50 m-2 text-center shadow-lg p-3 mb-5 bg-white rounded d-none">
+    <div id="available-words" class="w-50 m-2 shadow-lg p-3 mb-5 bg-white rounded d-none text-primary">
     </div>
 </div>
 
 <template id="addOwnWordTemplate">
     <div>
-        <input type="text" class="form-control" />
-        <button class="btn add-new-word btn-sm btn-warning text-white mt-1"> Добавить новое слово </button>
+        <hr />
+        <input type="text" class="form-control" placeholder="Введите свой вариант" />
+        <button class="btn btn-warning add-own-word-btn mt-1" data-request-url="@Url.Action("AddOwnTranslation", "Vocabulary")">  Добавить новое слово </button>
     </div>
 </template>
 

@@ -1,25 +1,27 @@
 ﻿@model LearningEnglishWeb.ViewModels.Training.Abstractions.QuestionViewModel
 
+    <div class="row">
+        <div class="col text-center">
+            <div class="questionArea tw">
 
-<div class="row mb-2">
-    <h5 class="col text-center">Вопрос @Model.QuestionNumber </h5>
-</div>
-
-<div class="text-center">
-    <h4>
-        <span>@Model.Word</span>
-        <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
-            <i class="fas audio fa-play"></i>
-        </button>
-    </h4>
-    <img id="wordImage" src="@Model.ImageSrc" />
-</div>
-
-<div id="answerRefreshArea">
-    <div class="form-group  m-4">
-        <input type="text" class="form-control" placeholder="Ваш перевод" />
+                <h5>Вопрос @Model.QuestionNumber </h5>
+                <h4>
+                    <span>@Model.Word</span>
+                    <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
+                        <i class="fas audio fa-play"></i>
+                    </button>
+                </h4>
+                <div class="imageWrapper">
+                    <img id="wordImage" src="@Model.ImageSrc" />
+                </div>
+            </div>
+            <div id="answerRefreshArea">
+                <div class="userAnswerArea ">
+                    <input type="text" class="form-control w-50" placeholder="Ваш перевод" />
+                </div>
+                <div class="actionArea">
+                    <button data-request-url="@Url.Action("CheckAnswer")" class="skipBtn btn btn-warning w-50 text-white  text-center">Не знаю</button>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="text-center ">
-        <button data-request-url="@Url.Action("CheckAnswer")" class="skipBtn btn btn-warning w-50 text-white  text-center">Не знаю</button>
-    </div>
-</div>
