@@ -14,44 +14,11 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Controllers.Abstraction
 {
-    public class TranslateWordTrainingFacade : TrainingFacade<TranslateWordTraining, Question>
+    public class TranslateWordTrainingFacade : TrainingFacade<TranslateWordTraining, QuestionViewModel>
     {
         public TranslateWordTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService) : base(trainingFactory, wordImageService, trainingService)
         {
         }
-
-        public async Task<TrainingViewModel<QuestionViewModel>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
-        {
-            TranslateWordTraining training = await _trainingFactory.GetTranslateTraining(isReverseWay, fromLanguage, toLanguage);
-
-            if (training.QuestionsCount == 0)
-            {
-                return null;
-            }
-
-            SaveTraining(htppContext, training);
-            var question = training.GetCurrentQuestion();
-            var image = await training.GetCurrentWordImageSrc(_wordImageService);
-
-            var questionModel = new QuestionViewModel(question.Word, question.Number, image);
-            return new TrainingViewModel<QuestionViewModel>(training.Id, training.IsReverse, questionModel);
-        }
-
-        public async Task<QuestionViewModel> GetNextQuestionViewModel(HttpContext htppContext, Guid trainingId)
-        {
-            var training = GetTraining(htppContext, trainingId);
-            var question = training.GetNextQuestion();
-
-            if (question == null)
-            {
-                return null;
-            }
-
-            var image = await training.GetCurrentWordImageSrc(_wordImageService);
-            SaveTraining(htppContext, training);
-            return new QuestionViewModel(question.Word, question.Number, image);
-        }
-
 
         public TranslateWordAnswerViewModel GetCheckAnswerModel(HttpContext htppContext, Guid trainingId, string answer)
         {

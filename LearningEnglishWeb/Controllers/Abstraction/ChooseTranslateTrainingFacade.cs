@@ -14,42 +14,10 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Controllers.Abstraction
 {
-    public class ChooseTranslateTrainingFacade : TrainingFacade<ChooseTranslateTraining, QuestionWithOptions>
+    public class ChooseTranslateTrainingFacade : TrainingFacade<ChooseTranslateTraining, ChooseTranslateQuestionViewModel>
     {
         public ChooseTranslateTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService) : base(trainingFactory, wordImageService, trainingService)
         {
-        }
-
-        public async Task<TrainingViewModel<ChooseTranslateQuestionViewModel>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
-        {
-            ChooseTranslateTraining training = await _trainingFactory.GetChooseTranslateTraining(isReverseWay, fromLanguage, toLanguage);
-
-            if (training.QuestionsCount == 0)
-            {
-                return null;
-            }
-
-            SaveTraining(htppContext,training);
-            var question = training.GetCurrentQuestion();
-            var image = await training.GetCurrentWordImageSrc(_wordImageService);
-
-            var questionModel = new ChooseTranslateQuestionViewModel(question, image);
-            return new TrainingViewModel<ChooseTranslateQuestionViewModel>(training.Id, training.IsReverse, questionModel);
-        }
-
-        public async Task<ChooseTranslateQuestionViewModel> GetNextQuestionViewModel(HttpContext htppContext, Guid trainingId)
-        {
-            var training = GetTraining(htppContext, trainingId);
-            var question = training.GetNextQuestion();
-
-            if (question == null)
-            {
-                return null;
-            }
-
-            var image = await training.GetCurrentWordImageSrc(_wordImageService);
-            SaveTraining(htppContext, training);
-            return new ChooseTranslateQuestionViewModel(question, image);
         }
         
 
@@ -68,6 +36,5 @@ namespace LearningEnglishWeb.Controllers.Abstraction
 
             return questionResult;
         }
-
     }
 }

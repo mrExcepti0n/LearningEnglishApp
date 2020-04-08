@@ -1,4 +1,5 @@
-﻿using LearningEnglishWeb.ViewModels.Training.Abstractions;
+﻿using LearningEnglishWeb.Models.Training.CollectWord;
+using LearningEnglishWeb.ViewModels.Training.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +9,12 @@ namespace LearningEnglishWeb.ViewModels.Training.CollectWord
 {
     public class CollectWordQuestionViewModel : QuestionViewModel
     {
-        public CollectWordQuestionViewModel(string word, int number, string imgSrc, char[] letters) : base(word, number, imgSrc)
+       
+        public CollectWordQuestionViewModel(CollectWordQuestion collectWordQuestion, string imgSrc) : base(collectWordQuestion.Word, collectWordQuestion.Number, imgSrc)
         {
-            Letters = letters;
+            Letters = collectWordQuestion.AnswerLetters;
         }
+
 
         public char[] Letters { get; set; }
     }

@@ -15,5 +15,6 @@ namespace LearningEnglishWeb.Services.Abstractions
         Task<Dictionary<int, byte>> GetTrainingWordsRatio(List<int> userWordIds);
 
         Task<Dictionary<(TrainingTypeEnum, bool), int>> GetAvailibleTrainingWordsCount();
+        Task<List<UserWord>> GetTrainingWords(IEnumerable<int> userSelectedWords);
     }
 }

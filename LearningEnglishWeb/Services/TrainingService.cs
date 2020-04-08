@@ -32,6 +32,13 @@ namespace LearningEnglishWeb.Services
             return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);
         }
 
+        public async Task<List<UserWord>> GetTrainingWords(IEnumerable<int> userSelectedWords)
+        {
+            var requestUrl = Api.Training.GetTrainingWords(_baseUrl, userSelectedWords);
+            var stringResult = await _httpClient.GetStringAsync(requestUrl);
+            return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);
+        }
+
         public async Task SaveTrainingResult(TrainingResultDto training)
         {
             string requestUrl = Api.Training.SaveTrainingResult(_baseUrl);
@@ -58,5 +65,7 @@ namespace LearningEnglishWeb.Services
 
             return result.ToDictionary(key => (key.TrainingType, key.IsReverseTraining), value => value.AvailableWordsCount);
         }
+
+
     }
 }

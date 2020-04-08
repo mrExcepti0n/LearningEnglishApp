@@ -19,11 +19,22 @@ namespace LearningEnglishWeb.Controllers
             _trainingService = trainingService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(IEnumerable<int> userSelectedWords = null)
         {
-            var availibleTrainingWords = await _trainingService.GetAvailibleTrainingWordsCount();
-            var viewModel = new ChooseTrainingViewModel(availibleTrainingWords);
+            var viewModel = await GetTrainingViewModel(userSelectedWords);
             return View(viewModel);
+        }
+
+
+        private async Task<ChooseTrainingViewModel> GetTrainingViewModel(IEnumerable<int> userSelectedWords = null)
+        {
+            if (userSelectedWords != null && userSelectedWords.Any())
+            {
+                return new ChooseTrainingViewModel(userSelectedWords);
+            }
+
+            var availibleTrainingWords = await _trainingService.GetAvailibleTrainingWordsCount();
+            return new ChooseTrainingViewModel(availibleTrainingWords);
         }
 
     }

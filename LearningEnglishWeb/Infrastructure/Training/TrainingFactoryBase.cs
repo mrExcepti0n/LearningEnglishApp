@@ -4,6 +4,8 @@ using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Services;
 using LearningEnglishWeb.Services.Abstractions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Infrastructure.Training
@@ -35,18 +37,32 @@ namespace LearningEnglishWeb.Infrastructure.Training
 
         protected async Task<UserWord[]> GetWords()
         {
-             var words = await _trainingService.GetRequiringStudyWords(_trainingType, _reverseWay);
+            var words = await _trainingService.GetRequiringStudyWords(_trainingType, _reverseWay);
+           
+            return GetWordsInternal(words);
+        }
 
+
+        protected async Task<UserWord[]> GetWords(IEnumerable<int> userSelectedWords)
+        {
+            var words = await _trainingService.GetTrainingWords(userSelectedWords);
+            return GetWordsInternal(words);
+        }
+
+
+        private UserWord[] GetWordsInternal(List<UserWord> userWords)
+        {
             if (_reverseWay)
             {
-                words.ForEach(word => {
+                userWords.ForEach(word => {
                     var tmp = word.Word;
                     word.Word = word.Translation;
                     word.Translation = tmp;
                 });
             }
 
-            return words.ToArray();
+            return userWords.ToArray();
+
         }
 
 

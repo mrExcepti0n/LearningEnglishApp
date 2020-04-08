@@ -118,6 +118,12 @@ namespace LearningEnglishWeb.Services.Helpers
                 return $"{baseUrl}/AvailibleTrainingWordsCount";
             }
 
+            internal static string GetTrainingWords(string baseUrl, IEnumerable<int> userSelectedWords)
+            {
+                var parameters = userSelectedWords.Select(uw => $"userSelectedWords={uw}");
+                return $"{baseUrl}/TrainingWords?" + String.Join('&',parameters);
+            }
+
             internal static string GetTrainingWordsRatio(string baseUrl, ICollection<int> userWordIs)
             {
                 var urlBulder = new StringBuilder($"{baseUrl}/TrainingWordsRatio");

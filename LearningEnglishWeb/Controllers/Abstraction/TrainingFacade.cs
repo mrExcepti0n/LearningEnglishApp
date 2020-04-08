@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Controllers.Abstraction
 {
-    public abstract class TrainingFacade<T, TQ> where T: TrainingBase<TQ> where TQ :Question
+    public abstract class TrainingFacade<T, TVM> where T:  ITraining<Question> where TVM : QuestionViewModel
     {
         protected TrainingFactory _trainingFactory;
         protected IWordImageService _wordImageService;
@@ -29,6 +29,42 @@ namespace LearningEnglishWeb.Controllers.Abstraction
             _trainingService = trainingService;
         }
 
+
+        public async Task<TrainingViewModel<TVM>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        {
+            var training = await _trainingFactory.GetTraining<T>(isReverseWay, fromLanguage, toLanguage);
+            if (training.QuestionsCount == 0)
+            {
+                return default;
+            }
+
+
+            SaveTraining(htppContext, training);
+            var question = training.GetCurrentQuestion();
+            var image = await training.GetCurrentWordImageSrc(_wordImageService);
+
+            var questionModel = GetQuestionViewModel(question, image);
+            return new TrainingViewModel<TVM>(training.Id, training.IsReverse, questionModel);
+        }
+
+        public async Task<TVM> GetNextQuestionViewModel(HttpContext htppContext, Guid trainingId)
+        {
+            var training = GetTraining(htppContext, trainingId);
+            var question = training.GetNextQuestion();
+
+            if (question == null)
+            {
+                return null;
+            }
+
+            var image = await training.GetCurrentWordImageSrc(_wordImageService);
+            SaveTraining(htppContext, training);
+
+            return GetQuestionViewModel(question, image);
+        }
+
+
+
         protected void SaveTraining(HttpContext htppContext, T training)
         {
             htppContext.Session.SetString(training.Id.ToString(), JsonConvert.SerializeObject(training));
@@ -38,6 +74,13 @@ namespace LearningEnglishWeb.Controllers.Abstraction
         {
             var training = htppContext.Session.GetString(trainingId.ToString());
             return JsonConvert.DeserializeObject<T>(training);
+        }
+
+
+
+        protected virtual TVM GetQuestionViewModel(Question currentQuestion, string imgSrc)
+        {
+            return QuestionViewModel.Create(currentQuestion, imgSrc);
         }
 
 

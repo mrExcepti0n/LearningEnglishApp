@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Models.Training.Shared
 {
-    public abstract class TrainingBase<TQ> where TQ: Question
+    public abstract class TrainingBase<TQ> : ITraining<TQ> where TQ: Question
     {
 
         public bool IsReverse { get; }

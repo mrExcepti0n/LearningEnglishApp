@@ -43,6 +43,16 @@ namespace VocabularyApi.Controllers
             return requiringStudyWords.Select(rsw => new UserVocabularyWordDto(rsw)).ToList();
         }
 
+
+        [HttpGet("TrainingWords")]
+        public async Task<ActionResult<List<UserVocabularyWordDto>>> GetTrainingWords([FromQuery]IEnumerable<int> userSelectedWords)
+        {
+            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId && userSelectedWords.Contains(uv.Id)).Include(uw => uw.TrainingStatistics).ToListAsync();
+            return userWords.Select(rsw => new UserVocabularyWordDto(rsw)).ToList();
+        }
+
+       
+
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

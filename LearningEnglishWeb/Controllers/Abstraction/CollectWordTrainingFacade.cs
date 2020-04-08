@@ -17,46 +17,11 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Controllers.Abstraction
 {
-    public class CollectWordTrainingFacade : TrainingFacade<CollectWordTraining, CollectWordQuestion>
+    public class CollectWordTrainingFacade : TrainingFacade<CollectWordTraining, CollectWordQuestionViewModel>
     {
         public CollectWordTrainingFacade(TrainingFactory trainingFactory, IWordImageService wordImageService, ITrainingService trainingService) : base(trainingFactory, wordImageService, trainingService)
         {
         }
-        public async Task<TrainingViewModel<CollectWordQuestionViewModel>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
-        {
-            var training = await _trainingFactory.GetCollectWordTraining(isReverseWay, fromLanguage, toLanguage);
-
-            if (training.QuestionsCount == 0)
-            {
-                return null;
-            }
-
-            SaveTraining(htppContext, training);
-            var question = training.GetCurrentQuestion();
-            var image = await training.GetCurrentWordImageSrc(_wordImageService);
-
-            var questionModel = new CollectWordQuestionViewModel(question.Word, question.Number, image, question.AnswerLetters);
-            return new TrainingViewModel<CollectWordQuestionViewModel>(training.Id, training.IsReverse, questionModel);
-        }
-
-        public async Task<CollectWordQuestionViewModel> GetNextQuestionViewModel(HttpContext htppContext, Guid trainingId)
-        {
-            var training = GetTraining(htppContext, trainingId);
-            var question = training.GetNextQuestion();
-
-            if (question == null)
-            {
-                return null;
-            }
-
-            var image = await training.GetCurrentWordImageSrc(_wordImageService);
-            SaveTraining(htppContext, training);
-            return new CollectWordQuestionViewModel(question.Word, question.Number, image, question.AnswerLetters);
-        }
-
-
-    
-
 
         public CollectWordAnswerViewModel GetCheckAnswerModel(HttpContext htppContext, Guid trainingId, string answer)
         {

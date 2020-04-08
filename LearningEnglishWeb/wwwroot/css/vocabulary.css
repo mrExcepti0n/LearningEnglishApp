@@ -1,0 +1,47 @@
+﻿#available-words button {
+    display: block;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding-bottom: 0.5rem;
+    line-height: 1.1;
+    color: white;
+    width: 100%;
+}
+
+
+
+.show-translations-btn {
+    visibility: hidden;
+}
+
+.training-sw-btn {
+    visibility: hidden;
+    float: right;
+}
+
+
+
+.words-table td {
+    vertical-align: middle;
+}
+
+
+.img-thumbnail {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+
+.thumbnail-wrapper {
+    width: 60px;
+    height: 60px;
+    position: relative
+}

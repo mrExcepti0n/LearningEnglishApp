@@ -13,12 +13,13 @@ namespace LearningEnglishWeb.ViewModels.Training
             _availibleTrainingWordsCount = availibleTrainingWordsCount;
         }
 
-        public ChooseTrainingViewModel()
+        public ChooseTrainingViewModel(IEnumerable<int> selectedUserWords)
         {
-
+            SelectedUserWords = selectedUserWords;
         }
 
         private Dictionary<(TrainingTypeEnum, bool), int> _availibleTrainingWordsCount { get; set; } = new Dictionary<(TrainingTypeEnum, bool), int>();
+        public IEnumerable<int> SelectedUserWords { get; private set; } =  new List<int> { };
 
         public bool IsTrainingActive(TrainingTypeEnum trainingType, bool isReverseTraining)
         {

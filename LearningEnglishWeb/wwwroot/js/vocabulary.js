@@ -3,19 +3,13 @@
 
     let vocabularyId = document.getElementById('vocabularyId')?.value;
 
-    //let vocabularyIdInput = document.getElementById('vocabularyId')?.value;
-    //if (vocabularyIdInput) {
-    //    vocabularyId = vocabularyIdInput;
-    //}
-
-
     let audio = new Audio();
 
     let availableWordsArea = document.getElementById('available-words');
 
     document.addEventListener('click', function (evt) {
         let targetElement = evt.target;
-       
+
 
         if (targetElement.classList.contains('show-translations-btn')) {
             loadTranslationList(targetElement);
@@ -37,19 +31,29 @@
             return;
         }
 
-        if (targetElement.classList.contains('audio'))
-        {
+        if (targetElement.classList.contains('audio')) {
             playAudio(targetElement);
             return;
         }
 
 
-        if (targetElement.classList.contains('delete-button'))
-        {
+        if (targetElement.classList.contains('delete-button')) {
             deleteWord(targetElement);
             return;
         }
 
+        if (targetElement.id === 'checkAll') {
+            setWordsCheckBox(targetElement.checked);
+        }
+
+        if (targetElement.matches('[type="checkbox"]'))
+        {
+            checkTrainingBtnVisibility(targetElement.checked);
+        }
+
+        if (targetElement.classList.contains('training-sw-btn')) {
+            trainSelectedWords();
+        }
 
 
         do {
@@ -58,10 +62,11 @@
         } while (targetElement);
 
         availableWordsArea.innerHTML = '';
-
         availableWordsArea.classList.add('d-none');
-
     });
+
+
+
 
     let input = document.querySelector("#find-input");
 
@@ -70,7 +75,7 @@
         refreshArea(this.value, this.dataset.requestUrl);
     }, false);
 
-   
+
 
 
     function switchOwnWordButton(btn) {
@@ -165,5 +170,58 @@
                 //todo убрать из dom модели tr без reload
             }
         });
+    }
+
+    function setWordsCheckBox(checked) {
+        let inputs = document.querySelectorAll('tbody tr input[type=checkbox]');
+        for (let i = 0; i !== inputs.length; i++) {
+            inputs[i].checked = checked;
+        }
+
+        setTraingBtnVisibility(checked);
+    }
+
+
+    function setTraingBtnVisibility(isVisible) {
+        let btn = document.querySelector('.training-sw-btn');
+        if (isVisible) {
+            if (!btn.style.visibility || btn.style.visibility === 'hidden') {
+                btn.style.visibility = 'visible';
+            }
+        } else if (btn.style.visibility === 'visible') {
+            btn.style.visibility = 'hidden';
+        }
+    }
+
+
+    function trainSelectedWords() {
+        let checkedWords = document.querySelectorAll('tbody tr input[type=checkbox]:checked+input[type=hidden]');
+
+        for (let i = 0; i < checkedWords.length; i++) {
+            console.log(checkedWords[i].value);
+        }
+    }
+
+    function checkTrainingBtnVisibility(isVisible) {
+        if (isVisible) {
+            setTraingBtnVisibility(isVisible);
+            let notCheckedElement = document.querySelector('tbody tr input[type=checkbox]:not(:checked)');
+
+            if (!notCheckedElement) {
+                let checkAllInput = document.getElementById('checkAll');
+                if (!checkAllInput.checked) {
+                    checkAllInput.checked = true;
+                }
+            }
+        } else {
+            let checkedElement = document.querySelector('tbody tr input[type=checkbox]:checked');
+            if (!checkedElement) {
+                setTraingBtnVisibility(isVisible);
+            }
+            let checkAllInput = document.getElementById('checkAll');
+            if (checkAllInput.checked) {
+                checkAllInput.checked = false;
+            }
+        }
     }
 })();
