@@ -22,12 +22,12 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\Data.Core\Data.Core.csproj" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 
   <ItemGroup>
-    <Folder Include="Properties\PublishProfiles\" />
+    <ProjectReference Include="..\..\Shared\Data.Core\Data.Core.csproj" />
   </ItemGroup>
 
 
