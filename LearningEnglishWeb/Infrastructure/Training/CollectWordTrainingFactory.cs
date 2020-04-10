@@ -14,8 +14,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
     public class CollectWordTrainingFactory : TrainingFactoryBase<CollectWordTraining>
     {
 
-        public CollectWordTrainingFactory(ITrainingService trainingService,  LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
-            : base(trainingService, TrainingTypeEnum.CollectWord, fromLanguage, toLanguage, reverseWay)
+        public CollectWordTrainingFactory(ITrainingService trainingService,  TrainingSettings trainingSettings) 
+            : base(trainingService, TrainingTypeEnum.CollectWord, trainingSettings)
         {
             
         }
@@ -24,7 +24,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             UserWord[] words = await GetWords();
 
-            return new CollectWordTraining(GetQuestions(words), _reverseWay);
+            return new CollectWordTraining(GetQuestions(words), _trainingSettings.IsReverseWay);
         }  
 
 

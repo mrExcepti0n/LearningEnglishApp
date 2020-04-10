@@ -6,6 +6,7 @@ using LearningEnglishWeb.Controllers.Abstraction;
 using LearningEnglishWeb.Infrastructure;
 using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Models.Training.CollectWord;
 using LearningEnglishWeb.Services;
 using LearningEnglishWeb.Services.Abstractions;
@@ -23,9 +24,10 @@ namespace LearningEnglishWeb.Controllers
             _trainingFacade = new CollectWordTrainingFacade(trainingFactory, wordImageService, trainingService);
         }
 
-        public async Task<IActionResult> Index(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        public async Task<IActionResult> Index(bool isReverseWay = false, IEnumerable<int> userWords = null)
         {
-            var trainingModel = await _trainingFacade.StartNewGame(HttpContext, isReverseWay, fromLanguage, toLanguage);
+            var trainingSettings = new TrainingSettings(isReverseWay, userWords);
+            var trainingModel = await _trainingFacade.StartNewGame(HttpContext, trainingSettings);
             return View(trainingModel);
         }
 

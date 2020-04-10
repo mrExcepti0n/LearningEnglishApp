@@ -1,5 +1,6 @@
 ﻿using Data.Core;
 using LearningEnglishWeb.Models;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Models.Training.CollectWord;
 using LearningEnglishWeb.Models.Training.Shared;
@@ -20,47 +21,47 @@ namespace LearningEnglishWeb.Infrastructure.Training
             _trainingService = trainingService;
         }
 
-        public async Task<T> GetTraining<T>(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian) where T: ITraining<Question>
+        public async Task<T> GetTraining<T>(TrainingSettings trainingSettings) where T: ITraining<Question>
         {
+            ITraining<Question> training;
 
             if (typeof(T) == typeof(CollectWordTraining))
             {
-                ITraining<Question> z = await GetCollectWordTraining(isReverseWay, fromLanguage, toLanguage);
-                return (T) z;
+                training = await GetCollectWordTraining(trainingSettings);
             }
-
-            if (typeof(T) == typeof(ChooseTranslateTraining))
+            else if (typeof(T) == typeof(ChooseTranslateTraining))
             {
-                ITraining<Question> z = await GetChooseTranslateTraining(isReverseWay, fromLanguage, toLanguage);
-                return (T)z;
+                training = await GetChooseTranslateTraining(trainingSettings);
             }
-
-            if (typeof(T) == typeof(TranslateWordTraining))
+            else if (typeof(T) == typeof(TranslateWordTraining))
             {
-                ITraining<Question> z = await GetTranslateTraining(isReverseWay, fromLanguage, toLanguage);
-                return (T)z;
+                training = await GetTranslateTraining(trainingSettings);
+            }
+            else
+            {
+                throw new NotImplementedException();
             }
 
-            throw new NotImplementedException();
+            return (T)training;
         }
 
 
-        private async Task<CollectWordTraining> GetCollectWordTraining(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        private async Task<CollectWordTraining> GetCollectWordTraining(TrainingSettings trainingSettings)
         {
-            var factory = new CollectWordTrainingFactory(_trainingService, fromLanguage, toLanguage, isReverseWay);
+            var factory = new CollectWordTrainingFactory(_trainingService, trainingSettings);
             return await factory.GetTraining();
         }
 
 
-        private async Task<ChooseTranslateTraining> GetChooseTranslateTraining(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        private async Task<ChooseTranslateTraining> GetChooseTranslateTraining(TrainingSettings trainingSettings)
         {
-            var factory = new ChooseTranslateTrainingFactory(_trainingService,  fromLanguage, toLanguage, isReverseWay);
+            var factory = new ChooseTranslateTrainingFactory(_trainingService, trainingSettings);
             return await factory.GetTraining();
         }
 
-        private async Task<TranslateWordTraining> GetTranslateTraining(bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        private async Task<TranslateWordTraining> GetTranslateTraining(TrainingSettings trainingSettings)
         {
-            return await new TranslateWordTrainingFactory(_trainingService,  fromLanguage, toLanguage, isReverseWay).GetTraining();
+            return await new TranslateWordTrainingFactory(_trainingService, trainingSettings).GetTraining();
         }
     }
 }

@@ -15,8 +15,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
     public class ChooseTranslateTrainingFactory : TrainingFactoryBase<ChooseTranslateTraining>
     {
 
-        public ChooseTranslateTrainingFactory(ITrainingService trainingService,  LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay)
-            :base(trainingService, TrainingTypeEnum.ChooseTranslate, fromLanguage, toLanguage, reverseWay)
+        public ChooseTranslateTrainingFactory(ITrainingService trainingService, TrainingSettings trainingSettings)
+            :base(trainingService, TrainingTypeEnum.ChooseTranslate, trainingSettings)
         {
           
            
@@ -25,7 +25,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         public override async Task<ChooseTranslateTraining> GetTraining()
         {
             UserWord[] words = await GetWords();
-            return new ChooseTranslateTraining(GetQuestions(words), _reverseWay);
+            return new ChooseTranslateTraining(GetQuestions(words), _trainingSettings.IsReverseWay);
         }
         
 

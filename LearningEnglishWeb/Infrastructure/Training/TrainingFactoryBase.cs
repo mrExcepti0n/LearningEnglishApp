@@ -14,21 +14,15 @@ namespace LearningEnglishWeb.Infrastructure.Training
     {
 
         protected ITrainingService _trainingService;
-        protected readonly LanguageEnum _fromLanguage;
-        protected readonly LanguageEnum _toLanguage;
-        protected readonly bool _reverseWay;
+        protected readonly TrainingSettings _trainingSettings;
         protected readonly TrainingTypeEnum _trainingType;
-
         private Random _random;
 
-        protected TrainingFactoryBase(ITrainingService trainingService, TrainingTypeEnum trainingType, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay)
+        protected TrainingFactoryBase(ITrainingService trainingService, TrainingTypeEnum trainingType, TrainingSettings trainingSettings)
         {
             _trainingService = trainingService;
-            _fromLanguage = fromLanguage;
-            _toLanguage = toLanguage;
-            _reverseWay = reverseWay;
+            _trainingSettings = trainingSettings;
             _trainingType = trainingType;
-
             _random = new Random();
         }
 
@@ -37,32 +31,27 @@ namespace LearningEnglishWeb.Infrastructure.Training
 
         protected async Task<UserWord[]> GetWords()
         {
-            var words = await _trainingService.GetRequiringStudyWords(_trainingType, _reverseWay);
-           
-            return GetWordsInternal(words);
-        }
 
-
-        protected async Task<UserWord[]> GetWords(IEnumerable<int> userSelectedWords)
-        {
-            var words = await _trainingService.GetTrainingWords(userSelectedWords);
-            return GetWordsInternal(words);
-        }
-
-
-        private UserWord[] GetWordsInternal(List<UserWord> userWords)
-        {
-            if (_reverseWay)
+            List<UserWord> words;
+            if (_trainingSettings.SelectedUserWords?.Any() ?? false)
             {
-                userWords.ForEach(word => {
+                words = await _trainingService.GetTrainingWords(_trainingSettings.SelectedUserWords);
+            }
+            else
+            {
+                words = await _trainingService.GetRequiringStudyWords(_trainingType, _trainingSettings.IsReverseWay);
+            }
+
+            if (_trainingSettings.IsReverseWay)
+            {
+                words.ForEach(word => {
                     var tmp = word.Word;
                     word.Word = word.Translation;
                     word.Translation = tmp;
                 });
             }
 
-            return userWords.ToArray();
-
+            return words.ToArray();
         }
 
 

@@ -34,14 +34,6 @@ namespace LearningEnglishWeb.Controllers
 
         private ITrainingService _trainingService { get; set; }
 
-        public async Task<IActionResult> Index()
-        {
-            var words = await _vocabularyService.GetWords();
-            var userVocabularies = await _vocabularyService.GetVocabularies();          
-            await FillImages(words);
-            await FillTrainingRatio(words);
-            return View(new UserVocabulariesViewModel {UserVocabularies = userVocabularies, UserWords = words });
-        }
 
         private async Task FillImages(List<UserWord> words)
         {
@@ -62,15 +54,34 @@ namespace LearningEnglishWeb.Controllers
             }
         }
 
-
-        public async Task<IActionResult> UserVocabulary(int vocabularyId)
+        public async Task<IActionResult> Index(int? id)
         {
-            var words = await _vocabularyService.GetWords(vocabularyId : vocabularyId);
-            var userVocabulary = await _vocabularyService.GetVocabulary(vocabularyId);
+            var words = await _vocabularyService.GetWords(vocabularyId: id);
             await FillImages(words);
             await FillTrainingRatio(words);
-            return View(new UserVocabularyViewModel { UserVocabulary = userVocabulary, UserWords = words });
+
+            if (id == null)
+            {
+                var userVocabularies = await _vocabularyService.GetVocabularies();
+                return View(new UserVocabulariesViewModel { UserVocabularies = userVocabularies, UserWords = words });
+            }
+            else
+            {            
+                var userVocabulary = await _vocabularyService.GetVocabulary(id.Value);
+                return View("UserVocabulary", new UserVocabularyViewModel { UserVocabulary = userVocabulary, UserWords = words });
+            }
         }
+
+        
+
+        //public async Task<IActionResult> Details(int id)
+        //{
+        //    var words = await _vocabularyService.GetWords(vocabularyId : id);
+        //    var userVocabulary = await _vocabularyService.GetVocabulary(id);
+        //    await FillImages(words);
+        //    await FillTrainingRatio(words);
+        //    return View(new UserVocabularyViewModel { UserVocabulary = userVocabulary, UserWords = words });
+        //}
 
 
         public async Task<IActionResult> WordList(string mask, int? vocabularyId)

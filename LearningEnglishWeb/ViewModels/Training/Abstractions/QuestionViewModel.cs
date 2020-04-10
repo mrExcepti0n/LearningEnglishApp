@@ -27,27 +27,26 @@ namespace LearningEnglishWeb.ViewModels.Training.Abstractions
 
         public string ImageSrc { get; set; }
 
-
-
-
-        private static CollectWordQuestionViewModel Create(CollectWordQuestion question, string src)
+        
+        private static CollectWordQuestionViewModel CreateImpl(CollectWordQuestion question, string src)
         {
             return new CollectWordQuestionViewModel(question, src);
         }
 
-        private static QuestionViewModel Create(Question question, string src)
+        private static QuestionViewModel CreateImpl(Question question, string src)
         {
             return new QuestionViewModel(question, src);
         }
 
-        private static ChooseTranslateQuestionViewModel Create(QuestionWithOptions question, string src)
+        private static ChooseTranslateQuestionViewModel CreateImpl(QuestionWithOptions question, string src)
         {
             return new ChooseTranslateQuestionViewModel(question, src);
         }
 
-        public static dynamic Create(dynamic question, string src)
+        public static dynamic Create(Question question, string src)
         {
-            return Create(question, src);
+            dynamic dQuestion = question;
+            return CreateImpl(dQuestion, src);
         }
     }
 }

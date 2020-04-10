@@ -47,12 +47,15 @@ namespace LearningEnglishWeb.Services
             return JsonConvert.DeserializeObject<WordSetDto>(stringResult);
         }
 
-        public async Task AddWords(int[] wordSetItems)
+        public async Task<int> AddWords(int wordSetId, ICollection<int> wordSetItemIds)
         {
             string requestUrl = Api.WordSet.AddWords(_baseUrl);
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(new { wordSetItems = wordSetItems }), Encoding.UTF8, "application/json");
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(new UserWordSetSaveDto { WordSetId = wordSetId, WordSetItemIds = wordSetItemIds }), Encoding.UTF8, "application/json");
             var result = await _httpClient.PostAsync(requestUrl, content);
             result.EnsureSuccessStatusCode();
+
+            var jsonResponse = await result.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<int>(jsonResponse);
         }      
     }
 }

@@ -6,6 +6,7 @@ using System.Linq;
 using LearningEnglishWeb.Services.Dtos;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Services.Abstractions;
+using System.Collections.Generic;
 
 namespace LearningEnglishWeb.Controllers
 {
@@ -23,13 +24,20 @@ namespace LearningEnglishWeb.Controllers
             return View(wordSets.Select(ws => new WordSetShortModel(ws)));
         }
 
-        [HttpGet("[controller]/[action]/{id}")]
-        public async Task<IActionResult> Index(int id)
+        public async Task<IActionResult> Details(int id)
         {
             var wordSetDto = await _wordSetService.GetWordSet(id);
             return View("WordSet", new WordSetModel(wordSetDto));
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> Details(int id, ICollection<int> wordSetItemIds)
+        {
+            var userVocabularyId = await _wordSetService.AddWords(id, wordSetItemIds);
+            return RedirectToAction("Index", "Vocabulary", new { id = userVocabularyId});
+        }
+         
 
         [HttpGet]
         public IActionResult Add()
@@ -54,14 +62,7 @@ namespace LearningEnglishWeb.Controllers
             }
             await _wordSetService.AddWordSet(wordSetDto);
             return View();
-        }
-
-
-        [HttpPost]
-        public async Task AddWordsToVocabulary(int[] wodsSetItems)
-        {
-           await _wordSetService.AddWords(wodsSetItems);
-        }
+        }     
 
     }
 }

@@ -78,9 +78,10 @@ namespace LearningEnglishWeb
             app.UseAuthentication();
             app.UseAuthorization();
 
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}");
+                endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultError", "{controller=Error}/{action=Error}");
                 endpoints.MapControllers();
             });

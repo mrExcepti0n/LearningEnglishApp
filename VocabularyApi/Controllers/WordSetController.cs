@@ -34,7 +34,7 @@ namespace VocabularyApi.Controllers
         }
 
         [HttpPost("UserWordSet")]
-        public void AddWords(UserWordSetSaveDto userWordSet)
+        public ActionResult<int> AddWords(UserWordSetSaveDto userWordSet)
         {
             var userWordSetItemIds = new List<int>();
             var wordSet = _vocabularyContext.Set<WordSet>().Include(ws => ws.WordSetItems).SingleOrDefault(ws => ws.Id == userWordSet.WordSetId);
@@ -54,7 +54,9 @@ namespace VocabularyApi.Controllers
             foreach (var ws in wordSets) {
                 userVocabulary.Words.Add(new UserVocabularyWord {Translation = ws.Translation, Word = ws.Word });
             }
+
             _vocabularyContext.SaveChanges();
+            return userVocabulary.Id;
         }
 
         [HttpGet("{id}")]

@@ -8,69 +8,92 @@
     @Model.Title
 </h4>
 
-<div class="mb-4 mt-4">
-    <input type="checkbox" id="checkAll" /> 
-    <span> Выбрать все слова </span>
-    <button class="btn btn-sm btn-primary float-right"> Добавить</button>
+<form method="post">
+    <div class="mb-4 mt-4">
+        <input type="checkbox" id="checkAll" />
+        <span> Выбрать все слова </span>
+        <button class="btn btn-sm btn-primary float-right add-btn" type="submit" style="visibility:hidden"> Добавить</button>
+    </div>
 
-</div>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th></th>
-            <th>Слово</th>
-            <th>Перевод</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Items)
-        {
+    <table class="table table-striped">
+        <thead>
             <tr>
-                <td style="width:5%"><input type="checkbox" data-id="@item.Id" /></td>
-                <td> @item.Word </td>
-                <td> @item.Translation</td>
+                <th></th>
+                <th>Слово</th>
+                <th>Перевод</th>
             </tr>
-        }
-    </tbody>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Items)
+            {
+                <tr>
+                    <td style="width:5%">
+                        <input name="WordSetItemIds" type="checkbox" value="@item.Id" />
+                    </td>
+                    <td> @item.Word </td>
+                    <td> @item.Translation</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</form>
 
 
+@section Scripts {
 
-</table>
-
-
-@section Scripts { 
-    
     <script>
         (function () {
-            let button = document.querySelector('.btn');
-            button.addEventListener('click', function () {
-
-                let inputs = document.querySelectorAll('table input:checked')
-                inputs = Array.from(inputs);
-                let selectedWords = inputs.map(el => el.dataset.id);
-
-                 $.ajax({
-                    url: '@Url.Action("AddWordsToVocabulary")',
-                    type: 'POST',
-                    data: { wodsSetItems: selectedWords },
-                    success: (res) => {
-                        console.log(res);                       
-                    }
-                });
-            });
-
             document.querySelector('#checkAll').addEventListener('click', function () {
-                var inputs = document.querySelectorAll('tbody tr input');
-                for (let i = 0; i != inputs.length; i++) {
-                    inputs[i].checked = this.checked;
-                }
+                setWordsCheckBox(this.checked);
             });
 
+            let checkInputs = document.querySelectorAll('tbody tr input[type=checkbox]');
+            Array.from(checkInputs).forEach(cb => cb.addEventListener('click', function () { checkAddBtnVisibility(this.checked);}));
+
+            function setWordsCheckBox(checked) {
+                let inputs = document.querySelectorAll('tbody tr input[type=checkbox]');
+                for (let i = 0; i !== inputs.length; i++) {
+                    inputs[i].checked = checked;
+                }
+
+                setAddBtnVisibility(checked);
+            }
 
 
+            function setAddBtnVisibility(isVisible) {
+                let btn = document.querySelector('.add-btn');
+                if (isVisible) {
+                    if (!btn.style.visibility || btn.style.visibility === 'hidden') {
+                        btn.style.visibility = 'visible';
+                    }
+                } else if (btn.style.visibility === 'visible') {
+                    btn.style.visibility = 'hidden';
+                }
+            }
 
+            function checkAddBtnVisibility(isVisible) {
+                if (isVisible) {
+                    setAddBtnVisibility(isVisible);
+                    let notCheckedElement = document.querySelector('tbody tr input[type=checkbox]:not(:checked)');
 
+                    if (!notCheckedElement) {
+                        let checkAllInput = document.getElementById('checkAll');
+                        if (!checkAllInput.checked) {
+                            checkAllInput.checked = true;
+                        }
+                    }
+                } else {
+                    let checkedElement = document.querySelector('tbody tr input[type=checkbox]:checked');
+                    if (!checkedElement) {
+                        setAddBtnVisibility(isVisible);
+                    }
+                    let checkAllInput = document.getElementById('checkAll');
+                    if (checkAllInput.checked) {
+                        checkAllInput.checked = false;
+                    }
+                }
+            }
         })()
     </script>
 }
+

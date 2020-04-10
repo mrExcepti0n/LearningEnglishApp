@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-6 p-3">
             <div class="trainingContainer">
-                <a asp-action="Index" asp-controller="TranslateWordTraining" class="trainingBtn trainingTopBtn @(Model.IsTrainingActive(TrainingTypeEnum.TranslateWord, false) ? "" : "notActive")">
+                <a  href="@Url.Action("Index", "TranslateWordTraining", new { userWords = Model.SelectedUserWords })" class="trainingBtn trainingTopBtn @(Model.IsTrainingActive(TrainingTypeEnum.TranslateWord, false) ? "" : "notActive")">
                     <div>
                         <p>  Русский </p>
                         @{ var twTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.TranslateWord, false); }
@@ -24,7 +24,7 @@
                     </div>
                 </a>
                 <button class="trainingDesc" disabled> Перевод слова </button>
-                <a asp-action="Index" asp-controller="TranslateWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn @(Model.IsTrainingActive(TrainingTypeEnum.TranslateWord, true) ? "" : "notActive")">
+                <a href="@Url.Action("Index", "TranslateWordTraining", new { userWords = Model.SelectedUserWords, isReverseWay = true })" class="trainingBtn trainingBotBtn @(Model.IsTrainingActive(TrainingTypeEnum.TranslateWord, true) ? "" : "notActive")">
                     <div>
                         <p>  Английский </p>
                         @{var twInverseTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.TranslateWord, true); }
@@ -38,7 +38,7 @@
         </div>
         <div class="col-6 p-3">
             <div class="trainingContainer">
-                <a asp-action="Index" asp-controller="ChooseTranslateTraining" class="trainingBtn trainingTopBtn  @(Model.IsTrainingActive(TrainingTypeEnum.ChooseTranslate, false) ? "" : "notActive")">
+                <a href="@Url.Action("Index", "ChooseTranslateTraining", new { userWords = Model.SelectedUserWords })"  class="trainingBtn trainingTopBtn  @(Model.IsTrainingActive(TrainingTypeEnum.ChooseTranslate, false) ? "" : "notActive")">
                     <div>
                         <p>  Русский </p>
                         @{ var ctTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.ChooseTranslate, false); }
@@ -49,7 +49,7 @@
                     </div>
                 </a>
                 <button class="trainingDesc" disabled> Выбор перевода </button>
-                <a asp-action="Index" asp-controller="ChooseTranslateTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn  @(Model.IsTrainingActive(TrainingTypeEnum.ChooseTranslate, true) ? "" : "notActive")">
+                <a href="@Url.Action("Index", "ChooseTranslateTraining", new { userWords = Model.SelectedUserWords, isReverseWay = true })" class="trainingBtn trainingBotBtn  @(Model.IsTrainingActive(TrainingTypeEnum.ChooseTranslate, true) ? "" : "notActive")">
                     <div>
                         <p>  Английский </p>
                         @{ var ctInverseTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.ChooseTranslate, true); }
@@ -63,7 +63,7 @@
         </div>
         <div class="col-6 p-3">
             <div class="trainingContainer">
-                <a asp-action="Index" asp-controller="CollectWordTraining" class="trainingBtn trainingTopBtn @(Model.IsTrainingActive(TrainingTypeEnum.CollectWord, false) ? "" : "notActive")">
+                <a href="@Url.Action("Index", "CollectWordTraining", new { userWords = Model.SelectedUserWords })" class="trainingBtn trainingTopBtn @(Model.IsTrainingActive(TrainingTypeEnum.CollectWord, false) ? "" : "notActive")">
                     <div>
                         <p>  Русский </p>
 
@@ -75,7 +75,7 @@
                     </div>
                 </a>
                 <button class="trainingDesc" disabled> Собери слово </button>
-                <a asp-action="Index" asp-controller="CollectWordTraining" asp-route-isReverseWay="true" class="trainingBtn trainingBotBtn @(Model.IsTrainingActive(TrainingTypeEnum.CollectWord, true) ? "" : "notActive")">
+                <a href="@Url.Action("Index", "CollectWordTraining", new { userWords = Model.SelectedUserWords, isReverseWay = true })" class="trainingBtn trainingBotBtn @(Model.IsTrainingActive(TrainingTypeEnum.CollectWord, true) ? "" : "notActive")">
                     <div>
                         <p>  Английский </p>
                         @{var cwInverseTrainingWordCount = Model.GetTrainingWordsCount(TrainingTypeEnum.CollectWord, true); }

@@ -14,6 +14,6 @@ namespace LearningEnglishWeb.Services.Abstractions
 
         Task<WordSetDto> GetWordSet(int id);
 
-        Task AddWords(int[] wordSetItems);
+        Task<int> AddWords(int wordSetId, ICollection<int> wordSetItemIds);
     }
 }

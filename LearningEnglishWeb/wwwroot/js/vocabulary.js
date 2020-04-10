@@ -52,7 +52,7 @@
         }
 
         if (targetElement.classList.contains('training-sw-btn')) {
-            trainSelectedWords();
+            trainSelectedWords(targetElement);
         }
 
 
@@ -194,12 +194,18 @@
     }
 
 
-    function trainSelectedWords() {
+    function trainSelectedWords(button) {
         let checkedWords = document.querySelectorAll('tbody tr input[type=checkbox]:checked+input[type=hidden]');
 
+        let url = button.dataset.requestUrl;
+
+        let parameters = '';
+
         for (let i = 0; i < checkedWords.length; i++) {
-            console.log(checkedWords[i].value);
+            parameters += 'userSelectedWords=' + checkedWords[i].value + '&';
         }
+
+        window.location = url + '?' + parameters;
     }
 
     function checkTrainingBtnVisibility(isVisible) {

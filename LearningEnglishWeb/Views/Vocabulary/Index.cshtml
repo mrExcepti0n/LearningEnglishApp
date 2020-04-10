@@ -14,7 +14,7 @@
                         @for (var j = i; j < i + 3 && j < Model.UserVocabularies.Count(); j++)
                         {
                             <div class="card d-inline-block" style="width: 12rem;">
-                                <div class="card-header">  <a asp-action="UserVocabulary" asp-controller="Vocabulary" asp-route-vocabularyId="@Model.UserVocabularies[j].Id">@Model.UserVocabularies[j].Title  </a></div>
+                                <div class="card-header">  <a asp-action="Index" asp-controller="Vocabulary" asp-route-id="@Model.UserVocabularies[j].Id">@Model.UserVocabularies[j].Title  </a></div>
                                 <div class="card-body">   количество слов @Model.UserVocabularies[j].WordsCount </div>
                             </div>
                         }

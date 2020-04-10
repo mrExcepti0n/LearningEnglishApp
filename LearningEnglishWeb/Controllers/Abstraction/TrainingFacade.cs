@@ -1,5 +1,6 @@
 ﻿using Data.Core;
 using LearningEnglishWeb.Infrastructure.Training;
+using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Models.Training.ChooseTranslate;
 using LearningEnglishWeb.Models.Training.Shared;
 using LearningEnglishWeb.Services;
@@ -30,9 +31,9 @@ namespace LearningEnglishWeb.Controllers.Abstraction
         }
 
 
-        public async Task<TrainingViewModel<TVM>> StartNewGame(HttpContext htppContext, bool isReverseWay = false, LanguageEnum fromLanguage = LanguageEnum.English, LanguageEnum toLanguage = LanguageEnum.Russian)
+        public async Task<TrainingViewModel<TVM>> StartNewGame(HttpContext htppContext, TrainingSettings trainingSettings)
         {
-            var training = await _trainingFactory.GetTraining<T>(isReverseWay, fromLanguage, toLanguage);
+            var training = await _trainingFactory.GetTraining<T>(trainingSettings);
             if (training.QuestionsCount == 0)
             {
                 return default;
@@ -45,7 +46,7 @@ namespace LearningEnglishWeb.Controllers.Abstraction
 
             var questionModel = GetQuestionViewModel(question, image);
             return new TrainingViewModel<TVM>(training.Id, training.IsReverse, questionModel);
-        }
+        }    
 
         public async Task<TVM> GetNextQuestionViewModel(HttpContext htppContext, Guid trainingId)
         {

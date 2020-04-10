@@ -13,8 +13,8 @@ namespace LearningEnglishWeb.Infrastructure.Training
 {
     internal class TranslateWordTrainingFactory : TrainingFactoryBase<TranslateWordTraining>
     {
-        public TranslateWordTrainingFactory(ITrainingService trainingService, LanguageEnum fromLanguage, LanguageEnum toLanguage, bool reverseWay) 
-            : base(trainingService, TrainingTypeEnum.TranslateWord, fromLanguage, toLanguage, reverseWay)
+        public TranslateWordTrainingFactory(ITrainingService trainingService, TrainingSettings trainingSettings) 
+            : base(trainingService, TrainingTypeEnum.TranslateWord, trainingSettings)
         {
 
         }
@@ -23,7 +23,7 @@ namespace LearningEnglishWeb.Infrastructure.Training
         {
             UserWord[] words = await GetWords();
 
-            return new TranslateWordTraining(GetQuestions(words).ToList(), _reverseWay);
+            return new TranslateWordTraining(GetQuestions(words).ToList(), _trainingSettings.IsReverseWay);
         }
 
 
