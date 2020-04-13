@@ -1,12 +1,9 @@
 import { TrainingResult } from "./trainingResult.model";
 import { TrainingDataService } from "../services/trainigData.service";
-import { Subject, Observable } from "rxjs";
+import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { Word } from "../../../vocabulary/models/word.model";
+import { UserWord } from "../../../vocabulary/models/word.model";
 import { IQuestion } from "./iquestion.model";
-import { Injectable } from "@angular/core";
-import { WordImageService } from "../../../shared/services/wordImage.service";
-import { SafeUrl } from "@angular/platform-browser";
 
 export abstract class TrainingBase {
 
@@ -34,12 +31,12 @@ export abstract class TrainingBase {
   }
 
 
-  reverseWords(words: Word[]): Word[] {
-    words.forEach(word => { let tmp = word.name; word.name = word.translation; word.translation = tmp; });
+  reverseWords(words: UserWord[]): UserWord[] {
+    words.forEach(word => { let tmp = word.word; word.word = word.translation; word.translation = tmp; });
     return words;
   }
 
-  protected abstract generateQuestions(words: Word[]);
+  protected abstract generateQuestions(words: UserWord[]);
 
   private currentQuestionNumber: number = 0;
 
@@ -69,7 +66,7 @@ export abstract class TrainingBase {
   protected abstract checkAnswerInternal(answer: string): boolean;
 
   public checkAnswer(answer: string): boolean {
-    var isRight = this.checkAnswerInternal(answer);
+    let isRight = this.checkAnswerInternal(answer);
 
     if (isRight) {
       this._rightAnsweredQuestions++;

@@ -1,15 +1,16 @@
 import { Injectable } from "@angular/core";
-import { Word } from "./models/word.model";
+import { UserWord } from "./models/word.model";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { DataService } from "../shared/services/data.service";
 import { ConfigurationService } from "../shared/services/configuration.service";
+import { Vocabulary } from "./models/vocabulary.model";
 
 @Injectable()
 export class VocabularyService {
 
   private vocabularyUrl: string = '';
-  words: Word[];
+  words: UserWord[];
 
   constructor(private service: DataService, private configurationService: ConfigurationService) {
     if (this.configurationService.isReady) {
@@ -22,15 +23,39 @@ export class VocabularyService {
     }
   }
 
-  getUserWords(): Observable<Word[]> {
+
+  getVocabularies(): Observable<Vocabulary[]> {
+    let url = this.vocabularyUrl;
+    return this.service.get(url).pipe<Vocabulary[]>(tap((response: any) => response));
+  }
+
+  getVocabulary(id: number): Observable<Vocabulary> {
+    let url = `${this.vocabularyUrl}/${id}`;
+    return this.service.get(url).pipe<Vocabulary>(tap((response: any) => response));
+  }
+
+
+  getUserWords(userVocabularyId?: number, mask?: string): Observable<UserWord[]> {
     let url = this.vocabularyUrl + '/words';
-    return this.service.get(url).pipe<Word[]>(tap((response: any) => {
+    let params : string[] = [];
+    if (userVocabularyId) {
+      params.push('userVocabularyId=' + userVocabularyId);
+    }
+    if (mask) {
+      params.push('mask=' + mask);
+    }
+    if (params.length > 0) {
+      url += '?' + params.join('&');
+    }
+
+    return this.service.get(url).pipe<UserWord[]>(tap((response: any) => {
       return response;
     }));
   }
 
-  addWord(word: string, translation: string): Observable<Response> {
-    return this.service.post(this.vocabularyUrl, { Name: word, Translation: translation });
+  addWord(word: string, translation: string, userVocabularyId?: number): Observable<Response> {
+    let url = this.vocabularyUrl + '/words';
+    return this.service.post(url, { Word: word, Translation: translation, UserVocabularyId : userVocabularyId });
   }
 
   getTranslations(word: string): Observable<string[]> {

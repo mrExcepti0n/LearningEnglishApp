@@ -78,12 +78,6 @@ namespace VocabularyApi.Controllers
         }
 
 
-
-
-
-
-
-
         [HttpGet("{word}/translations")]
         public ActionResult<List<string>> GetTranslations(string word)
         {
@@ -91,7 +85,7 @@ namespace VocabularyApi.Controllers
             return translations.Select(tr => tr.Translation).ToList();
         }
 
-        [HttpPost]
+        [HttpPost("Words")]
         public ActionResult Post(UserVocabularyWordDto vocabularyWordDto)
         {
             var vocabularyWord = vocabularyWordDto.ToVocabularyWord();

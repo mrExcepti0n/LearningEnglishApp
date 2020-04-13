@@ -1,4 +1,4 @@
-import { Word } from "../../../vocabulary/models/word.model";
+import { UserWord } from "../../../vocabulary/models/word.model";
 import { TrainingBase } from "../../shared/models/trainingBase.model";
 import { TrainingDataService } from "../../shared/services/trainigData.service";
 import { IQuestion } from "../../shared/models/iquestion.model";
@@ -17,14 +17,14 @@ export class ChooseTranslateTraining extends TrainingBase {
     super(trainingDataService, isReverse);
   }
 
-  protected generateQuestions(words: Word[]): IQuestion[] {
+  protected generateQuestions(words: UserWord[]): IQuestion[] {
 
     let results: IQuestion[] = [];
     for (let i = 0; i < words.length; i++) {
 
       let question = new QuestionWithAnswers();
       question.number = (i + 1).toString();
-      question.word = words[i].name;
+      question.word = words[i].word;
       question.translation = words[i].translation;
 
       let answer = this.getAnswers(question, words, i, 4);      
@@ -35,10 +35,10 @@ export class ChooseTranslateTraining extends TrainingBase {
   }
 
 
-  protected getAnswers(question: QuestionWithAnswers, words: Word[], currentIndex: number, size: number): Answer[] {
+  protected getAnswers(question: QuestionWithAnswers, words: UserWord[], currentIndex: number, size: number): Answer[] {
 
     let rightAnswer = new Answer(question, words[currentIndex].translation);
-    let otherWords: Word[] = words.filter((w, i) => i != currentIndex);
+    let otherWords: UserWord[] = words.filter((w, i) => i != currentIndex);
     this.shuffleWords(otherWords);
     let answers: Answer[] = otherWords.slice(0, size).map(w => new Answer(question, w.translation));
     answers.push(rightAnswer);

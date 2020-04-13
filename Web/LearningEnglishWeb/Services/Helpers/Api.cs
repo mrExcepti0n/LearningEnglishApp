@@ -42,7 +42,7 @@ namespace LearningEnglishWeb.Services.Helpers
 
             public static string AddWord(string baseUrl)
             {
-                return baseUrl;
+                return $"{baseUrl}/words";
             }
 
             public static string RemoveWord(string baseUrl, int wordId)

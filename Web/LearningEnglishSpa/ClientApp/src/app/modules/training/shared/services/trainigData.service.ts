@@ -3,7 +3,7 @@ import { DataService } from "../../../shared/services/data.service";
 import { ConfigurationService } from "../../../shared/services/configuration.service";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
-import { Word } from "../../../vocabulary/models/word.model";
+import { UserWord } from "../../../vocabulary/models/word.model";
 
 @Injectable()
 export class TrainingDataService {
@@ -22,9 +22,9 @@ export class TrainingDataService {
   }
 
 
-  public getRequiringStudyWords(): Observable<Word[]> {
+  public getRequiringStudyWords(): Observable<UserWord[]> {
 
-    return this.service.get(this.serviceUrl +'/RequiringStudyWords').pipe<Word[]>(tap((response: any) => {
+    return this.service.get(this.serviceUrl + '/RequiringStudyWords').pipe<UserWord[]>(tap((response: any) => {
       return response;
     }));
     /*return [{ name: 'dog', translation: "собака" }, { name: 'cat', translation: "кошка" }, { name: 'girl', translation: "девушка" },

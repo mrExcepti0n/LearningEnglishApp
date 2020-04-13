@@ -18,7 +18,7 @@ export class ChooseTranslateTrainingComponent extends TrainingComponentBase<Choo
   protected loadDataInternal() {
     this.training = new ChooseTranslateTraining(this.trainingDataService, this.isReverse);
   }
-  public showAnswer: boolean = false;
+
 
   constructor(configurationService: ConfigurationService, trainingDataService: TrainingDataService, wordImageService: WordImageService, audioPlayer: AudioPlayer, route: ActivatedRoute) {
     super(configurationService, trainingDataService, wordImageService, audioPlayer, route);

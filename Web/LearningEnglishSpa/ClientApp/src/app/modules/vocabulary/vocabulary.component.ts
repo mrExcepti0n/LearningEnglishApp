@@ -1,23 +1,19 @@
 import { Component, OnInit } from "@angular/core";
 import { VocabularyService } from "./vocabulary.service";
-import { Word } from "./models/word.model";
 import { ConfigurationService } from "../shared/services/configuration.service";
-import { AudioPlayer } from "../shared/audioPlayer";
-import { LanguageEnum } from "../shared/models/language.enum";
+import { Vocabulary } from "./models/vocabulary.model";
+import { NguCarouselConfig } from '@ngu/carousel';
 
 @Component({
-  templateUrl: "vocabulary.component.html"
+  templateUrl: 'vocabulary.component.html',
+  styleUrls: ['vocabulary.component.css']
 })
 export class VocabularyComponent implements OnInit {
-  words: Word[];
 
-  wordMask: string = '';
-
-  wordMaskTranslation: string[] = [];
-  hideTranslationArea: boolean = true;
+  public vocabularies: Vocabulary[];
 
 
-  constructor(private service: VocabularyService, private configurationService: ConfigurationService, private audioPlayer: AudioPlayer) {
+  constructor(private service: VocabularyService, private configurationService: ConfigurationService) {
   }
 
   ngOnInit() {
@@ -29,34 +25,24 @@ export class VocabularyComponent implements OnInit {
     }
   }
 
-  loadData() {
-    this.getWords();
+  loadData(): void {
+    this.getVocabularies();
   }
 
-  getWords() {
-    this.service.getUserWords().subscribe(result => { this.words = result });
+  getVocabularies(): void {
+    this.service.getVocabularies().subscribe(result => { this.vocabularies = result });
   }
+  public carouselTileItems: number[] = [1, 2, 3, 4, 5];
+  public carouselTileConfig: NguCarouselConfig = {
+    grid: { xs: 1, sm: 1, md: 1, lg: 5, all: 0 },
+    speed: 250,
+    point: {
+      visible: true
+    },
+    touch: true,
+    loop: true,
+    interval: { timing: 5000 },
+    animation: 'lazy'
+  };
 
-  addWord(word, translation) {
-    this.onClickedOutside();
-    this.service.addWord(word, translation).subscribe(res => { this.wordMask = ''; this.getWords() });
-  }
-
-  getTranslations() {
-    this.service.getTranslations(this.wordMask).subscribe(res => { this.wordMaskTranslation = res; this.hideTranslationArea = false; });
-  }
-
-  onClickedOutside() {
-    this.hideTranslationArea = true;
-    this.wordMaskTranslation = [];
-  }
-
-
-  playWordAudio(word: string) {
-    this.audioPlayer.playWordAudio(word, LanguageEnum.English);
-  }
-
-  playTranslationAudio(word: string) {
-    this.audioPlayer.playWordAudio(word, LanguageEnum.Russian);
-  }
 }

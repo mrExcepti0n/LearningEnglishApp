@@ -1,5 +1,6 @@
-export class Word {  
-  name: string;
-  //transcription: string;
+export class UserWord {
+  id: number;
+  word: string;
+  transcription: string;
   translation: string;
 }
