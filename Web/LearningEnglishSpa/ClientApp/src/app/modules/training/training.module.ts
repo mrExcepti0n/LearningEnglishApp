@@ -29,7 +29,7 @@ let routing = RouterModule.forChild([
   providers: [TrainingDataService]
 })
 export class TrainingModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<TrainingModule> {
     return {
       ngModule: TrainingModule,
       providers: [

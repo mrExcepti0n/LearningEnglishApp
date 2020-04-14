@@ -4,7 +4,7 @@
 </div>
 
 
-<div (clickOutside)="onClickedOutside($event)" class="w-50 m-2 text-center shadow-lg p-3 mb-3 bg-white rounded" [class.invisible]="hideTranslationArea">
+<div (clickOutside)="onClickedOutside()" class="w-50 m-2 text-center shadow-lg p-3 mb-3 bg-white rounded" [class.invisible]="hideTranslationArea">
   <button *ngFor="let translation of wordMaskTranslation" class="btn btn-block" (click)="addWord(wordMask, $event.target.innerText)"> {{translation}}</button>
   <button class="btn btn-secondary">Другое</button>
 </div>

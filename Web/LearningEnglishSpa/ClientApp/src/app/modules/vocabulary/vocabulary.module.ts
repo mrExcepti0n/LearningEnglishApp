@@ -14,7 +14,7 @@ import { NguCarouselModule } from '@ngu/carousel';
   providers: [VocabularyService]
 })
 export class VocabularyModule {
-  static forRoot(): ModuleWithProviders {
+  static forRoot(): ModuleWithProviders<VocabularyModule> {
     return {
       ngModule: VocabularyModule,
       providers: [

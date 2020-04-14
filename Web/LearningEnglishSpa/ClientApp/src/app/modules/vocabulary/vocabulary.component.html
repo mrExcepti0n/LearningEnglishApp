@@ -1,41 +1,5 @@
-<ngu-carousel #myCarousel [inputs]="carouselTileConfig" [dataSource]="carouselTileItems">
-  <ngu-tile *nguCarouselDef="let item; let i = index; let ani = animate">
-    <!-- [@slider]="ani" PLease this animation to this tile to see animation. stackblitz have error with animations -->
-    <div class="tile" [style.background]="'url('+item+')'">
-      <h1>{{i + 1}}</h1>
-    </div>
-  </ngu-tile>
 
-  <button NguCarouselPrev class="leftRs" [style.opacity]="myCarousel.isFirst ? 0.5:1">&lt;</button>
-  <button NguCarouselNext class="rightRs" [style.opacity]="myCarousel.isLast ? 0.5:1">&gt;</button>
 
-  <ul class="myPoint" NguCarouselPoint>
-    <li *ngFor="let i of myCarousel.pointNumbers; let i = index" [class.active]="i==myCarousel.activePoint" (click)="myCarousel.moveTo(i)"></li>
-  </ul>
-</ngu-carousel>
-
-<div class="row justify-content-center">
-  <div class="col-xl-8 col-sm-12 mb-3 mt-3">
-    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-      <div class="carousel-inner text-center">
-        <div class="carousel-item" *ngFor="let item of vocabularies; index as i" [class.active]="i ==0">
-          <div class="card d-inline-block" style="width: 12rem;">
-            <div class="card-header"> <a href="">{{item.title}}  </a></div>
-            <div class="card-body">   {{item.wordsCount}} </div>
-          </div>
-        </div>
-      </div>
-      <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-        <span class="text-dark carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-      </a>
-      <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-      </a>
-    </div>
-  </div>
-</div>
 
 <app-user-words>
 </app-user-words>
