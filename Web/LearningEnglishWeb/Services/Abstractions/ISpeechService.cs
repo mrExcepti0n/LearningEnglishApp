@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Services.Abstractions
 {
-    public interface ISpeachService
+    public interface ISpeechService
     {
         Task<string> GetAudio(string word, LanguageEnum language);
 

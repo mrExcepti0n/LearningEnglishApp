@@ -20,16 +20,16 @@ namespace LearningEnglishWeb.Controllers
    
     public class VocabularyController : Controller
     {
-        public VocabularyController(IVocabularyService vocabularyService, ISpeachService speachService, IWordImageService wordImageService, ITrainingService trainingService)
+        public VocabularyController(IVocabularyService vocabularyService, ISpeechService speechService, IWordImageService wordImageService, ITrainingService trainingService)
         {
             _trainingService = trainingService;
             _vocabularyService = vocabularyService;
 
-            _speachService = speachService;
+            _speechService = speechService;
             _wordImageService = wordImageService;
         }
         private IVocabularyService _vocabularyService { get; set; } 
-        private ISpeachService _speachService { get; set; }
+        private ISpeechService _speechService { get; set; }
         private IWordImageService _wordImageService { get; set; }
 
         private ITrainingService _trainingService { get; set; }
@@ -126,7 +126,7 @@ namespace LearningEnglishWeb.Controllers
         [HttpGet]
         public async Task<string> GetAudio(string word, LanguageEnum language = LanguageEnum.Russian)
         {
-            return await _speachService.GetAudio(word, language);
+            return await _speechService.GetAudio(word, language);
         }
 
     }

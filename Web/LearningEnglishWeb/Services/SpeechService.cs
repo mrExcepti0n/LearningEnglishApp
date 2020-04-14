@@ -11,15 +11,15 @@ using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Services
 {
-    public class SpeachService : ISpeachService
+    public class SpeechService : ISpeechService
     {
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
 
-        public SpeachService(HttpClient httpClient, IConfiguration configuration)
+        public SpeechService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
-            _baseUrl = configuration.GetSection("SpeachUrl").Value;
+            _baseUrl = configuration.GetSection("SpeechUrl").Value;
         }
 
 

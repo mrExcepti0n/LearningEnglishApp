@@ -16,19 +16,25 @@ namespace SpeechApi.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SpeechController : ApiController
     {
-        private TextToSpeech _textToSpeach;
-        private SpeechToText _speachToText;
+        private TextToSpeech _textToSpeech;
+        private SpeechToText _speechToText;
 
-        public SpeechController(TextToSpeech textToSpeach, SpeechToText speachToText)
+        public SpeechController(TextToSpeech textToSpeech, SpeechToText speechToText)
         {
-            _textToSpeach = textToSpeach;
-            _speachToText = speachToText;
+            _textToSpeech = textToSpeech;
+            _speechToText = speechToText;
+        }
+
+        public SpeechController()
+        {
+            _textToSpeech = new TextToSpeech();
+            _speechToText = new SpeechToText();
         }
 
         [Route("{word}")]
         public async Task<HttpResponseMessage> GetAudio(string word, LanguageEnum language = LanguageEnum.English)
         {
-            var stream = await _textToSpeach.GetAudioAsync(word, language);
+            var stream = await _textToSpeech.GetAudioAsync(word, language);
 
             HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
             response.Content = new StreamContent(stream);
@@ -53,7 +59,7 @@ namespace SpeechApi.Controllers
 
             using (var stream = await file.ReadAsStreamAsync())
             {
-                return await _speachToText.GetTextAsync(stream);
+                return await _speechToText.GetTextAsync(stream);
             }
         }
 
@@ -64,7 +70,7 @@ namespace SpeechApi.Controllers
         {
             using (var fileStream = File.Open(@"D:\sounds\sound10.wav", FileMode.Open))
             {
-                return await _speachToText.GetTextAsync(fileStream);
+                return await _speechToText.GetTextAsync(fileStream);
             }
         }
 
@@ -74,7 +80,7 @@ namespace SpeechApi.Controllers
         public async Task<IHttpActionResult> SaveAudio(string word, LanguageEnum language = LanguageEnum.English, string path = @"D:\\sounds\sound.wav")
         {
 
-            await _textToSpeach.SaveAudioAsync(word, language, path);            
+            await _textToSpeech.SaveAudioAsync(word, language, path);            
             return Ok();
         }
 

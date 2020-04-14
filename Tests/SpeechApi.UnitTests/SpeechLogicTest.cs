@@ -8,7 +8,7 @@ using SpeechApi.Models;
 namespace SpeechApi.UnitTests
 {
     [TestClass]
-    public class SpeachLogicTest
+    public class SpeechLogicTest
     {
         [TestMethod]
         public void GetAudioFromTextAndGetTextFromAudio_EnglishWord_GetSameText()

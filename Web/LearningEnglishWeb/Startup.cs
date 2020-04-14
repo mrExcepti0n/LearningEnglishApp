@@ -107,7 +107,7 @@ namespace LearningEnglishWeb
             services.AddHttpClient<IWordSetService, WordSetService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<IWordImageService, WordImageService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<ITrainingService, TrainingService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
-            services.AddHttpClient<ISpeachService, SpeachService>();
+            services.AddHttpClient<ISpeechService, SpeechService>();
 
             return services;
         }

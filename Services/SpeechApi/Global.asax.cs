@@ -9,7 +9,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 
-namespace SpeachApi
+namespace SpeechApi
 {
     public class WebApiApplication : System.Web.HttpApplication
     {
@@ -24,7 +24,7 @@ namespace SpeachApi
 
             var config = GlobalConfiguration.Configuration;
 
-            builder.RegisterApiControllers(Assembly.GetExecutingAssembly());
+            builder.RegisterApiControllers();
             builder.RegisterWebApiFilterProvider(config);
 
             builder.RegisterWebApiModelBinderProvider();

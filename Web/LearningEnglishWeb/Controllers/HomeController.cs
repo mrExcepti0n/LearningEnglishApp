@@ -14,10 +14,10 @@ namespace LearningEnglishWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private ISpeachService _speachService;
-        public HomeController(ISpeachService speachService)
+        private ISpeechService _speechService;
+        public HomeController(ISpeechService speechService)
         {
-            _speachService = speachService;
+            _speechService = speechService;
         }
 
         public IActionResult Index()
@@ -43,7 +43,7 @@ namespace LearningEnglishWeb.Controllers
             return "Ok";
 
 
-            var res = await _speachService.GetText(formFile.OpenReadStream());
+            var res = await _speechService.GetText(formFile.OpenReadStream());
 
             return res;
         }
