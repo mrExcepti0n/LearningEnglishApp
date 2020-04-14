@@ -3,16 +3,17 @@ import { VocabularyService } from "./vocabulary.service";
 import { ConfigurationService } from "../shared/services/configuration.service";
 import { Vocabulary } from "./models/vocabulary.model";
 import { NguCarouselConfig } from '@ngu/carousel';
+import { Observable } from "rxjs";
 
 @Component({
   templateUrl: 'vocabulary.component.html',
   styleUrls: ['vocabulary.component.css']
 })
-export class VocabularyComponent implements OnInit {
+export class VocabularyComponent implements OnInit
+{
+  public vocabularies$: Observable<Vocabulary[]>;
 
-  public vocabularies: Vocabulary[];
-
-
+  public vocabularies: Vocabulary[] = [];
   constructor(private service: VocabularyService, private configurationService: ConfigurationService) {
   }
 
@@ -24,18 +25,18 @@ export class VocabularyComponent implements OnInit {
       this.configurationService.settingsLoaded$.subscribe(() => this.loadData());
     }
   }
-
   loadData(): void {
     this.getVocabularies();
   }
 
   getVocabularies(): void {
-    this.service.getVocabularies().subscribe(result => { this.vocabularies = result });
+
+    this.service.getVocabularies().subscribe(res =>  this.vocabularies = res );
   }
-  public carouselTileItems: number[] = [1, 2, 3, 4, 5];
+
   public carouselTileConfig: NguCarouselConfig = {
-    grid: { xs: 1, sm: 1, md: 1, lg: 5, all: 0 },
-    speed: 250,
+    grid: { xs: 1, sm: 2, md: 3, lg: 3, all: 0 },
+    speed: 500,
     point: {
       visible: true
     },

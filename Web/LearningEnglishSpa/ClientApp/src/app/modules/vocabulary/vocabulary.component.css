@@ -40,8 +40,6 @@
 }
 
 
-
-
 .myPoint {
   list-style-type: none;
   text-align: center;
@@ -50,25 +48,23 @@
   white-space: nowrap;
   overflow: auto;
   box-sizing: border-box;
-  li
-
-{
-  display: inline-block;
-  border-radius: 50%;
-  border: 2px solid rgba(0, 0, 0, 0.55);
-  padding: 4px;
-  margin: 0 3px;
-  transition-timing-function: cubic-bezier(0.17, 0.67, 0.83, 0.67);
-  transition: 0.4s;
-  &.active
-
-{
-  background: #6b6b6b;
-  transform: scale(1.2);
 }
 
-}
-}
+  .myPoint li {
+    display: inline-block;
+    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.55);
+    padding: 4px;
+    margin: 0 3px;
+    transition-timing-function: cubic-bezier(0.17, 0.67, 0.83, 0.67);
+    transition: 0.4s;
+  }
+
+    .myPoint li.active {
+      background: #6b6b6b;
+      transform: scale(1.2);
+    }
+
 
 .carouselHoved {
   opacity: 0.4;
