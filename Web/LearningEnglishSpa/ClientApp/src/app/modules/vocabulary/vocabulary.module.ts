@@ -7,10 +7,24 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { SharedModule } from "../shared/shared.module";
 import { UserWordsComponent } from "./userWords.component";
 import { NguCarouselModule } from '@ngu/carousel';
+import { RouterModule } from "@angular/router";
+import { VocabularyGalleryComponent } from "./vocabularyGallery.component";
+
+
+const routing = RouterModule.forChild([
+  {
+    path: 'vocabulary', component: VocabularyGalleryComponent
+  },
+  {
+    path: 'vocabulary/:id', component: VocabularyComponent,
+  }
+])
+
+
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ClickOutsideModule, SharedModule, NguCarouselModule],
-  declarations: [VocabularyComponent, UserWordsComponent],
+  imports: [CommonModule, FormsModule, ClickOutsideModule, SharedModule, NguCarouselModule, routing],
+  declarations: [VocabularyGalleryComponent,VocabularyComponent, UserWordsComponent],
   providers: [VocabularyService]
 })
 export class VocabularyModule {

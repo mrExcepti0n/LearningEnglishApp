@@ -39,7 +39,7 @@ export class VocabularyService {
     let url = this.vocabularyUrl + '/words';
     let params : string[] = [];
     if (userVocabularyId) {
-      params.push('userVocabularyId=' + userVocabularyId);
+      params.push('vocabularyId=' + userVocabularyId);
     }
     if (mask) {
       params.push('mask=' + mask);

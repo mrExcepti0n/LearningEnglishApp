@@ -1,10 +1,10 @@
-.carousel-control-prev-icon {
-  background-image: url('https://apufpel.com.br/assets/img/seta_prim.png') !important
+/*.carousel-control-prev-icon {
+  background-image: url('https://apufpel.com.br/assets/img/seta_prim.png')
 }
 
 .carousel-control-next-icon {
-  background-image: url('https://apufpel.com.br/assets/img/seta_ult.png') !important
-}
+  background-image: url('https://apufpel.com.br/assets/img/seta_ult.png')
+}*/
 
 
 .tile h1 {
@@ -69,4 +69,3 @@
 .carouselHoved {
   opacity: 0.4;
 }
-

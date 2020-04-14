@@ -2,19 +2,19 @@ import { Component, OnInit } from "@angular/core";
 import { VocabularyService } from "./vocabulary.service";
 import { ConfigurationService } from "../shared/services/configuration.service";
 import { Vocabulary } from "./models/vocabulary.model";
-import { NguCarouselConfig } from '@ngu/carousel';
-import { Observable } from "rxjs";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
-  templateUrl: 'vocabulary.component.html',
-  styleUrls: ['vocabulary.component.css']
+  templateUrl: 'vocabulary.component.html'
 })
 export class VocabularyComponent implements OnInit
 {
-  public vocabularies$: Observable<Vocabulary[]>;
+  public vocabulary: Vocabulary;
 
-  public vocabularies: Vocabulary[] = [];
-  constructor(private service: VocabularyService, private configurationService: ConfigurationService) {
+  public vocabularyId: number;
+
+  constructor(private service: VocabularyService, private configurationService: ConfigurationService, activateRoute: ActivatedRoute) {
+    this.vocabularyId = activateRoute.snapshot.params['id'];
   }
 
   ngOnInit() {
@@ -25,25 +25,12 @@ export class VocabularyComponent implements OnInit
       this.configurationService.settingsLoaded$.subscribe(() => this.loadData());
     }
   }
+
   loadData(): void {
-    this.getVocabularies();
+    this.getVocabulary();
   }
 
-  getVocabularies(): void {
-
-    this.service.getVocabularies().subscribe(res =>  this.vocabularies = res );
+  getVocabulary(): void {
+    this.service.getVocabulary(this.vocabularyId).subscribe(res => this.vocabulary = res );
   }
-
-  public carouselTileConfig: NguCarouselConfig = {
-    grid: { xs: 1, sm: 2, md: 3, lg: 3, all: 0 },
-    speed: 500,
-    point: {
-      visible: true
-    },
-    touch: true,
-    loop: true,
-    interval: { timing: 5000 },
-    animation: 'lazy'
-  };
-
 }
