@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="LearningEnglishMobile.Core.Views.LoginView">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+            <ColumnDefinition Width="64" />
+        </Grid.ColumnDefinitions>
+        <!-- LOG IN BUTTON -->
+        <Grid Grid.Column="0" Grid.Row="0">
+            <Label Text="[ LOGIN ]"/>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding SignInCommand}"
+                        NumberOfTapsRequired="1" />
+            </Grid.GestureRecognizers>
+        </Grid>
+        <!-- REGISTER BUTTON -->
+        <Grid Grid.Column="1" Grid.Row="0" >
+            <Label Text="[ REGISTER ]" />
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Command="{Binding RegisterCommand}"
+                        NumberOfTapsRequired="1" />
+            </Grid.GestureRecognizers>
+        </Grid>
+
+        <Grid Grid.Column="3" Grid.Row="0">
+            <Label Text="[ SETTINGS ]"/>
+        </Grid>
+    </Grid>
+</ContentPage>
