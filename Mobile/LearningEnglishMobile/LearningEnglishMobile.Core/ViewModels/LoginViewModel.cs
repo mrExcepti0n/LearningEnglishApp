@@ -3,10 +3,11 @@ using LearningEnglishMobile.Core.Models.User;
 using LearningEnglishMobile.Core.Services.Identity;
 using LearningEnglishMobile.Core.Services.OpenUrl;
 using LearningEnglishMobile.Core.Services.Settings;
-using LearningEnglishMobile.Core.Validations;
 using LearningEnglishMobile.Core.ViewModels.Base;
+using LearningEnglishMobile.Core.Views;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -14,34 +15,29 @@ using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class LoginViewModel : ViewModelBase
+    public class LoginViewModel : ExtendedBindableObject
     {
-        private ValidatableObject<string> _userName;
-        private ValidatableObject<string> _password;
-        private bool _isMock;
+        private string _userName;
+        private string _password;
+
         private bool _isValid;
         private bool _isLogin;
         private string _authUrl;
 
-        private ISettingsService _settingsService;
         private IOpenUrlService _openUrlService;
         private IIdentityService _identityService;
+        public INavigation Navigation;
 
-        public LoginViewModel(
-            ISettingsService settingsService,
-            IOpenUrlService openUrlService,
-            IIdentityService identityService)
+        public LoginViewModel(IOpenUrlService openUrlService, IIdentityService identityService)
         {
-            _settingsService = settingsService;
             _openUrlService = openUrlService;
             _identityService = identityService;
 
-            _userName = new ValidatableObject<string>();
-            _password = new ValidatableObject<string>();
-            AddValidations();
+            UserName = "admin";
+            Password = "123";
         }
 
-        public ValidatableObject<string> UserName
+        public string UserName
         {
             get
             {
@@ -54,7 +50,7 @@ namespace LearningEnglishMobile.Core.ViewModels
             }
         }
 
-        public ValidatableObject<string> Password
+        public string Password
         {
             get
             {
@@ -65,7 +61,8 @@ namespace LearningEnglishMobile.Core.ViewModels
                 _password = value;
                 RaisePropertyChanged(() => Password);
             }
-        }      
+        }
+
 
         public bool IsValid
         {
@@ -109,118 +106,23 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         public ICommand SignInCommand => new Command(async () => await SignInAsync());
 
-        public ICommand RegisterCommand => new Command(async() => await RegisterAsync());
+        public ICommand RegisterCommand => new Command(async () => await RegisterAsync());     
 
-        public ICommand NavigateCommand => new Command<string>(async (url) => await NavigateAsync(url));
 
-        public ICommand SettingsCommand => new Command(async () => await SettingsAsync());
-
-        public ICommand ValidateUserNameCommand => new Command(() => ValidateUserName());
-
-        public ICommand ValidatePasswordCommand => new Command(() => ValidatePassword());
-
-        public override Task InitializeAsync(object navigationData)
-        {
-            if (navigationData is LogoutParameter)
-            {
-                var logoutParameter = (LogoutParameter)navigationData;
-
-                if (logoutParameter.Logout)
-                {
-                    Logout();
-                }
-            }
-
-            return base.InitializeAsync(navigationData);
-        }
 
         private async Task SignInAsync()
         {
-            IsBusy = true;
+            Application.Current.MainPage = new NavigationPage(new MainView());
 
-            await Task.Delay(10);
-
-            LoginUrl = _identityService.CreateAuthorizationRequest();
-
-            IsValid = true;
-            IsLogin = true;
-            IsBusy = false;
+            //await Task.Delay(10);
+            //LoginUrl = _identityService.CreateAuthorizationRequest();
+            //IsValid = true;
+            //IsLogin = true;
         }
 
         private async Task RegisterAsync()
         {
-            await _openUrlService.OpenUrlAsync(GlobalSetting.Instance.RegisterWebsite);
-        }
-
-        private void Logout()
-        {
-            var authIdToken = _settingsService.AuthIdToken;
-            var logoutRequest = _identityService.CreateLogoutRequest(authIdToken);
-
-            if (!string.IsNullOrEmpty(logoutRequest))
-            {
-                // Logout
-                LoginUrl = logoutRequest;
-            }
-        }
-
-        private async Task NavigateAsync(string url)
-        {
-            var unescapedUrl = System.Net.WebUtility.UrlDecode(url);
-
-            if (unescapedUrl.Equals(GlobalSetting.Instance.LogoutCallback))
-            {
-                _settingsService.AuthAccessToken = string.Empty;
-                _settingsService.AuthIdToken = string.Empty;
-                IsLogin = false;
-                LoginUrl = _identityService.CreateAuthorizationRequest();
-            }
-            else if (unescapedUrl.Contains(GlobalSetting.Instance.Callback))
-            {
-                var authResponse = new AuthorizeResponse(url);
-                if (!string.IsNullOrWhiteSpace(authResponse.Code))
-                {
-                    var userToken = await _identityService.GetTokenAsync(authResponse.Code);
-                    string accessToken = userToken.AccessToken;
-
-                    if (!string.IsNullOrWhiteSpace(accessToken))
-                    {
-                        _settingsService.AuthAccessToken = accessToken;
-                        _settingsService.AuthIdToken = authResponse.IdentityToken;
-                        await NavigationService.NavigateToAsync<MainViewModel>();
-                        await NavigationService.RemoveLastFromBackStackAsync();
-                    }
-                }
-            }
-        }
-
-        private async Task SettingsAsync()
-        {
-            await NavigationService.NavigateToAsync<SettingsViewModel>();
-        }
-
-        private bool Validate()
-        {
-            bool isValidUser = ValidateUserName();
-            bool isValidPassword = ValidatePassword();
-
-            return isValidUser && isValidPassword;
-        }
-
-        private bool ValidateUserName()
-        {
-            return _userName.Validate();
-        }
-
-        private bool ValidatePassword()
-        {
-            return _password.Validate();
-        }
-
-        private void AddValidations()
-        {
-            _userName.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "A username is required." });
-            _password.Validations.Add(new IsNotNullOrEmptyRule<string> { ValidationMessage = "A password is required." });
+           await  _openUrlService.OpenUrlAsync(GlobalSetting.Instance.RegisterWebsite);
         }
 
     }

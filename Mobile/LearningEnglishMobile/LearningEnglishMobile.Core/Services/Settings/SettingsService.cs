@@ -12,9 +12,21 @@ namespace LearningEnglishMobile.Core.Services.Settings
 
         private const string AccessToken = "access_token";
         private const string IdToken = "id_token";
+        private const string IdUseMocks = "use_mocks";
         private const string IdIdentityBase = "url_base";
+        private const string IdGatewayMarketingBase = "url_marketing";
+        private const string IdGatewayShoppingBase = "url_shopping";
+        private const string IdUseFakeLocation = "use_fake_location";
+        private const string IdLatitude = "latitude";
+        private const string IdLongitude = "longitude";
+        private const string IdAllowGpsLocation = "allow_gps_location";
         private readonly string AccessTokenDefault = string.Empty;
         private readonly string IdTokenDefault = string.Empty;
+        private readonly bool UseMocksDefault = true;
+        private readonly bool UseFakeLocationDefault = false;
+        private readonly bool AllowGpsLocationDefault = false;
+        private readonly double FakeLatitudeDefault = 47.604610d;
+        private readonly double FakeLongitudeDefault = -122.315752d;
         private readonly string UrlIdentityDefault = GlobalSetting.Instance.BaseIdentityEndpoint;
         #endregion
 
@@ -32,11 +44,44 @@ namespace LearningEnglishMobile.Core.Services.Settings
             set => AddOrUpdateValue(IdToken, value);
         }
 
+        public bool UseMocks
+        {
+            get => GetValueOrDefault(IdUseMocks, UseMocksDefault);
+            set => AddOrUpdateValue(IdUseMocks, value);
+        }
+
         public string IdentityEndpointBase
         {
             get => GetValueOrDefault(IdIdentityBase, UrlIdentityDefault);
             set => AddOrUpdateValue(IdIdentityBase, value);
         }
+
+     
+
+        public bool UseFakeLocation
+        {
+            get => GetValueOrDefault(IdUseFakeLocation, UseFakeLocationDefault);
+            set => AddOrUpdateValue(IdUseFakeLocation, value);
+        }
+
+        public string Latitude
+        {
+            get => GetValueOrDefault(IdLatitude, FakeLatitudeDefault.ToString());
+            set => AddOrUpdateValue(IdLatitude, value);
+        }
+
+        public string Longitude
+        {
+            get => GetValueOrDefault(IdLongitude, FakeLongitudeDefault.ToString());
+            set => AddOrUpdateValue(IdLongitude, value);
+        }
+
+        public bool AllowGpsLocation
+        {
+            get => GetValueOrDefault(IdAllowGpsLocation, AllowGpsLocationDefault);
+            set => AddOrUpdateValue(IdAllowGpsLocation, value);
+        }
+
         #endregion
 
         #region Public Methods

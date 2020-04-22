@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using PCLCrypto;
 using static PCLCrypto.WinRTCrypto;
 using IdentityModel;
-using LearningEnglishMobile.Core.Helpers;
 using System.Net;
 
 namespace LearningEnglishMobile.Core.Services.Identity
@@ -32,7 +31,7 @@ namespace LearningEnglishMobile.Core.Services.Identity
             dic.Add("client_id", GlobalSetting.Instance.ClientId);
             dic.Add("client_secret", GlobalSetting.Instance.ClientSecret);
             dic.Add("response_type", "code id_token");
-            dic.Add("scope", "openid profile basket orders locations marketing offline_access");
+            dic.Add("scope", "openid learningEnglish");
             dic.Add("redirect_uri", GlobalSetting.Instance.Callback);
             dic.Add("nonce", Guid.NewGuid().ToString("N"));
             dic.Add("code_challenge", CreateCodeChallenge());
@@ -68,7 +67,7 @@ namespace LearningEnglishMobile.Core.Services.Identity
 
         private string CreateCodeChallenge()
         {
-            _codeVerifier = RandomNumberGenerator.CreateUniqueId();
+            _codeVerifier = Guid.NewGuid().ToString();
             var sha256 = HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Sha256);
             var challengeBuffer = sha256.HashData(CryptographicBuffer.CreateFromByteArray(Encoding.UTF8.GetBytes(_codeVerifier)));
             byte[] challengeBytes;
