@@ -4,12 +4,37 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="LearningEnglishMobile.Core.Views.VocabularyView">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="VocabularyView"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+             x:Class="LearningEnglishMobile.Core.Views.VocabularyView"
+             x:Name="Page"
+             Title="Vocabulary">
+    <CollectionView ItemsSource="{Binding Vocabularies}">
+        <CollectionView.ItemsLayout>
+            <GridItemsLayout Orientation="Vertical" Span="2">
+            </GridItemsLayout>
+        </CollectionView.ItemsLayout>
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Grid Padding="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="140" />
+                    </Grid.ColumnDefinitions>
+                    <BoxView Color="AntiqueWhite" Grid.RowSpan="2"/>
+                    <Label Grid.Column="1" Text="{Binding Title}"/>
+                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding WordsCount, StringFormat='слов: {0:N0}'}"></Label>
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer
+                            Command="{Binding Source={x:Reference Page}, Path=BindingContext.SelectVocabularyCommand}" 
+                            CommandParameter="{Binding .}"
+                            NumberOfTapsRequired="1" >
+                        </TapGestureRecognizer>
+                    </Grid.GestureRecognizers>
+                </Grid>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 </ContentPage>

@@ -7,13 +7,12 @@
              mc:Ignorable="d"
              x:Class="LearningEnglishMobile.Core.Views.MainView"
             Title="LearningEnglish">
-    
-    <views:VocabularyView x:Name="VocabularyView" Title="Vocabulary">
-    </views:VocabularyView>
-    <views:TrainingView x:Name="TrainingView" Title="Training">
-    </views:TrainingView>
 
-    <views:WordSetView
-        x:Name="WordSetView" Title="WordSet">
-    </views:WordSetView>
+    <views:VocabularyView x:Name="VocabularyView"/>
+
+    <views:TrainingView x:Name="TrainingView"/>
+
+
+    <views:WordSetView x:Name="WordSetView"/>
+
 </TabbedPage>
