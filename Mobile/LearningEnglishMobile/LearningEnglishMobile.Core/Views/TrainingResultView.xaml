@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="LearningEnglishMobile.Core.Views.TrainingResultView"
+             Title="Результаты тренировки">
+    <ContentPage.Content>
+        <StackLayout Margin="0,100"  HorizontalOptions="Center" Spacing="50">
+            <Label Text="{Binding Caption}" FontSize="Large" HorizontalOptions="Center"></Label>
+            <Label Text="{Binding Summary}" FontSize="Large" HorizontalOptions="Center"></Label>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

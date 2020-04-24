@@ -5,12 +5,50 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              x:Class="LearningEnglishMobile.Core.Views.ChooseTranslateTrainigView"
+             x:Name="Page"
+             xmlns:models="clr-namespace:LearningEnglishMobile.Core.Models.Training.ChooseTranslate"
              Title="ChooseTranslateTrainig">
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="ChooseTranslateTrainig"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <Label Text="{Binding CurrentQuestion.Word}" HorizontalOptions="Center" Margin="10" FontSize="Large"/>
+            <ListView ItemsSource="{Binding CurrentQuestion.Options}" SelectionMode="None" Margin="50,0" IsVisible="{Binding ShowRightAnswer, Converter={StaticResource InverseBoolConverter}}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Button Text="{Binding Option}"  Command="{Binding Source={x:Reference Page}, Path=BindingContext.CheckAnswerCommand}"  CommandParameter="{Binding Option}" BackgroundColor="LightBlue" Margin="5">
+                            </Button>                            
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <Button Text="Не знаю" VerticalOptions="StartAndExpand" Command="{Binding SkipAnswerCommand}" Margin="5" BackgroundColor="OrangeRed" TextColor="Black"/>
+                </ListView.Footer>
+            </ListView>
+
+            <ListView ItemsSource="{Binding CurrentQuestion.Options}" SelectionMode="None" Margin="50,0" IsVisible="{Binding ShowRightAnswer}" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Button Text="{Binding Option}" BackgroundColor="LightBlue" Margin="5">
+                                <Button.Triggers>
+                                    <DataTrigger TargetType="Button" Binding="{Binding AnswerState}"   Value="{x:Static models:AnswerStateEnum.Right}">
+                                        <Setter Property="BackgroundColor" Value="LightGreen" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Button" Binding="{Binding AnswerState}"   Value="{x:Static models:AnswerStateEnum.RightSkipped}">
+                                        <Setter Property="BackgroundColor" Value="OrangeRed" />
+                                    </DataTrigger>
+                                    <DataTrigger TargetType="Button" Binding="{Binding AnswerState}"   Value="{x:Static models:AnswerStateEnum.Wrong}">
+                                        <Setter Property="BackgroundColor" Value="OrangeRed" />
+                                    </DataTrigger>
+                                </Button.Triggers>
+                            </Button>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+                <ListView.Footer>
+                    <Button Text="Следующий вопрос" VerticalOptions="StartAndExpand" Command="{Binding NextAnswerCommand}" BackgroundColor="DeepSkyBlue"  Margin="5"/>
+                </ListView.Footer>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

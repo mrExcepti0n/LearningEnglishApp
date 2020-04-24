@@ -6,21 +6,21 @@ using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.Converters
 {
-    public class ItemTappedEventArgsConverter : IValueConverter
+    public class InverseBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (!(value is bool))
+            {
+                throw new InvalidOperationException("The target must be a boolean");
+            }
 
-            var eventArgs = value as ItemTappedEventArgs;
-            if (eventArgs == null)
-                throw new ArgumentException("Expected TappedEventArgs as value", "value");
-
-            return eventArgs.Item;
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return null;
         }
     }
 }

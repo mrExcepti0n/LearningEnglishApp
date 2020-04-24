@@ -1,4 +1,5 @@
-﻿using LearningEnglishMobile.Core.ViewModels;
+﻿using LearningEnglishMobile.Core.Models.Training.Results;
+using LearningEnglishMobile.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,12 @@ using Xamarin.Forms.Xaml;
 namespace LearningEnglishMobile.Core.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ChooseTranslateTrainigView : ContentPage
+    public partial class TrainingResultView : ContentPage
     {
-        public ChooseTranslateTrainigView()
+        public TrainingResultView(TrainingSummarizing summarizing)
         {
             InitializeComponent();
-
-            BindingContext = new ChooseTranslateTrainingViewModel(Navigation);
+            BindingContext = new TrainingResultViewModel(summarizing);
         }
     }
 }

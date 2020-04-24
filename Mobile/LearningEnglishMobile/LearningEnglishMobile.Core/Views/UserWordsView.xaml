@@ -5,45 +5,49 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              xmlns:behaviors="clr-namespace:LearningEnglishMobile.Core.Behaviors;assembly=LearningEnglishMobile.Core" 
-             xmlns:converters="clr-namespace:LearningEnglishMobile.Core.Converters;assembly=LearningEnglishMobile.Core"
              x:Class="LearningEnglishMobile.Core.Views.UserWordsView"
              x:Name="Page"
              Title="{Binding SelectedVocabulary.Title}">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <converters:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter" />
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ContentPage.Content>
-
-        <ListView ItemsSource="{Binding UserWords}" SelectionMode="None">
-            <ListView.Behaviors>
-                <behaviors:EventToCommandBehavior
+        <StackLayout Orientation="Vertical">
+            <Entry Placeholder="Введите слово" Margin="15">
+                <Entry.Behaviors>
+                    <behaviors:EventToCommandBehavior
+                        EventName="TextChanged"
+                        EventArgsConverter= "{StaticResource TextChangedEventArgsConverter}"
+                        Command="{Binding FilterWordsCommand}"
+                        />
+                </Entry.Behaviors>
+            </Entry>
+            <ListView ItemsSource="{Binding UserWords}" SelectionMode="None">
+                <ListView.Behaviors>
+                    <behaviors:EventToCommandBehavior
 										EventName="ItemTapped"
 										EventArgsConverter= "{StaticResource ItemTappedEventArgsConverter}"
                                         Command="{Binding SelectWordCommand}" />
-            </ListView.Behaviors>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <Grid VerticalOptions="Center" Margin="5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"></RowDefinition>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="40"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <BoxView Color="LightGreen" IsVisible="{Binding IsSelected}"/>
-                            <Label  Grid.Column="1" Text="{Binding Word}" VerticalOptions="Center" />
-                            <Label Grid.Column="2" Text="{Binding Translation}" VerticalOptions="Center"/>
-                            <Button  Grid.Column="3" Text="Delete" Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteWordCommand}" CommandParameter="{Binding .}"/>
-                        </Grid>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                </ListView.Behaviors>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid VerticalOptions="Center" Margin="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <BoxView Color="LightGreen" IsVisible="{Binding IsSelected}"/>
+                                <Label  Grid.Column="1" Text="{Binding Word}" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="{Binding Translation}" VerticalOptions="Center"/>
+                                <Button  Grid.Column="3" Text="Delete" Command="{Binding Source={x:Reference Page}, Path=BindingContext.DeleteWordCommand}" CommandParameter="{Binding .}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>        
     </ContentPage.Content>
 </ContentPage>

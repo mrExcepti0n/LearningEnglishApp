@@ -2,10 +2,18 @@
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:converters="clr-namespace:LearningEnglishMobile.Core.Converters"
              mc:Ignorable="d"             
              x:Class="LearningEnglishMobile.Core.App">
     <Application.Resources>
+        <ResourceDictionary>
+            
+            <!--converters-->
+            <converters:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter" />
+            <converters:TextChangedEventArgsConverter x:Key="TextChangedEventArgsConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
 
+        </ResourceDictionary>
     </Application.Resources>
 </Application>
