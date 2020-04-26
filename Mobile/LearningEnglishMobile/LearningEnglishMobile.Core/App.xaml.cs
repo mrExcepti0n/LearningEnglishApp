@@ -1,4 +1,5 @@
-﻿using LearningEnglishMobile.Core.Views;
+﻿using LearningEnglishMobile.Core.Models.User;
+using LearningEnglishMobile.Core.Views;
 using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core
@@ -10,7 +11,7 @@ namespace LearningEnglishMobile.Core
         {
             InitializeComponent();
 
-            MainPage = new NavigationPage(new LoginView());
+            MainPage = new LoginView(new LogoutParameter { Logout = false});           
         }
     }
     

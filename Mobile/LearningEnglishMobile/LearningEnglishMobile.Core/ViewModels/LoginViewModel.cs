@@ -28,13 +28,18 @@ namespace LearningEnglishMobile.Core.ViewModels
         private IIdentityService _identityService;
         public INavigation Navigation;
 
-        public LoginViewModel(IOpenUrlService openUrlService, IIdentityService identityService)
+        public LoginViewModel(IOpenUrlService openUrlService, IIdentityService identityService, LogoutParameter logoutParameter)
         {
             _openUrlService = openUrlService;
             _identityService = identityService;
 
             UserName = "admin";
             Password = "123";
+
+            if (logoutParameter.Logout)
+            {
+                Logout();
+            }
         }
 
         public string UserName
@@ -112,7 +117,7 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         private async Task SignInAsync()
         {
-            Application.Current.MainPage = new NavigationPage(new MainView());
+            Application.Current.MainPage = new MainView();
 
             //await Task.Delay(10);
             //LoginUrl = _identityService.CreateAuthorizationRequest();
@@ -125,5 +130,17 @@ namespace LearningEnglishMobile.Core.ViewModels
            await  _openUrlService.OpenUrlAsync(GlobalSetting.Instance.RegisterWebsite);
         }
 
+
+        private void Logout()
+        {
+            //var authIdToken = _settingsService.AuthIdToken;
+            //var logoutRequest = _identityService.CreateLogoutRequest(authIdToken);
+
+            //if (!string.IsNullOrEmpty(logoutRequest))
+            //{
+            //    // Logout
+            //    LoginUrl = logoutRequest;
+            //}
+        }
     }
 }

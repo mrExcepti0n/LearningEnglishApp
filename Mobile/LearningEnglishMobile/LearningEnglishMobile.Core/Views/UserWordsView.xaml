@@ -8,6 +8,12 @@
              x:Class="LearningEnglishMobile.Core.Views.UserWordsView"
              x:Name="Page"
              Title="{Binding SelectedVocabulary.Title}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem 
+            Command="{Binding SettingsCommand}"
+            Text="AddWord">
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout Orientation="Vertical">
             <Entry Placeholder="Введите слово" Margin="15">
