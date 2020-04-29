@@ -8,15 +8,13 @@ namespace LearningEnglishMobile.Core.Services.Vocabulary
 {
     public class MockedVocabularyService : IVocabularyService
     {
-        private int _currentVocabularyWordsCount;
-        public MockedVocabularyService(int currentVocabularyWordsCount = 40)
+        public MockedVocabularyService()
         {
-            _currentVocabularyWordsCount = currentVocabularyWordsCount;
         }
 
         public IEnumerable<UserWord> GetUserWords(int id)
         {
-            return GenerateUserWords(_currentVocabularyWordsCount).ToList();
+            return GenerateUserWords(10).ToList();
         }
 
         private IEnumerable<UserWord> GenerateUserWords(int count)

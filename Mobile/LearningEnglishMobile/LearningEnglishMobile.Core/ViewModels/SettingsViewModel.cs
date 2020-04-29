@@ -11,14 +11,14 @@ namespace LearningEnglishMobile.Core.ViewModels
 {
     public class SettingsViewModel
     {
-        public ICommand LogoutCommand => new Command(async () => await LogoutAsync());
+        //public ICommand LogoutCommand => new Command(async () => await LogoutAsync());
 
-        private async Task LogoutAsync()
-        {
-            // Logout
-            Application.Current.MainPage = new LoginView(new LogoutParameter { Logout = true });
-            await RemoveBackStackAsync();
-        }
+        //private async Task LogoutAsync()
+        //{
+        //    // Logout
+        //    Application.Current.MainPage = new LoginView(new LogoutParameter { Logout = true });
+        //    await RemoveBackStackAsync();
+        //}
 
         public Task RemoveBackStackAsync()
         {

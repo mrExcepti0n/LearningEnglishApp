@@ -2,16 +2,40 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:behaviors="clr-namespace:LearningEnglishMobile.Core.Behaviors"
+             mc:Ignorable="d"             
              x:Class="LearningEnglishMobile.Core.Views.LoginView"
              Title="LearningEnglish">
-    <StackLayout>
-        <Label Text="Логин:" />
-        <Entry Text="{Binding UserName}" />
-        <Label Text="Пароль:"/>
-        <Entry Text="{Binding Password}" />
-        <Button Text="Login" Command="{Binding SignInCommand}"/>
-        
-    </StackLayout>
+
+    <Grid  ColumnSpacing="0" RowSpacing="0" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Button Grid.Column="0" Grid.Row="0" Text="Войти" Command="{Binding SignInCommand}"/>
+        <Button Grid.Column="1" Grid.Row="0" Text="Регистрация" Command="{Binding RegistryCommand}" />
+        <AbsoluteLayout
+                Grid.Column="0"
+                Grid.ColumnSpan="2"
+                Grid.Row="0"
+                Grid.RowSpan="2"
+                IsVisible="{Binding IsLogin}">
+            <WebView     
+                    Source="{Binding LoginUrl}"
+                    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                    AbsoluteLayout.LayoutFlags="All">
+                <WebView.Behaviors>
+                    <behaviors:EventToCommandBehavior 
+                            EventName="Navigating"
+                            EventArgsConverter="{StaticResource WebNavigatingEventArgsConverter}"
+                            Command="{Binding NavigateCommand}" />
+                </WebView.Behaviors>
+            </WebView>
+        </AbsoluteLayout>
+    </Grid>
 </ContentPage>

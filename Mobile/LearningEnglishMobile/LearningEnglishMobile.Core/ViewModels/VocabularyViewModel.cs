@@ -6,12 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class VocabularyViewModel : ExtendedBindableObject
+    public class VocabularyViewModel : ViewModelBase
     {
 
         private ObservableCollection<UserVocabulary> _vocabularies;
@@ -27,19 +28,16 @@ namespace LearningEnglishMobile.Core.ViewModels
         public ICommand SelectVocabularyCommand { get; }
 
 
-        private INavigation _navigation;
 
-
-        public VocabularyViewModel(IVocabularyService vocabularyService, INavigation navigation)
+        public VocabularyViewModel(IVocabularyService vocabularyService)
         {
-            _navigation = navigation;
             Vocabularies = new ObservableCollection<UserVocabulary>(vocabularyService.GetVocabularies());
-            SelectVocabularyCommand = new Command<UserVocabulary>(vocabulary => SelectVocabulary(vocabulary));
+            SelectVocabularyCommand = new Command<UserVocabulary>(async vocabulary => await SelectVocabulary(vocabulary));
         }
 
-        private void SelectVocabulary(UserVocabulary vocabulary)
+        private async Task SelectVocabulary(UserVocabulary vocabulary)
         {
-            _navigation.PushAsync(new UserWordsView(vocabulary));
+            await NavigationService.NavigateToAsync<UserWordsViewModel>(vocabulary);
         }
     }
 }

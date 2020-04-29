@@ -15,11 +15,9 @@ namespace LearningEnglishMobile.Core.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class UserWordsView : ContentPage
     {
-        public UserWordsView(UserVocabulary userVocabulary)
+        public UserWordsView()
         {
             InitializeComponent();
-
-            BindingContext = new UserWodsViewModel(userVocabulary, new MockedVocabularyService(userVocabulary.WordsCount));
         }
     }
 }

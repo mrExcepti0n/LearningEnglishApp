@@ -17,16 +17,10 @@ namespace LearningEnglishMobile.Core.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class MasterMainView : ContentPage
     {
-        public ListView ListView;
-
         public MasterMainView()
         {
             InitializeComponent();
-
-            BindingContext = new MasterMainViewModel();
-            ListView = MenuItems;
         }
 
-       
     }
 }

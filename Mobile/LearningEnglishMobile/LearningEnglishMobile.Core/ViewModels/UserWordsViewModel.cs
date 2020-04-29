@@ -12,7 +12,7 @@ using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class UserWodsViewModel : ExtendedBindableObject
+    public class UserWordsViewModel : ViewModelBase
     {
         public UserVocabulary SelectedVocabulary { get; }
 
@@ -20,7 +20,7 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         private List<UserWord> _userWords { get; set; }
 
-        public UserWodsViewModel(UserVocabulary selectedVocabulary, IVocabularyService vocabularyService)
+        public UserWordsViewModel(UserVocabulary selectedVocabulary, IVocabularyService vocabularyService)
         {
             SelectedVocabulary = selectedVocabulary;
             _userWords = vocabularyService.GetUserWords(selectedVocabulary.Id).ToList();

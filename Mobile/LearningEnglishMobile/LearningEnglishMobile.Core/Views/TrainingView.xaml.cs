@@ -15,8 +15,6 @@ namespace LearningEnglishMobile.Core.Views
         public TrainingView()
         {
             InitializeComponent();
-
-            this.BindingContext = new LearningEnglishMobile.Core.ViewModels.TrainingViewModel() { Navigation = Navigation};
         }
     }
 }

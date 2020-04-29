@@ -3,23 +3,51 @@ using LearningEnglishMobile.Core.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class TrainingResultViewModel : ExtendedBindableObject
+    public class TrainingResultViewModel : ViewModelBase
     {
-        public int TotalQuestions;
-        public int RightQuestions;
+        private string _summary;
 
-        public string Summary => RightQuestions / TotalQuestions > 0.6 ? "Хорошо" : "Плохо";
+        public string Summary { 
+            get => _summary; 
+            set { 
+                _summary = value;
+                RaisePropertyChanged(() => Summary); 
+            } 
+        }
 
-        public string Caption => $"Правильных ответов {RightQuestions} из {TotalQuestions}";
-
-
-        public TrainingResultViewModel(TrainingSummarizing summarizing)
+        private string _caption;
+        public string Caption
         {
-            TotalQuestions = summarizing.TotalQuestions;
-            RightQuestions = summarizing.RightQuestions;
-        } 
+            get => _caption;
+            set
+            {
+                _caption = value;
+                RaisePropertyChanged(() => Caption);
+            }
+        }
+
+
+        public TrainingResultViewModel()
+        {
+        }
+
+        public override Task InitializeAsync(object navigationData)
+        {
+            if (navigationData is TrainingSummarizing trainingSummarizing)
+            {
+                SetTrainingSummarizing(trainingSummarizing);
+            }
+            return base.InitializeAsync(navigationData);
+        }
+
+        private void SetTrainingSummarizing(TrainingSummarizing summarizing)
+        {
+            Summary = summarizing.RightQuestions / summarizing.TotalQuestions > 0.6 ? "Хорошо" : "Плохо";
+            Caption = $"Правильных ответов { summarizing.RightQuestions} из {summarizing.TotalQuestions}";
+        }
     }
 }

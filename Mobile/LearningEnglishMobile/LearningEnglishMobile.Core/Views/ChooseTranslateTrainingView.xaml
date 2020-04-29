@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             x:Class="LearningEnglishMobile.Core.Views.ChooseTranslateTrainigView"
+             x:Class="LearningEnglishMobile.Core.Views.ChooseTranslateTrainingView"
              x:Name="Page"
              xmlns:models="clr-namespace:LearningEnglishMobile.Core.Models.Training.ChooseTranslate"
              Title="ChooseTranslateTrainig">

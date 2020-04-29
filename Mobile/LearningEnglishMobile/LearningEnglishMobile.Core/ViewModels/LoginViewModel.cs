@@ -15,71 +15,20 @@ using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class LoginViewModel : ExtendedBindableObject
+    public class LoginViewModel : ViewModelBase
     {
-        private string _userName;
-        private string _password;
-
-        private bool _isValid;
         private bool _isLogin;
         private string _authUrl;
 
         private IOpenUrlService _openUrlService;
         private IIdentityService _identityService;
-        public INavigation Navigation;
+        private ISettingsService _settingsService;
 
-        public LoginViewModel(IOpenUrlService openUrlService, IIdentityService identityService, LogoutParameter logoutParameter)
+        public LoginViewModel(ISettingsService settingsService, IOpenUrlService openUrlService, IIdentityService identityService)
         {
             _openUrlService = openUrlService;
             _identityService = identityService;
-
-            UserName = "admin";
-            Password = "123";
-
-            if (logoutParameter.Logout)
-            {
-                Logout();
-            }
-        }
-
-        public string UserName
-        {
-            get
-            {
-                return _userName;
-            }
-            set
-            {
-                _userName = value;
-                RaisePropertyChanged(() => UserName);
-            }
-        }
-
-        public string Password
-        {
-            get
-            {
-                return _password;
-            }
-            set
-            {
-                _password = value;
-                RaisePropertyChanged(() => Password);
-            }
-        }
-
-
-        public bool IsValid
-        {
-            get
-            {
-                return _isValid;
-            }
-            set
-            {
-                _isValid = value;
-                RaisePropertyChanged(() => IsValid);
-            }
+            _settingsService = settingsService;        
         }
 
         public bool IsLogin
@@ -111,36 +60,97 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         public ICommand SignInCommand => new Command(async () => await SignInAsync());
 
-        public ICommand RegisterCommand => new Command(async () => await RegisterAsync());     
+        public ICommand RegistryCommand => new Command(async () => await RegistryAsync());
+        public ICommand NavigateCommand => new Command<string>(async (url) => await NavigateAsync(url));
+
+        public ICommand LogoutCommand => new Command(() => Logout());
+
+        public override Task InitializeAsync(object navigationData)
+        {
+            if (navigationData is LogoutParameter)
+            {
+                var logoutParameter = (LogoutParameter)navigationData;
+
+                if (logoutParameter.Logout)
+                {
+                    Logout();
+                }
+            }
+
+            return base.InitializeAsync(navigationData);
+        }
+
+        private async Task NavigateAsync(string url)
+        {
+            var unescapedUrl = System.Net.WebUtility.UrlDecode(url);
+
+            if (unescapedUrl.Equals(GlobalSetting.Instance.LogoutCallback))
+            {
+                _settingsService.AuthAccessToken = string.Empty;
+                _settingsService.AuthIdToken = string.Empty;
+                IsLogin = false;
+                LoginUrl = _identityService.CreateAuthorizationRequest();
+            }
+            else if (unescapedUrl.Contains(GlobalSetting.Instance.Callback))
+            {
+                var authResponse = new AuthorizeResponse(url);
+                if (!string.IsNullOrWhiteSpace(authResponse.Code))
+                {
+                    var userToken = await _identityService.GetTokenAsync(authResponse.Code);
+                    string accessToken = userToken.AccessToken;
+
+                    if (!string.IsNullOrWhiteSpace(accessToken))
+                    {
+                        _settingsService.AuthAccessToken = accessToken;
+                        _settingsService.AuthIdToken = authResponse.IdentityToken;
+                        await NavigationService.NavigateToAsync<MainViewModel>();
+                        //await NavigationService.RemoveLastFromBackStackAsync();
+                    }
+                }
+            }
+        }
 
 
+        public Task RemoveBackStackAsync()
+        {
+            var mainPage = Application.Current.MainPage;
+
+            if (mainPage != null)
+            {
+                for (int i = 0; i < mainPage.Navigation.NavigationStack.Count - 1; i++)
+                {
+                    var page = mainPage.Navigation.NavigationStack[i];
+                    mainPage.Navigation.RemovePage(page);
+                }
+            }
+
+            return Task.FromResult(true);
+        }
 
         private async Task SignInAsync()
         {
-            Application.Current.MainPage = new MainView();
-
-            //await Task.Delay(10);
-            //LoginUrl = _identityService.CreateAuthorizationRequest();
-            //IsValid = true;
-            //IsLogin = true;
+            await Task.Delay(10);
+            LoginUrl = _identityService.CreateAuthorizationRequest();
+            IsLogin = true;
         }
 
-        private async Task RegisterAsync()
+        private async Task RegistryAsync()
         {
-           await  _openUrlService.OpenUrlAsync(GlobalSetting.Instance.RegisterWebsite);
+            await _openUrlService.OpenUrlAsync(GlobalSetting.Instance.RegisterWebsite);
         }
 
 
         private void Logout()
         {
-            //var authIdToken = _settingsService.AuthIdToken;
-            //var logoutRequest = _identityService.CreateLogoutRequest(authIdToken);
+            var authIdToken = _settingsService.AuthIdToken;
+            var logoutRequest = _identityService.CreateLogoutRequest(authIdToken);
 
-            //if (!string.IsNullOrEmpty(logoutRequest))
-            //{
-            //    // Logout
-            //    LoginUrl = logoutRequest;
-            //}
+            if (!string.IsNullOrEmpty(logoutRequest))
+            {
+                // Logout
+                LoginUrl = logoutRequest;
+            }
         }
+
     }
 }

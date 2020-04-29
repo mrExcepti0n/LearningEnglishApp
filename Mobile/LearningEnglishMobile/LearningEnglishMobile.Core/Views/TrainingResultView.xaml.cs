@@ -14,10 +14,9 @@ namespace LearningEnglishMobile.Core.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class TrainingResultView : ContentPage
     {
-        public TrainingResultView(TrainingSummarizing summarizing)
+        public TrainingResultView()
         {
             InitializeComponent();
-            BindingContext = new TrainingResultViewModel(summarizing);
         }
     }
 }

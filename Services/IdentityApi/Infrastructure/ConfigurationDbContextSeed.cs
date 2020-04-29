@@ -19,6 +19,8 @@ namespace IdentityApi.Infrastructure
 
             clientUrls.Add("Mvc", configuration.GetValue<string>("MvcClient"));
             clientUrls.Add("Spa", configuration.GetValue<string>("SpaClient"));
+            clientUrls.Add("Xamarin", configuration.GetValue<string>("XamarinCallback"));
+
 
             if (!context.Clients.Any())
             {
@@ -27,7 +29,7 @@ namespace IdentityApi.Infrastructure
                     context.Clients.Add(client.ToEntity());
                 }
                 await context.SaveChangesAsync();
-            }
+            } 
 
             if (!context.IdentityResources.Any())
             {

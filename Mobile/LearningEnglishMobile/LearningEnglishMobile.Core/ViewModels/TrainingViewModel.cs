@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class TrainingViewModel : ExtendedBindableObject    
+    public class TrainingViewModel : ViewModelBase    
     {
         public ICommand GetCollectWordTrainingCommand => new Command(async () => await GetCollectWordTrainingAsync());
 
@@ -20,8 +20,6 @@ namespace LearningEnglishMobile.Core.ViewModels
         public ICommand GetAuditionTrainigCommand => new Command(async () => await GetAuditionTrainigCommandAsync());
 
 
-        public INavigation Navigation { get; internal set; }
-
         public TrainingViewModel()
         {
 
@@ -29,22 +27,22 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         private async Task GetCollectWordTrainingAsync()
         {
-            await Navigation.PushAsync(new CollectWordTrainingView());
+            await NavigationService.NavigateToAsync<CollectWordTrainingViewModel>();
         }
 
         private async Task GetTranslateWordTrainingAsync()
         {
-            await Navigation.PushAsync(new TranslateWordTrainingView());
+            throw new NotImplementedException();
         }
 
         private async Task GetChooseTranslateTrainigAsync()
         {
-            await Navigation.PushAsync(new ChooseTranslateTrainigView());
+            await NavigationService.NavigateToAsync<ChooseTranslateTrainingViewModel>();
         }
 
         private async Task GetAuditionTrainigCommandAsync()
         {
-            await Navigation.PushAsync(new AuditionTrainigView());
+            throw new NotImplementedException();
         }
     }
 }

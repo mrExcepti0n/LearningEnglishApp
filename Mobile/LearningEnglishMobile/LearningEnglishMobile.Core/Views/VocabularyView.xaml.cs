@@ -17,8 +17,6 @@ namespace LearningEnglishMobile.Core.Views
         public VocabularyView()
         {
             InitializeComponent();
-
-            BindingContext = new VocabularyViewModel(new MockedVocabularyService(), Navigation);
         }
     }
 }

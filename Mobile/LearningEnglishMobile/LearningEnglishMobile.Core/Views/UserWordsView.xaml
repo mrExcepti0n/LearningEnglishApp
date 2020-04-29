@@ -7,6 +7,8 @@
              xmlns:behaviors="clr-namespace:LearningEnglishMobile.Core.Behaviors;assembly=LearningEnglishMobile.Core" 
              x:Class="LearningEnglishMobile.Core.Views.UserWordsView"
              x:Name="Page"
+             xmlns:viewModelBase="clr-namespace:LearningEnglishMobile.Core.ViewModels.Base;assembly=LearningEnglishMobile.Core"
+             viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              Title="{Binding SelectedVocabulary.Title}">
     <ContentPage.ToolbarItems>
         <ToolbarItem 

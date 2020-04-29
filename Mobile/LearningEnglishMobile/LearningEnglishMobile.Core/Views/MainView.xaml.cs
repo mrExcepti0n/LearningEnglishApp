@@ -1,4 +1,5 @@
-﻿using LearningEnglishMobile.Core.ViewModels.Base;
+﻿using LearningEnglishMobile.Core.ViewModels;
+using LearningEnglishMobile.Core.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,30 +17,14 @@ namespace LearningEnglishMobile.Core.Views
         public MainView()
         {
             InitializeComponent();
-            MasterView.ListView.ItemSelected += ListView_ItemSelected;
         }
 
-        private async void ListView_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+        protected override async void OnAppearing()
         {
-            var item = e.SelectedItem as MasterMenuItem;
-            if (item == null)
-                return;
-
-            var page = (Page)Activator.CreateInstance(item.TargetType);
-            page.Title = item.Title;         
-
-            await NavigateToPage(page);
-            IsPresented = false;
-
-            MasterView.ListView.SelectedItem = null;
+            base.OnAppearing();
+            
+            await ((MasterMainViewModel)MasterView.BindingContext).InitializeAsync(null);
         }
 
-        private async Task NavigateToPage(Page page)
-        {
-            if (Detail.Navigation.NavigationStack.LastOrDefault().GetType() != page.GetType())
-            {
-                await Detail.Navigation.PushAsync(page);
-            }
-        }
     }
 }

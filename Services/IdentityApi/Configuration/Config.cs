@@ -42,7 +42,7 @@ namespace IdentityApi.Configuration
                     {
                         new Secret("secret".Sha256())
                     },
-                    ClientUri = $"{clientsUrl["Mvc"]}",                             // public uri of the client
+                    ClientUri = $"{clientsUrl["Mvc"]}",                            
                     AllowedGrantTypes = GrantTypes.Hybrid,
                     AllowAccessTokensViaBrowser = false,
                     RequireConsent = false,
@@ -61,13 +61,12 @@ namespace IdentityApi.Configuration
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.OfflineAccess,
-                        "learningenglish",
                         "vocabulary"
                     },
                     AccessTokenLifetime = 60*60*2, // 2 hours
                     IdentityTokenLifetime= 60*60*2 // 2 hours
                 },
-                  new Client
+                new Client
                 {
                     ClientId = "js",
                     ClientName = "SPA OpenId Client",
@@ -81,9 +80,33 @@ namespace IdentityApi.Configuration
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
-                       "learningenglish",
                         "vocabulary"
                     },
+                },
+                new Client
+                {
+                    ClientId = "xamarin",
+                    ClientName = "Xamarin OpenId Client",
+                    AllowedGrantTypes = GrantTypes.Hybrid,                    
+                    //Used to retrieve the access token on the back channel.
+                    ClientSecrets =
+                    {
+                        new Secret("secret".Sha256())
+                    },
+                    RedirectUris = { clientsUrl["Xamarin"] },
+                    RequireConsent = false,
+                    RequirePkce = true,
+                    PostLogoutRedirectUris = { $"{clientsUrl["Xamarin"]}/Account/Redirecting" },
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.OfflineAccess,
+                        "vocabulary"
+                    },
+                    //Allow requesting refresh tokens for long lived API access
+                    AllowOfflineAccess = true,
+                    AllowAccessTokensViaBrowser = true
                 },
             };
         }

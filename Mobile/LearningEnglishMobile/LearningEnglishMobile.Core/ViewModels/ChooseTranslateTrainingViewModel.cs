@@ -7,12 +7,13 @@ using LearningEnglishMobile.Core.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class ChooseTranslateTrainingViewModel  : ExtendedBindableObject
+    public class ChooseTranslateTrainingViewModel  : ViewModelBase
     {
 
         private QuestionWithOptions _currentQuestion;
@@ -35,11 +36,9 @@ namespace LearningEnglishMobile.Core.ViewModels
         }
 
         private ChooseTranslateTraining _training;
-        private INavigation _navigation;
 
-        public ChooseTranslateTrainingViewModel(INavigation navigation)
+        public ChooseTranslateTrainingViewModel()
         {
-            _navigation = navigation;
 
             var questions = new List<QuestionWithOptions> {
                 new QuestionWithOptions(1, new TrainingWord {Id = 1, Word = "Fox", Translation = "Лиса"}, new List<string>{ "Собака", "Заяц", "Лиса", "Кошка", "Волк"}),
@@ -54,7 +53,7 @@ namespace LearningEnglishMobile.Core.ViewModels
 
             CheckAnswerCommand = new Command<string>((answer) => CheckAnswer(answer));
             SkipAnswerCommand = new Command(() => SkipAnswer());
-            NextAnswerCommand = new Command(() => NextQuestion());
+            NextAnswerCommand = new Command(async () => await NextQuestion());
         }
 
 
@@ -74,7 +73,7 @@ namespace LearningEnglishMobile.Core.ViewModels
             ShowRightAnswer = true;
         }
 
-        private void NextQuestion()
+        private async Task NextQuestion()
         {
             var question = _training.GetNextQuestion();
 
@@ -85,8 +84,8 @@ namespace LearningEnglishMobile.Core.ViewModels
             }
             else
             {
-                _navigation.PushAsync(new TrainingResultView(_training.GetSummarizing()));
-                _navigation.RemovePrevPageFromStack();
+                await NavigationService.NavigateToAsync<TrainingResultViewModel>(_training.GetSummarizing());
+                await NavigationService.RemoveLastFromBackStackAsync();
             }
         }
 

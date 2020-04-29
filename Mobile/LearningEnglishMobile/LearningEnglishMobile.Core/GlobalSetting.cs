@@ -6,13 +6,11 @@ namespace LearningEnglishMobile.Core
 {
     public class GlobalSetting
     {
-        public const string DefaultEndpoint = "http://YOUR_IP_OR_DNS_NAME"; // i.e.: "http://YOUR_IP" or "http://YOUR_DNS_NAME"
+        public const string DefaultEndpoint = "http://10.10.2.185:8005"; 
         private string _baseIdentityEndpoint;
-
+         
         public GlobalSetting()
         {
-            AuthToken = "INSERT AUTHENTICATION TOKEN";
-
             BaseIdentityEndpoint = DefaultEndpoint;
         }
 
@@ -32,7 +30,6 @@ namespace LearningEnglishMobile.Core
 
         public string ClientSecret { get { return "secret"; } }
 
-        public string AuthToken { get; set; }
 
         public string RegisterWebsite { get; set; }
 
@@ -54,14 +51,14 @@ namespace LearningEnglishMobile.Core
             RegisterWebsite = $"{endpoint}/Account/Register";
             LogoutCallback = $"{endpoint}/Account/Redirecting";
 
-            var connectBaseEndpoint = $"{endpoint}/connect";
+            var connectBaseEndpoint = $"{endpoint}/connect";          
             AuthorizeEndpoint = $"{connectBaseEndpoint}/authorize";
             UserInfoEndpoint = $"{connectBaseEndpoint}/userinfo";
             TokenEndpoint = $"{connectBaseEndpoint}/token";
             LogoutEndpoint = $"{connectBaseEndpoint}/endsession";
 
             var baseUri = ExtractBaseUri(endpoint);
-            Callback = $"{baseUri}/xamarincallback";
+            Callback =  $"{baseUri}/xamarincallback";
         }
 
         private string ExtractBaseUri(string endpoint)

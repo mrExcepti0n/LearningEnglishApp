@@ -11,13 +11,11 @@ using Xamarin.Forms.Xaml;
 namespace LearningEnglishMobile.Core.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ChooseTranslateTrainigView : ContentPage
+    public partial class ChooseTranslateTrainingView : ContentPage
     {
-        public ChooseTranslateTrainigView()
+        public ChooseTranslateTrainingView()
         {
             InitializeComponent();
-
-            BindingContext = new ChooseTranslateTrainingViewModel(Navigation);
         }
     }
 }

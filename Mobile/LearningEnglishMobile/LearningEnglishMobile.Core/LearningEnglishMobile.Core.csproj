@@ -24,6 +24,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\ChooseTranslateTrainingView.xaml.cs">
+      <DependentUpon>ChooseTranslateTrainingView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\MainView.xaml.cs">
       <DependentUpon>MainView.xaml</DependentUpon>
     </Compile>
@@ -36,7 +39,7 @@
     <EmbeddedResource Update="Views\AuditionTrainigView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\ChooseTranslateTrainigView.xaml">
+    <EmbeddedResource Update="Views\ChooseTranslateTrainingView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\CollectWordTrainingView.xaml">

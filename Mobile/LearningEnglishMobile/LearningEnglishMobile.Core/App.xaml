@@ -13,7 +13,7 @@
             <converters:ItemTappedEventArgsConverter x:Key="ItemTappedEventArgsConverter" />
             <converters:TextChangedEventArgsConverter x:Key="TextChangedEventArgsConverter" />
             <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
-
+            <converters:WebNavigatingEventArgsConverter x:Key="WebNavigatingEventArgsConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

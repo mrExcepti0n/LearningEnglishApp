@@ -5,7 +5,7 @@ using System.Text;
 
 namespace LearningEnglishMobile.Core.ViewModels
 {
-    public class CollectWordViewModel : ExtendedBindableObject
+    public class CollectWordTrainingViewModel : ViewModelBase
     {
     }
 }
