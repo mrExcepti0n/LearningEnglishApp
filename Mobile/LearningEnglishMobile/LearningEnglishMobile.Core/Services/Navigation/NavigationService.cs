@@ -23,10 +23,10 @@ namespace LearningEnglishMobile.Core.Services.Navigation
 
         public Task InitializeAsync()
         {
-            if (string.IsNullOrEmpty(_settingsService.AuthAccessToken))
+            //if (string.IsNullOrEmpty(_settingsService.AuthAccessToken))
                 return NavigateToAsync<LoginViewModel>();
-            else
-                return NavigateToAsync<MainViewModel>();
+            //else
+            //    return NavigateToAsync<MainViewModel>();
         }
 
         public Task NavigateToAsync<TViewModel>() where TViewModel : ViewModelBase
@@ -112,7 +112,6 @@ namespace LearningEnglishMobile.Core.Services.Navigation
             }
 
             Page page = Activator.CreateInstance(pageType) as Page;
-            page.BindingContext = ViewModelLocator.Resolve(viewModelType);
             return page;
         }
     }

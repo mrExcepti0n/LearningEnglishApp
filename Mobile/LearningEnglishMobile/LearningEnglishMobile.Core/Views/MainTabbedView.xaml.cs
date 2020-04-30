@@ -12,18 +12,23 @@ using Xamarin.Forms.Xaml;
 namespace LearningEnglishMobile.Core.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class MainView : MasterDetailPage
+    public partial class MainTabbedView : TabbedPage
     {
-        public MainView()
+        public MainTabbedView()
         {
             InitializeComponent();
         }
 
-        protected override async void OnAppearing()
+        private async Task InitializeCurrentViewModel()
         {
-            base.OnAppearing();
+            await ((ViewModelBase)CurrentPage.BindingContext).InitializeAsync(null);
+        }
 
-            await ((MasterMainViewModel)MasterView.BindingContext).InitializeAsync(null);
+        protected override async void OnCurrentPageChanged()
+        {
+            base.OnCurrentPageChanged();
+
+            await InitializeCurrentViewModel();
         }
     }
 }

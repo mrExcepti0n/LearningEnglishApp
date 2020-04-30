@@ -1,4 +1,5 @@
 ﻿using LearningEnglishMobile.Core.Extensions;
+using LearningEnglishMobile.Core.Services.Training.Dto;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,11 @@ namespace LearningEnglishMobile.Core.Models.Training.Shared
         public QuestionWithOptions(int number, TrainingWord word, IEnumerable<string> options) : base(number, word)
         {
             Options = options.Select(opt => new QuestionOption { Option = opt }).ToObservableCollection();
+        }
+
+        public QuestionWithOptions(QuestionWithOptionsDto question) : base(question)
+        {
+            Options = question.Options.Select(opt => new QuestionOption { Option = opt }).ToObservableCollection();
         }
 
         public ObservableCollection<QuestionOption> Options { get; set; }

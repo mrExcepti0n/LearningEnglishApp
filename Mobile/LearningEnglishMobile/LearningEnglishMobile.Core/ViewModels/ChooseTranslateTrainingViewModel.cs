@@ -1,11 +1,14 @@
-﻿using LearningEnglishMobile.Core.Extensions;
+﻿using Data.Core;
+using LearningEnglishMobile.Core.Extensions;
 using LearningEnglishMobile.Core.Models.Training.ChooseTranslate;
 using LearningEnglishMobile.Core.Models.Training.Results;
 using LearningEnglishMobile.Core.Models.Training.Shared;
+using LearningEnglishMobile.Core.Services.Training;
 using LearningEnglishMobile.Core.ViewModels.Base;
 using LearningEnglishMobile.Core.Views;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -17,6 +20,7 @@ namespace LearningEnglishMobile.Core.ViewModels
     {
 
         private QuestionWithOptions _currentQuestion;
+        private ITrainingService _trainingService;
 
         public QuestionWithOptions CurrentQuestion { 
             get => _currentQuestion; 
@@ -37,23 +41,29 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         private ChooseTranslateTraining _training;
 
-        public ChooseTranslateTrainingViewModel()
+        public ChooseTranslateTrainingViewModel(ITrainingService trainingService)
         {
-
-            var questions = new List<QuestionWithOptions> {
-                new QuestionWithOptions(1, new TrainingWord {Id = 1, Word = "Fox", Translation = "Лиса"}, new List<string>{ "Собака", "Заяц", "Лиса", "Кошка", "Волк"}),
-                new QuestionWithOptions(1, new TrainingWord {Id = 2, Word = "Hare", Translation = "Заяц"}, new List<string>{ "Заяц", "Лиса", "Собака", "Кошка", "Волк"})
-
-            };
-            _training = new ChooseTranslateTraining(questions);
-
-            CurrentQuestion = _training.GetCurrentQuestion();
-
-            ShowRightAnswer = false;
+            _trainingService = trainingService;
+        
 
             CheckAnswerCommand = new Command<string>((answer) => CheckAnswer(answer));
             SkipAnswerCommand = new Command(() => SkipAnswer());
             NextAnswerCommand = new Command(async () => await NextQuestion());
+        }
+
+        public override async Task InitializeAsync(object navigationData)
+        {
+            ShowRightAnswer = false;
+
+            var questionsDto = await _trainingService.GetChooseTranslateQuestions(false);
+
+            var questions = questionsDto.Select(q => new QuestionWithOptions(q)).ToList();
+            _training = new ChooseTranslateTraining(questions);
+
+            CurrentQuestion = _training.GetCurrentQuestion();
+
+   
+            await base.InitializeAsync(navigationData);
         }
 
 

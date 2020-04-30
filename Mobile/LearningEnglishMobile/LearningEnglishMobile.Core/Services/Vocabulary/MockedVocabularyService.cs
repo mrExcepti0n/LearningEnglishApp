@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace LearningEnglishMobile.Core.Services.Vocabulary
 {
@@ -12,9 +13,9 @@ namespace LearningEnglishMobile.Core.Services.Vocabulary
         {
         }
 
-        public IEnumerable<UserWord> GetUserWords(int id)
+        public async Task<IEnumerable<UserWord>> GetUserWords(int id)
         {
-            return GenerateUserWords(10).ToList();
+            return await Task.FromResult(GenerateUserWords(10).ToList());
         }
 
         private IEnumerable<UserWord> GenerateUserWords(int count)
@@ -30,9 +31,9 @@ namespace LearningEnglishMobile.Core.Services.Vocabulary
             }
         }
 
-        public IEnumerable<UserVocabulary> GetVocabularies()
+        public async Task<IEnumerable<UserVocabulary>> GetVocabularies()
         {
-            return GenerateUserVocabularies(10).ToList();
+            return await Task.FromResult(GenerateUserVocabularies(10).ToList());
         }
 
       

@@ -3,6 +3,7 @@ using LearningEnglishMobile.Core.Services.Navigation;
 using LearningEnglishMobile.Core.Services.OpenUrl;
 using LearningEnglishMobile.Core.Services.RequestProvider;
 using LearningEnglishMobile.Core.Services.Settings;
+using LearningEnglishMobile.Core.Services.Training;
 using LearningEnglishMobile.Core.Services.User;
 using LearningEnglishMobile.Core.Services.Vocabulary;
 using System;
@@ -46,7 +47,8 @@ namespace LearningEnglishMobile.Core.ViewModels.Base
             _container.Register<IIdentityService, IdentityService>();
             _container.Register<INavigationService, NavigationService>();
             _container.Register<IUserService, UserService>();
-            _container.Register<IVocabularyService, MockedVocabularyService>();
+            _container.Register<IVocabularyService, VocabularyService>();
+            _container.Register<ITrainingService, TrainingService>();
 
             _container.Register<IRequestProvider, RequestProvider>();
         }
@@ -60,11 +62,6 @@ namespace LearningEnglishMobile.Core.ViewModels.Base
         public static T Resolve<T>() where T : class
         {
             return _container.Resolve<T>();
-        }
-
-        public static object Resolve(Type type)
-        {
-            return _container.Resolve(type);
         }
 
 

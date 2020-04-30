@@ -26,6 +26,8 @@ namespace LearningEnglishMobile.Core
             }
         }
 
+        public string VocabularyEndpoint { get { return "http://10.10.2.185:8181"; } }
+
         public string ClientId { get { return "xamarin"; } }
 
         public string ClientSecret { get { return "secret"; } }
@@ -44,7 +46,7 @@ namespace LearningEnglishMobile.Core
         public string Callback { get; set; }
 
         public string LogoutCallback { get; set; }
-
+        
 
         private void UpdateEndpoint(string endpoint)
         {

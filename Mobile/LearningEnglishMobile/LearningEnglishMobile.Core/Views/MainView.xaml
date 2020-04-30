@@ -2,7 +2,9 @@
 <MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                  
+             xmlns:viewModelBase="clr-namespace:LearningEnglishMobile.Core.ViewModels.Base;assembly=LearningEnglishMobile.Core"
+             viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              mc:Ignorable="d"
              x:Class="LearningEnglishMobile.Core.Views.MainView"
              xmlns:views="clr-namespace:LearningEnglishMobile.Core.Views;assembly=LearningEnglishMobile.Core">
@@ -12,11 +14,7 @@
   <MasterDetailPage.Detail>
     <NavigationPage>
       <x:Arguments>
-          <TabbedPage Title="LearningEnglish">
-              <views:VocabularyView x:Name="VocabularyView"/>
-              <views:TrainingView x:Name="TrainingView"/>
-              <views:WordSetView x:Name="WordSetView"/>
-           </TabbedPage>
+          <views:MainTabbedView></views:MainTabbedView>          
       </x:Arguments>
     </NavigationPage>
   </MasterDetailPage.Detail>

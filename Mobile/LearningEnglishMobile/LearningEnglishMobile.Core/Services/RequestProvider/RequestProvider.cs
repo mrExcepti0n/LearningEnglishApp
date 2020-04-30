@@ -1,4 +1,5 @@
 ﻿using LearningEnglishMobile.Core.Exceptions;
+using LearningEnglishMobile.Core.Services.Settings;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;

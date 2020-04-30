@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using LearningEnglishMobile.Core.Services.Training.Dto;
+using Newtonsoft.Json;
 
 namespace LearningEnglishMobile.Core.Models.Training.Shared
 {
@@ -15,6 +16,14 @@ namespace LearningEnglishMobile.Core.Models.Training.Shared
             UserWordId = userWord.Id;
             Word = userWord.Word;
             Translation = userWord.Translation;
+        }
+
+        public Question(QuestionDto question)
+        {
+            Number = question.Number;
+            UserWordId = question.UserWordId;
+            Word = question.Word;
+            Translation = question.Translation;
         }
 
         public int UserWordId { get; set; }

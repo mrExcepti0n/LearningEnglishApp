@@ -1,4 +1,5 @@
-﻿using LearningEnglishMobile.Core.Models.Vocabulary;
+﻿using LearningEnglishMobile.Core.Extensions;
+using LearningEnglishMobile.Core.Models.Vocabulary;
 using LearningEnglishMobile.Core.Services.Vocabulary;
 using LearningEnglishMobile.Core.ViewModels.Base;
 using LearningEnglishMobile.Core.Views;
@@ -15,6 +16,8 @@ namespace LearningEnglishMobile.Core.ViewModels
     public class VocabularyViewModel : ViewModelBase
     {
 
+        private IVocabularyService _vocabularyService { get; set; }
+
         private ObservableCollection<UserVocabulary> _vocabularies;
 
         public ObservableCollection<UserVocabulary> Vocabularies { 
@@ -28,11 +31,17 @@ namespace LearningEnglishMobile.Core.ViewModels
         public ICommand SelectVocabularyCommand { get; }
 
 
-
+       
         public VocabularyViewModel(IVocabularyService vocabularyService)
         {
-            Vocabularies = new ObservableCollection<UserVocabulary>(vocabularyService.GetVocabularies());
+            _vocabularyService = vocabularyService;
             SelectVocabularyCommand = new Command<UserVocabulary>(async vocabulary => await SelectVocabulary(vocabulary));
+        }
+
+        public override async Task InitializeAsync(object navigationData)
+        {
+            Vocabularies = (await _vocabularyService.GetVocabularies()).ToObservableCollection();
+            await base.InitializeAsync(navigationData);
         }
 
         private async Task SelectVocabulary(UserVocabulary vocabulary)

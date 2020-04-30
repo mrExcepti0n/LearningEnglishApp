@@ -1,4 +1,5 @@
 ﻿using Data.Core.Extensions;
+using LearningEnglishMobile.Core.Extensions;
 using LearningEnglishMobile.Core.Models.Vocabulary;
 using LearningEnglishMobile.Core.Services.Vocabulary;
 using LearningEnglishMobile.Core.ViewModels.Base;
@@ -7,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -14,17 +16,29 @@ namespace LearningEnglishMobile.Core.ViewModels
 {
     public class UserWordsViewModel : ViewModelBase
     {
-        public UserVocabulary SelectedVocabulary { get; }
+        private IVocabularyService _vocabularyService { get; set; }
 
-        public ObservableCollection<UserWord> UserWords { get; set; }
+        private UserVocabulary _selectedVocabulary;
+        private List<UserWord> _allWords;
+        private ObservableCollection<UserWord> _userWords;
 
-        private List<UserWord> _userWords { get; set; }
+        public UserVocabulary SelectedVocabulary { get => _selectedVocabulary; private set { _selectedVocabulary = value; RaisePropertyChanged(() => SelectedVocabulary); } }
 
-        public UserWordsViewModel(UserVocabulary selectedVocabulary, IVocabularyService vocabularyService)
+        public ObservableCollection<UserWord> UserWords { get => _userWords; set { _userWords = value; RaisePropertyChanged(() => UserWords); } }
+
+
+        public UserWordsViewModel(IVocabularyService vocabularyService)
         {
-            SelectedVocabulary = selectedVocabulary;
-            _userWords = vocabularyService.GetUserWords(selectedVocabulary.Id).ToList();
-            UserWords = new ObservableCollection<UserWord>(_userWords);
+            _vocabularyService = vocabularyService;
+
+        }
+
+        public override async Task InitializeAsync(object navigationData)
+        {
+            SelectedVocabulary = navigationData as UserVocabulary;
+            _allWords = (await _vocabularyService.GetUserWords(SelectedVocabulary.Id)).ToList();
+            UserWords = _allWords.ToObservableCollection();
+            await base.InitializeAsync(navigationData);
         }
 
 
@@ -36,16 +50,15 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         private void FilterWords(string mask)
         {
-            var words = mask == null ? _userWords : _userWords.Where(uw => uw.Word.Contains(mask, StringComparison.OrdinalIgnoreCase)).ToList();
-            
-            UserWords = new ObservableCollection<UserWord>(words);
-            RaisePropertyChanged(() => UserWords);
+            var words = mask == null ? _allWords : _allWords.Where(uw => uw.Word.Contains(mask, StringComparison.OrdinalIgnoreCase)).ToList();            
+            UserWords = words.ToObservableCollection();
         }
 
 
 
         private void DeleteWord(UserWord uw)
         {
+            _allWords.Remove(uw);
             UserWords.Remove(uw);
         }
 

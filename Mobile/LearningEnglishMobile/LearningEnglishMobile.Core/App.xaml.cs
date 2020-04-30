@@ -27,6 +27,7 @@ namespace LearningEnglishMobile.Core
             var navigationService = ViewModelLocator.Resolve<INavigationService>();
             return navigationService.InitializeAsync();
         }
+        
 
         protected override async void OnStart()
         {

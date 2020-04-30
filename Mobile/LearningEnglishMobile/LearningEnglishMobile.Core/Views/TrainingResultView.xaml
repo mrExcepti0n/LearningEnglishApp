@@ -4,6 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:viewModelBase="clr-namespace:LearningEnglishMobile.Core.ViewModels.Base;assembly=LearningEnglishMobile.Core"
+             viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              x:Class="LearningEnglishMobile.Core.Views.TrainingResultView"
              Title="Результаты тренировки">
     <ContentPage.Content>
