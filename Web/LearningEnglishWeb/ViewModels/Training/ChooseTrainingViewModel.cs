@@ -1,4 +1,5 @@
-﻿using LearningEnglishWeb.Models.Training;
+﻿using Data.Core;
+using LearningEnglishWeb.Models.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;

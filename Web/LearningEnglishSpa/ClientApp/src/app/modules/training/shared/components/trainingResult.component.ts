@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from "@angular/core";
-import { TrainingResult } from "../models/trainingResult.model";
+import { TrainingSummarizing } from "../models/trainingSummarizing.model";
 
 @Component({
   selector: 'app-training-result',
@@ -11,7 +11,7 @@ export class TrainingResultComponent {
   }
 
   @Input()
-  results: TrainingResult;
+  results: TrainingSummarizing;
 
 
   @Output()

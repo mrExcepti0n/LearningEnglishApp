@@ -15,7 +15,7 @@
           </div>
           <div *ngIf="!showAnswer; else elseBlock">
             <div style="min-height: 50px;">
-              <button class="btn text-center btn-warning m-1 text-white" *ngFor="let letter of currentQuestion.userAnswer; index as i" (click)="removeLetter(i)">{{letter}}</button>
+              <button class="btn text-center btn-warning m-1 text-white" *ngFor="let letter of currentQuestion.userLetters; index as i" (click)="removeLetter(i)">{{letter}}</button>
             </div>
             <div style="min-height: 50px;">
               <button class="btn text-center btn-info m-1 text-white" *ngFor="let letter of currentQuestion.letters; index as i" (click)="putLetter(i)">{{letter}}</button>
@@ -23,7 +23,7 @@
           </div>
           <ng-template #elseBlock>
             <div style="min-height: 50px;">
-              <button class="btn text-center m-1 text-white" *ngFor="let letter of currentQuestion.userAnswer; index as i" [ngClass]="letter==currentQuestion.translation[i]? 'btn-success': 'btn-danger' ">{{letter}}</button>
+              <button class="btn text-center m-1 text-white" *ngFor="let letter of currentQuestion.userLetters; index as i" [ngClass]="letter==currentQuestion.translation[i]? 'btn-success': 'btn-danger' ">{{letter}}</button>
             </div>
             <div style="min-height: 50px;">
               <button class="btn btn-primary text-left w-50" (click)="nextQuestion()">Следующий вопрос</button>

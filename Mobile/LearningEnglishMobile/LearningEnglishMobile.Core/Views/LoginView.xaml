@@ -4,6 +4,8 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:viewModelBase="clr-namespace:LearningEnglishMobile.Core.ViewModels.Base;assembly=LearningEnglishMobile.Core"
+             xmlns:gradient ="clr-namespace:Syncfusion.XForms.Graphics;assembly=Syncfusion.Core.XForms"
+             
              viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              xmlns:behaviors="clr-namespace:LearningEnglishMobile.Core.Behaviors"
              mc:Ignorable="d"             
@@ -11,33 +13,46 @@
              Title="LearningEnglish">
 
     <Grid  ColumnSpacing="0" RowSpacing="0" >
-        <Grid.RowDefinitions>
-            <RowDefinition Height="60" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition />
-        </Grid.ColumnDefinitions>
-        <Button Grid.Column="0" Grid.Row="0" Text="Войти" Command="{Binding SignInCommand}"/>
-        <Button Grid.Column="1" Grid.Row="0" Text="Регистрация" Command="{Binding RegistryCommand}" />
-        <AbsoluteLayout
+        <gradient:SfGradientView>
+            <gradient:SfGradientView.BackgroundBrush>
+                <gradient:SfLinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <gradient:SfLinearGradientBrush.GradientStops>
+                        <gradient:SfGradientStop Color="#CFD6E6" Offset="0.0" />
+                        <gradient:SfGradientStop Color="#E7EFF9" Offset="1.0" />
+                    </gradient:SfLinearGradientBrush.GradientStops>
+                </gradient:SfLinearGradientBrush>
+            </gradient:SfGradientView.BackgroundBrush>
+        </gradient:SfGradientView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Grid.Row="0" Text="Войти" Command="{Binding SignInCommand}"/>
+            <Button Grid.Column="1" Grid.Row="0" Text="Регистрация" Command="{Binding RegistryCommand}" />
+            <AbsoluteLayout
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Grid.Row="0"
                 Grid.RowSpan="2"
                 IsVisible="{Binding IsLogin}">
-            <WebView     
+                <WebView     
                     Source="{Binding LoginUrl}"
                     AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
                     AbsoluteLayout.LayoutFlags="All">
-                <WebView.Behaviors>
-                    <behaviors:EventToCommandBehavior 
+                    <WebView.Behaviors>
+                        <behaviors:EventToCommandBehavior 
                             EventName="Navigating"
                             EventArgsConverter="{StaticResource WebNavigatingEventArgsConverter}"
                             Command="{Binding NavigateCommand}" />
-                </WebView.Behaviors>
-            </WebView>
-        </AbsoluteLayout>
+                    </WebView.Behaviors>
+                </WebView>
+            </AbsoluteLayout>
+
+        </Grid>
     </Grid>
 </ContentPage>

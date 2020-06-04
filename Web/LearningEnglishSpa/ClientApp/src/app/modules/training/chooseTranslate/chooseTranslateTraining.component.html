@@ -15,13 +15,13 @@
           <div class="col-lg-7 col-md-7 col-sm-6 col-8 answerArea ">
 
             <div *ngIf="!showAnswer; else elseBlock">
-              <button class="btn btn-info btn-block text-left" *ngFor="let answer of currentQuestion.answers" (click)="checkAnswer($event.target.innerText)">{{answer.translation}}</button>
+              <button class="btn btn-info btn-block text-left" *ngFor="let option of currentQuestion.options" (click)="checkAnswer($event.target.innerText)">{{option}}</button>
               <button class="btn btn-danger  btn-block text-left" (click)="checkAnswer(null)">Не знаю</button>
             </div>
             <ng-template #elseBlock>
-              <button class="btn btn-block text-left disabled" *ngFor="let answer of currentQuestion.answers"
-                      [ngClass]="answer.isRight ? (answer.userSelect ? 'btn-success' : (answer.question.skippedQuestion ? 'btn-danger' : 'btn-success')) : (answer.userSelect ? 'btn-danger' : '')">
-                {{answer.translation}}
+              <button class="btn btn-block text-left disabled" *ngFor="let option of currentQuestion.options"
+                      [ngClass]="option === currentQuestion.translation ? (option === currentQuestion.userAnswer  ? 'btn-success' : ( !currentQuestion.userAnswer  ? 'btn-danger' : 'btn-success')) : (option === currentQuestion.userAnswer ? 'btn-danger' : '')">
+                {{option}}
               </button>
               <button class="btn btn-primary  btn-block text-left" (click)="nextQuestion()">Следующий вопрос</button>
             </ng-template>

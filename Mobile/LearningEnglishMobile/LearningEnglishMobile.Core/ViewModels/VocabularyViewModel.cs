@@ -6,6 +6,7 @@ using LearningEnglishMobile.Core.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -40,7 +41,7 @@ namespace LearningEnglishMobile.Core.ViewModels
 
         public override async Task InitializeAsync(object navigationData)
         {
-            Vocabularies = (await _vocabularyService.GetVocabularies()).ToObservableCollection();
+            Vocabularies = (await _vocabularyService.GetVocabularies())/*.Select(x => { x.Title = "Vocabulary"; return x; })*/.ToObservableCollection();
             await base.InitializeAsync(navigationData);
         }
 

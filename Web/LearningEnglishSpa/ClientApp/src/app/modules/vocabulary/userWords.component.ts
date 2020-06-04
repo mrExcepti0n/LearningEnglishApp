@@ -4,10 +4,13 @@ import { UserWord } from "./models/word.model";
 import { ConfigurationService } from "../shared/services/configuration.service";
 import { AudioPlayer } from "../shared/audioPlayer";
 import { LanguageEnum } from "../shared/models/language.enum";
+import { TrainingService } from "../training/shared/services/trainig.service";
+import { TrainingWordRatio } from "../training/shared/models/trainingWordRatio.model";
 
 @Component({
   templateUrl: 'userWords.component.html',
-  selector: 'app-user-words'
+  selector: 'app-user-words',
+  styleUrls: ['userWords.component.css']
 })
 export class UserWordsComponent implements OnInit {
 
@@ -20,10 +23,7 @@ export class UserWordsComponent implements OnInit {
   wordMaskTranslation: string[] = [];
   hideTranslationArea: boolean = true;
 
-
-
-
-  constructor(private service: VocabularyService, private configurationService: ConfigurationService, private audioPlayer: AudioPlayer) {
+  constructor(private vocabularyService: VocabularyService, private trainingService: TrainingService, private configurationService: ConfigurationService, private audioPlayer: AudioPlayer) {
   }
 
   ngOnInit() {
@@ -40,16 +40,16 @@ export class UserWordsComponent implements OnInit {
   }
 
   getWords() {
-    this.service.getUserWords(this.userVocabularyId).subscribe(result => { this.words = result });
+    this.vocabularyService.getUserWords(this.userVocabularyId).subscribe(result => { this.words = result; this.loadTrainingRatio() });
   }
 
   addWord(word, translation) {
     this.onClickedOutside();
-    this.service.addWord(word, translation, this.userVocabularyId).subscribe(res => { this.wordMask = ''; this.getWords() });
+    this.vocabularyService.addWord(word, translation, this.userVocabularyId).subscribe(res => { this.wordMask = ''; this.getWords() });
   }
 
   getTranslations() {
-    this.service.getTranslations(this.wordMask).subscribe(res => { this.wordMaskTranslation = res; this.hideTranslationArea = false; });
+    this.vocabularyService.getTranslations(this.wordMask).subscribe(res => { this.wordMaskTranslation = res; this.hideTranslationArea = false; });
   }
 
   onClickedOutside() {
@@ -64,5 +64,22 @@ export class UserWordsComponent implements OnInit {
 
   playTranslationAudio(word: string) {
     this.audioPlayer.playWordAudio(word, LanguageEnum.Russian);
+  }
+
+  loadTrainingRatio() {
+    let userWordsId = this.words.map(uw => uw.id);
+    this.trainingService.getTrainingWordsRatio(userWordsId).subscribe(res => this.fillTrainingRatio(res));
+  }
+
+  fillTrainingRatio(wordsRatio: TrainingWordRatio[]) {
+    this.words.forEach(w => this.setTrainingRatio(w, wordsRatio.find(wr => wr.userWordId === w.id).trainingRatio));   
+  }
+
+  private setTrainingRatio(word: UserWord, ratio: number) {
+    if (ratio < 8) {
+      word.trainingRatio = 8;
+    } else {
+      word.trainingRatio = ratio;
+    }
   }
 }

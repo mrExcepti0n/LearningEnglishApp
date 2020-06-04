@@ -39,7 +39,7 @@ namespace VocabularyApi.Controllers
             {
                 await FillWordImage(vocabularyWord);
             }            
-            return new FileContentResult(vocabularyWord.Image.Image, "image/gif");
+            return new FileContentResult(vocabularyWord.Image.Image, "image/png");
         }
 
 
@@ -58,7 +58,7 @@ namespace VocabularyApi.Controllers
                 await FillWordImage(vocabularyWord);
             }
 
-            return new FileContentResult(vocabularyWord.Thumbnail.Image, "image/gif");
+            return new FileContentResult(vocabularyWord.Thumbnail.Image, "image/png");
         }    
 
 

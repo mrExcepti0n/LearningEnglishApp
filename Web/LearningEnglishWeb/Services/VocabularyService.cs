@@ -20,7 +20,7 @@ namespace LearningEnglishWeb.Services
         private readonly HttpClient _httpClient;
         private readonly string _baseUrl;
 
-        public VocabularyService(HttpClient httpClient, IConfiguration configuration)
+        public VocabularyService(HttpClient httpClient, IConfiguration configuration )
         {
             _httpClient = httpClient;
             _baseUrl = configuration.GetSection("VocabularyUrl").Value;

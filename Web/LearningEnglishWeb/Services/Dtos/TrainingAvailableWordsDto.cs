@@ -1,4 +1,5 @@
 ﻿
+using Data.Core;
 using LearningEnglishWeb.Models.Training;
 
 namespace LearningEnglishWeb.Services.Dtos

@@ -1,4 +1,6 @@
-<ngu-carousel #myCarousel [inputs]="carouselTileConfig" [dataSource]="vocabularies">
+
+
+<ngu-carousel #myCarousel [inputs]="carouselTileConfig" [dataSource]="vocabularies" *ngIf="vocabularies.length>0">
   <ngu-tile *nguCarouselDef="let vocabulary; let i = index;">
     <div class="tile">
       <h1>{{i + 1}}</h1>

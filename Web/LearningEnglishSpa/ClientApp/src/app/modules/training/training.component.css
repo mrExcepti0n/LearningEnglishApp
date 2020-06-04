@@ -1,0 +1,232 @@
+.trainingArea {
+  width: 100%;
+  margin: 50px auto;
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+  border-radius: 0.25rem;
+  background-color: white;
+  padding: 25px;
+}
+
+  .trainingArea.cw {
+    height: 550px;
+  }
+
+  .trainingArea.ct {
+    height: 400px;
+  }
+
+  .trainingArea.tw {
+    height: 500px;
+  }
+
+.imageWrapper {
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-grow: 1;
+}
+
+
+.questionArea {
+  overflow: hidden;
+  display: flex;
+  flex-flow: column;
+}
+
+
+
+  .questionArea.cw, .questionArea.tw {
+    height: 300px;
+  }
+
+    .questionArea.cw h5, .questionArea.tw h5 {
+      text-align: right;
+    }
+
+.userAnswerArea {
+  height: 60px;
+}
+
+  .userAnswerArea.cw {
+    flex: 1 0 auto;
+  }
+
+  .userAnswerArea input {
+    margin: auto;
+  }
+
+.cwOptionsArea {
+  height: 60px;
+  flex: 2 0 auto;
+}
+
+.cwRightAnswerArea {
+  height: 60px;
+}
+
+.answerWrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+  .answerWrapper.cw {
+    height: 200px;
+  }
+
+  .answerWrapper.tw {
+    height: 100px;
+  }
+
+.actionArea {
+  flex: 0 0 auto;
+  margin-bottom: 15px;
+}
+
+.letter {
+  width: 50px;
+  height: 50px;
+}
+
+
+/*.answerBtn {
+    margin: 5px;
+    display: block;
+    text-align: left;
+}*/
+/*.nextAnswerBtn {
+    margin: 5px;
+    display: block;
+    text-align: left;
+}*/
+
+
+/*.questionArea {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: central;
+    text-align: center;
+    height: 4rem;
+}*/
+
+/*.answerArea {
+    height: 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    vertical-align: central;
+    text-align: center;
+    min-height: 100px;
+}*/
+
+
+.trainingDesc {
+  background-color: white;
+  text-decoration: none;
+  user-select: none;
+  border: 1px solid transparent;
+  cursor: default;
+  padding: 0;
+  display: block;
+  height: 30px;
+  width: 150px;
+  position: absolute;
+  margin: auto;
+  bottom: 50%;
+  top: 50%;
+  left: 0;
+  right: 0;
+  opacity: 1;
+  z-index: 1;
+}
+
+.trainingContainer {
+  height: 150px;
+}
+
+@keyframes topBtnAnimation {
+  50% {
+    transform: translateY(-10px)
+  }
+
+  100% {
+    transform: translate(10px, -10px)
+  }
+}
+
+@keyframes botBtnAnimation {
+  50% {
+    transform: translateY(10px)
+  }
+
+  100% {
+    transform: translate(-10px, 10px)
+  }
+}
+
+.trainingContainer:hover .trainingTopBtn {
+  animation: topBtnAnimation 0.5s;
+  animation-fill-mode: forwards;
+  /*transform: translate(0, -10px) translate(10px, 0);*/
+}
+
+.trainingContainer:hover .trainingBotBtn {
+  animation: botBtnAnimation 0.5s;
+  animation-fill-mode: forwards;
+  /*transform: translate(0, 10px) translate(-10px, 0);*/
+}
+
+.trainingBtn {
+  color: white;
+  height: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  text-decoration: none;
+  position: relative;
+  z-index: 0;
+  transition: 1.5s;
+  cursor: pointer;
+  width: 100%;
+}
+
+
+  .trainingBtn p {
+    margin: 0;
+  }
+
+  .trainingBtn:hover {
+    text-decoration: none;
+    color: white;
+  }
+
+.trainingTopBtn {
+  border-radius: 50px 50px 0 0;
+  background-color: cornflowerblue;
+}
+
+  .trainingTopBtn:hover {
+    background-color: #427BE3;
+  }
+
+
+.trainingBotBtn {
+  border-radius: 0 0 50px 50px;
+  background-color: #FF5F6B;
+}
+
+  .trainingBotBtn:hover {
+    background-color: #FF3443;
+  }
+
+.trainingBtn.notActive {
+  background-color: lightgreen;
+  pointer-events: none;
+  cursor: default;
+}
+
+  /*не работает с pointer-events: none;*/
+  .trainingBtn.notActive:hover {
+    background-color: lawngreen;
+  }

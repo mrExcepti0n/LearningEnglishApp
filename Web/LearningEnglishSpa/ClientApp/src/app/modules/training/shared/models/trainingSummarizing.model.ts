@@ -1,4 +1,4 @@
-export class TrainingResult {
+export class TrainingSummarizing {
   constructor(totalQuestion: number, rightAnswers: number) {
     this.totalQuestions = totalQuestion;
     this.rightAnswers = rightAnswers;

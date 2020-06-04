@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -38,6 +39,19 @@ namespace LearningEnglishMobile.Core.Services.RequestProvider
                 JsonConvert.DeserializeObject<TResult>(serialized, _serializerSettings));
 
             return result;
+        }
+
+        public async Task<Stream> GetStreamAsync(string requestUrl, string token = "")
+        {
+            HttpClient httpClient = CreateHttpClient(token);
+            using (HttpResponseMessage response = await httpClient.GetAsync(requestUrl))
+            using (Stream stream = await response.Content.ReadAsStreamAsync())
+            {
+                MemoryStream ms = new MemoryStream();
+                stream.CopyTo(ms);
+                ms.Position = 0;
+                return ms;
+            }
         }
 
         public async Task<TResult> PostAsync<TResult>(string uri, TResult data, string token = "", string header = "")

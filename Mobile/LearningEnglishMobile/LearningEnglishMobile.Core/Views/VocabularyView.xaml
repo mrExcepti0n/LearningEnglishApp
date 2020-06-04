@@ -8,35 +8,36 @@
              viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              x:Class="LearningEnglishMobile.Core.Views.VocabularyView"
              x:Name="Page"
-             Title="Vocabulary">
-    <CollectionView ItemsSource="{Binding Vocabularies}">
-        <CollectionView.ItemsLayout>
-            <GridItemsLayout Orientation="Vertical" Span="2">
-            </GridItemsLayout>
-        </CollectionView.ItemsLayout>
-        <CollectionView.ItemTemplate>
+             Title="Словарь">
+    <CarouselView ItemsSource="{Binding Vocabularies}"  PeekAreaInsets="50">
+        <CarouselView.ItemTemplate>
             <DataTemplate>
-                <Grid Padding="10">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35"/>
-                        <RowDefinition Height="35"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition Width="140" />
-                    </Grid.ColumnDefinitions>
-                    <BoxView Color="AntiqueWhite" Grid.RowSpan="2"/>
-                    <Label Grid.Column="1" Text="{Binding Title}"/>
-                    <Label Grid.Row="1" Grid.Column="1" Text="{Binding WordsCount, StringFormat='слов: {0:N0}'}"></Label>
-                    <Grid.GestureRecognizers>
-                        <TapGestureRecognizer
-                            Command="{Binding Source={x:Reference Page}, Path=BindingContext.SelectVocabularyCommand}" 
-                            CommandParameter="{Binding .}"
-                            NumberOfTapsRequired="1" >
-                        </TapGestureRecognizer>
-                    </Grid.GestureRecognizers>
-                </Grid>
+                <StackLayout>
+                    <Frame HasShadow="True"
+                       BorderColor="DarkGray"
+                       CornerRadius="5"
+                       Margin="20"
+                       HeightRequest="300"
+                       VerticalOptions="CenterAndExpand">
+                        <StackLayout>
+                            <Label Text="{Binding Title}"
+                               FontAttributes="Bold"
+                               FontSize="Large"
+                               HorizontalTextAlignment="Center"
+                               VerticalOptions="Center" />
+                            <BoxView Color="AntiqueWhite"
+                               HeightRequest="150"
+                               WidthRequest="150"
+                               HorizontalOptions="Center" />
+                            <Label Text="{Binding WordsCount, StringFormat='слов: {0:N0}'}"
+                               FontAttributes="Italic"
+                               HorizontalOptions="Center"
+                               MaxLines="5"
+                               LineBreakMode="TailTruncation" />
+                        </StackLayout>
+                    </Frame>
+                </StackLayout>
             </DataTemplate>
-        </CollectionView.ItemTemplate>
-    </CollectionView>
+        </CarouselView.ItemTemplate>
+    </CarouselView>
 </ContentPage>

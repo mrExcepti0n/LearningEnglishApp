@@ -1,12 +1,11 @@
 import { OnInit } from "@angular/core";
 import { ConfigurationService } from "../../../shared/services/configuration.service";
-import { TrainingDataService } from "../services/trainigData.service";
+import { TrainingService } from "../services/trainig.service";
 import { ActivatedRoute } from "@angular/router";
 import { TrainingBase } from "../models/trainingBase.model";
 import { IQuestion } from "../models/iquestion.model";
 import { WordImageService } from "../../../shared/services/wordImage.service";
 import { SafeUrl } from "@angular/platform-browser";
-import { SpeechService } from "../../../shared/services/speech.service";
 import { AudioPlayer } from "../../../shared/audioPlayer";
 import { LanguageEnum } from "../../../shared/models/language.enum";
 
@@ -16,7 +15,6 @@ export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQ
   protected isReverse: boolean = true;
   protected training: T;
   public showAnswer: boolean = false;
-
 
 
 
@@ -38,7 +36,7 @@ export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQ
   }
 
 
-  constructor(private configurationService: ConfigurationService, protected trainingDataService: TrainingDataService,
+  constructor(private configurationService: ConfigurationService, protected trainingDataService: TrainingService,
     protected wordImageService: WordImageService, private audioPlayer: AudioPlayer, route: ActivatedRoute) {
     route.data.subscribe(data => this.isReverse = data.isReverse);
   }
@@ -81,7 +79,10 @@ export abstract class TrainingComponentBase<T extends TrainingBase, Q extends IQ
   public nextQuestion() {
     this.showAnswer = false;
     this.currentQuestion = this.training.getNextQuestion() as Q;
-    this.loadImageSrc();
+
+    if (this.currentQuestion) {
+      this.loadImageSrc();
+    } 
   }
 
 

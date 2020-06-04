@@ -10,13 +10,19 @@
 </div>
 
 
+<div class="mb-4 mt-4">
+  <input type="checkbox" id="checkAll" />
+  <span> Выбрать все слова </span>
+  <button class="btn btn-sm btn-primary training-sw-btn"> Тренировать</button>
+</div>
+
 <div class="row justify-content-center">
-  <div class="col-xl-8 col-sm-12">
-    <table class="table table-hover">
+  <div class="col">
+    <table class="table table-hover words-table">
       <thead>
         <tr>
           <th style="width:2%"></th>
-          <th colspan="2" class="text-center">Слово</th>
+          <th colspan="3" class="text-center">Слово</th>
           <th>Транскрипция</th>
           <th>Перевод</th>
           <th></th>
@@ -24,12 +30,22 @@
       </thead>
       <tbody>
         <tr *ngFor="let userWord of words">
-          <td class="align-middle"> <input type="checkbox" /></td>
-          <td class="align-middle" style="width:2%">  <div class="d-inline-block align-middle" style="width:60px; height:60px;"> <img class="img-thumbnail" [wordsm]="userWord.word" />  </div>  </td>
-          <td class="align-middle">  {{userWord.word}}   <button class="btn p-0 ml-1" (click)="playWordAudio(userWord.word)"> <i class="fa fa-play text-success"></i> </button> </td>
-          <td class="align-middle"> {{userWord.transcription}}</td>
-          <td class="align-middle">  {{userWord.translation}}  <button class="btn p-0 ml-1" (click)="playTranslationAudio(userWord.translation)"> <i class="fa fa-play text-success"></i> </button> </td>
-          <td class="align-middle text-right"> <button class="btn btn-danger btn-sm">удалить</button></td>
+          <td> <input type="checkbox" /></td>
+          <td class="p-0" style="width: 1%">
+              <div class="thumbnail-wrapper">
+                  <img class="img-thumbnail" [wordsm]="userWord.word" />
+              </div>
+          </td>
+          <td class="pl-1 pr-1" style="width:6%;">
+            <div class="progress">
+              <div class="progress-bar progress-bar-striped" role="progressbar" style="width: {{userWord.trainingRatio}}%"  [attr.aria-valuenow]="userWord.trainingRatio" aria-valuemin="0" aria-valuemax="100">
+  </div>
+            </div>
+          </td>
+          <td class="pl-0">  {{userWord.word}}   <button class="btn p-0 ml-1" (click)="playWordAudio(userWord.word)"> <i class="fa fa-play text-success"></i> </button> </td>
+          <td> {{userWord.transcription}} {{userWord.trainingRatio}}</td>
+          <td>  {{userWord.translation}}  <button class="btn p-0 ml-1" (click)="playTranslationAudio(userWord.translation)"> <i class="fa fa-play text-success"></i> </button> </td>
+          <td class="text-right"> <button class="btn btn-danger btn-sm">удалить</button></td>
         </tr>
       </tbody>
     </table>

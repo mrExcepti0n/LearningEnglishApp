@@ -13,5 +13,7 @@ namespace LearningEnglishSpa
 
         public string SpeechUrl { get; set; }
 
+        public string TrainingUrl { get; set; }
+
     }
 }

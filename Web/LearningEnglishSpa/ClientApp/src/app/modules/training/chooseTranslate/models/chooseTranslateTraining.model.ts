@@ -1,20 +1,14 @@
 import { UserWord } from "../../../vocabulary/models/word.model";
 import { TrainingBase } from "../../shared/models/trainingBase.model";
-import { TrainingDataService } from "../../shared/services/trainigData.service";
+import { TrainingService } from "../../shared/services/trainig.service";
 import { IQuestion } from "../../shared/models/iquestion.model";
-import { QuestionWithAnswers } from "../../shared/models/questionWithAnswers.model";
-import { Answer } from "../../shared/models/answer.model";
-import { WordImageService } from "../../../shared/services/wordImage.service";
+import { QuestionWithOptions} from "../../shared/models/questionWithOptions.model";
+import { TrainingType } from "../../shared/models/trainingType.model";
 
 export class ChooseTranslateTraining extends TrainingBase {
 
-  protected checkAnswerInternal(answer: string): boolean {
-    let question = this.getCurrentQuestion() as QuestionWithAnswers;
-    return question.checkAnswer(answer);
-  }
-
-  constructor(trainingDataService: TrainingDataService, isReverse: boolean) { 
-    super(trainingDataService, isReverse);
+  constructor(trainingDataService: TrainingService, isReverse: boolean) {
+    super(trainingDataService, TrainingType.ChooseTranslate, isReverse);
   }
 
   protected generateQuestions(words: UserWord[]): IQuestion[] {
@@ -22,25 +16,25 @@ export class ChooseTranslateTraining extends TrainingBase {
     let results: IQuestion[] = [];
     for (let i = 0; i < words.length; i++) {
 
-      let question = new QuestionWithAnswers();
+      let question = new QuestionWithOptions();
+      question.userWordId = words[i].id;
       question.number = (i + 1).toString();
       question.word = words[i].word;
       question.translation = words[i].translation;
 
-      let answer = this.getAnswers(question, words, i, 4);      
-      question.answers = answer;
+      let answer = this.getAnswers(words, i, 4);
+      question.options = answer;
       results.push(question);
     }
     return results;
   }
 
 
-  protected getAnswers(question: QuestionWithAnswers, words: UserWord[], currentIndex: number, size: number): Answer[] {
-
-    let rightAnswer = new Answer(question, words[currentIndex].translation);
-    let otherWords: UserWord[] = words.filter((w, i) => i != currentIndex);
+  protected getAnswers(words: UserWord[], currentIndex: number, size: number): string[] {
+    let rightAnswer = words[currentIndex].translation;
+    let otherWords: UserWord[] = words.filter((w, i) => i !== currentIndex);
     this.shuffleWords(otherWords);
-    let answers: Answer[] = otherWords.slice(0, size).map(w => new Answer(question, w.translation));
+    let answers: string[] = otherWords.slice(0, size).map(w =>  w.translation);
     answers.push(rightAnswer);
     this.shuffleWords(answers);
     return answers;

@@ -121,7 +121,7 @@ namespace VocabularyApi
             {
                 options.Authority = identityUrl;
                 options.RequireHttpsMetadata = false;
-                options.Audience = "learningenglish";
+                options.Audience = "vocabulary";
             });
 
             return services;

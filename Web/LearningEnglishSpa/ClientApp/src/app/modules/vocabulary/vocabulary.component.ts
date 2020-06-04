@@ -33,4 +33,5 @@ export class VocabularyComponent implements OnInit
   getVocabulary(): void {
     this.service.getVocabulary(this.vocabularyId).subscribe(res => this.vocabulary = res );
   }
+
 }

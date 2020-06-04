@@ -11,7 +11,7 @@ import { Guid } from '../../../guid';
 export class DataService {
   constructor(private http: HttpClient, private securityService: SecurityService) { }
 
-  get(url: string, params?: any): Observable<Response> {
+  get(url: string): Observable<Response> {
     let options = {};
     this.setHeaders(options);
 
@@ -24,11 +24,17 @@ export class DataService {
       );
   }
 
-  getBlob(url: string, params?: any): Observable<Blob> {
+  getResult<T>(url: string): Observable<T> {
+    let options = {};
+    this.setHeaders(options);
+    return this.http.get<T>(url, options);
+  }
+
+  getBlob(url: string): Observable<Blob> {
     let options = { };
     this.setHeaders(options);
     options['responseType'] = 'blob';
-    return this.http.get<any>(url, options)
+    return this.http.get(url, options)
       .pipe(tap((res: Blob) => {
         return res;
       }));
@@ -40,7 +46,7 @@ export class DataService {
       headers: new HttpHeaders()
     };
     options['responseType'] = 'blob';
-    return this.http.get<any>(url, options)
+    return this.http.get(url, options)
       .pipe(tap((res: Blob) => {
         return res;
       }));

@@ -13,6 +13,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="{Binding CurrentQuestion.Word}" HorizontalOptions="Center" Margin="10" FontSize="Large"/>
+            <Image Source="{Binding MyImageSource}" WidthRequest="250" HeightRequest="200" Aspect="AspectFit" VerticalOptions="Center" HorizontalOptions="Center"/>
             <ListView ItemsSource="{Binding CurrentQuestion.Options}" SelectionMode="None" Margin="50,0" IsVisible="{Binding ShowRightAnswer, Converter={StaticResource InverseBoolConverter}}">
                 <ListView.ItemTemplate>
                     <DataTemplate>

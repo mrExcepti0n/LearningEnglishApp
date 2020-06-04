@@ -1,18 +1,14 @@
 import { TrainingBase } from "../shared/models/trainingBase.model";
-import { TrainingDataService } from "../shared/services/trainigData.service";
+import { TrainingService } from "../shared/services/trainig.service";
 import { UserWord } from "../../vocabulary/models/word.model";
 import { IQuestion } from "../shared/models/iquestion.model";
 import { CollectWordQuestion } from "./collectWordQuestion.model";
+import { TrainingType } from "../shared/models/trainingType.model";
 
 export class CollectWordTraining extends TrainingBase {
 
-  protected checkAnswerInternal(answer: string): boolean {
-    let question = this.getCurrentQuestion();
-    return question.translation == answer;
-  }
-
-  constructor(trainingDataService: TrainingDataService, isReverse: boolean) {
-    super(trainingDataService, isReverse);
+  constructor(trainingDataService: TrainingService, isReverse: boolean) {
+    super(trainingDataService, TrainingType.CollectWord, isReverse);
   }
 
   protected generateQuestions(words: UserWord[]): IQuestion[] {
@@ -21,6 +17,7 @@ export class CollectWordTraining extends TrainingBase {
     for (let i = 0; i < words.length; i++) {
 
       let question = new CollectWordQuestion();
+      question.userWordId = words[i].id;
       question.number = (i + 1).toString();
       question.word = words[i].word;
       question.translation = words[i].translation;

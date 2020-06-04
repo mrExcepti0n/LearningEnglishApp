@@ -6,6 +6,7 @@ using LearningEnglishMobile.Core.Services.Settings;
 using LearningEnglishMobile.Core.Services.Training;
 using LearningEnglishMobile.Core.Services.User;
 using LearningEnglishMobile.Core.Services.Vocabulary;
+using LearningEnglishMobile.Core.Services.WordImage;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -49,6 +50,7 @@ namespace LearningEnglishMobile.Core.ViewModels.Base
             _container.Register<IUserService, UserService>();
             _container.Register<IVocabularyService, VocabularyService>();
             _container.Register<ITrainingService, TrainingService>();
+            _container.Register<IWordImageService, WordImageService>();
 
             _container.Register<IRequestProvider, RequestProvider>();
         }

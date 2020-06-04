@@ -3,30 +3,35 @@ import { TrainingComponent } from "./training.component";
 import { RouterModule } from "@angular/router";
 import { FormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { ChooseTrainingComponent } from "./chooseTraining.component";
 import { ChooseTranslateTrainingComponent } from "./chooseTranslate/chooseTranslateTraining.component";
 import { TrainingResultComponent } from "./shared/components/trainingResult.component";
 import { SharedModule } from "../shared/shared.module";
-import { TrainingDataService } from "./shared/services/trainigData.service";
+import { TrainingService } from "./shared/services/trainig.service";
 import { CollectWordTrainingComponent } from "./collectWord/collectWordTraining.component";
 
-let routing = RouterModule.forChild([
+const
+  routing = RouterModule.forChild([
   {
-    path: 'training', component: TrainingComponent,
-    children: [
-      { path: '', component: ChooseTrainingComponent },
-      { path: 'chooseTranslate', data: { isReverse: false }, component: ChooseTranslateTrainingComponent },
-      { path: 'chooseTranslate/isReverse', data: { isReverse: true }, component: ChooseTranslateTrainingComponent },
-      { path: 'collectWord', data: { isReverse: false }, component: CollectWordTrainingComponent },
-      { path: 'collectWord/isReverse', data: { isReverse: true }, component: CollectWordTrainingComponent },
-    ]
-  }
+    path: 'training', component: TrainingComponent
+  },
+  {
+    path: 'training/chooseTranslate', data: { isReverse: false }, component: ChooseTranslateTrainingComponent
+  },
+  {
+    path: 'training/chooseTranslate/isReverse', data: { isReverse: true }, component: ChooseTranslateTrainingComponent
+  },
+  {
+    path: 'training/collectWord', data: { isReverse: false }, component: CollectWordTrainingComponent
+  },
+  {
+    path: 'training/collectWord/isReverse', data: { isReverse: true }, component: CollectWordTrainingComponent
+  },
 ])
 
 @NgModule({
   imports: [CommonModule, FormsModule, SharedModule,  routing],
-  declarations: [TrainingComponent, ChooseTrainingComponent, ChooseTranslateTrainingComponent, CollectWordTrainingComponent, TrainingResultComponent],
-  providers: [TrainingDataService]
+  declarations: [TrainingComponent,  ChooseTranslateTrainingComponent, CollectWordTrainingComponent, TrainingResultComponent],
+  providers: [TrainingService]
 })
 export class TrainingModule {
   static forRoot(): ModuleWithProviders<TrainingModule> {
@@ -34,7 +39,7 @@ export class TrainingModule {
       ngModule: TrainingModule,
       providers: [
         // Providers
-        TrainingDataService
+        TrainingService
       ]
     };
   }

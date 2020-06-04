@@ -1,4 +1,5 @@
-﻿using LearningEnglishWeb.Models;
+﻿using Data.Core;
+using LearningEnglishWeb.Models;
 using LearningEnglishWeb.Models.Training;
 using LearningEnglishWeb.Services.Dtos;
 using System;

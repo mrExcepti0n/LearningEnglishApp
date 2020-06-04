@@ -3,4 +3,5 @@ export class UserWord {
   word: string;
   transcription: string;
   translation: string;
+  trainingRatio: number;
 }

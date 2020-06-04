@@ -1,5 +1,5 @@
 import { ConfigurationService } from "../../shared/services/configuration.service";
-import { TrainingDataService } from "../shared/services/trainigData.service";
+import { TrainingService } from "../shared/services/trainig.service";
 import { ActivatedRoute } from "@angular/router";
 import { CollectWordTraining } from "./collectWordTraining.model";
 import { TrainingComponentBase } from "../shared/components/trainingComponentBase";
@@ -18,7 +18,7 @@ export class CollectWordTrainingComponent extends TrainingComponentBase<CollectW
   }
 
 
-  constructor(configurationService: ConfigurationService, trainingDataService: TrainingDataService, wordImageService: WordImageService, audioPlayer: AudioPlayer, route: ActivatedRoute) {
+  constructor(configurationService: ConfigurationService, trainingDataService: TrainingService, wordImageService: WordImageService, audioPlayer: AudioPlayer, route: ActivatedRoute) {
     super(configurationService, trainingDataService, wordImageService, audioPlayer, route);
   }  
 
@@ -26,18 +26,18 @@ export class CollectWordTrainingComponent extends TrainingComponentBase<CollectW
   public putLetter(letterIndex: number) {
 
     let letter = this.currentQuestion.letters[letterIndex];
-    this.currentQuestion.userAnswer.push(letter);
+    this.currentQuestion.userLetters.push(letter);
     this.currentQuestion.letters.splice(letterIndex, 1);
 
     if (this.currentQuestion.letters.length <= 0) {
-      this.checkAnswer(this.currentQuestion.userAnswer.reduce((pv, cv) => pv + cv, ''));
+      this.checkAnswer(this.currentQuestion.userLetters.reduce((pv, cv) => pv + cv, ''));
     }
   }
 
   public removeLetter(letterIndex: number) {
     let letter = this.currentQuestion.userAnswer[letterIndex];
     this.currentQuestion.letters.push(letter);
-    this.currentQuestion.userAnswer.splice(letterIndex, 1);
+    this.currentQuestion.userLetters.splice(letterIndex, 1);
   }
 }
 

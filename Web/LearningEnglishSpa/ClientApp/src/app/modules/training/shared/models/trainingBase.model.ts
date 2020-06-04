@@ -1,14 +1,16 @@
-import { TrainingResult } from "./trainingResult.model";
-import { TrainingDataService } from "../services/trainigData.service";
+import { TrainingSummarizing } from "./trainingSummarizing.model";
+import { TrainingService } from "../services/trainig.service";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { UserWord } from "../../../vocabulary/models/word.model";
 import { IQuestion } from "./iquestion.model";
+import { TrainingType } from "./trainingType.model";
+import { TrainingSaveResult } from "./trainingSaveResult.model";
 
 export abstract class TrainingBase {
 
   private questions: IQuestion[];
-  public constructor(private trainingDataService: TrainingDataService, private _isReverse: boolean) {
+  public constructor(private trainingDataService: TrainingService, private trainingType: TrainingType, private _isReverse: boolean) {
    
   }
 
@@ -17,7 +19,7 @@ export abstract class TrainingBase {
     this.questions = [];
     this.currentQuestionNumber = 0;
     this._rightAnsweredQuestions = 0;
-    return this.trainingDataService.getRequiringStudyWords()
+    return this.trainingDataService.getRequiringStudyWords(this.trainingType, this._isReverse)
       .pipe(
         map(words => this._isReverse ? this.reverseWords(words) : words),
         map(words => {
@@ -58,12 +60,21 @@ export abstract class TrainingBase {
     return this.questions[this.currentQuestionNumber];
   }
 
+  private results: TrainingSummarizing = null;
 
-  getResult(): TrainingResult {
-    return new TrainingResult(this.questions.length, this._rightAnsweredQuestions);
+  getResult(): TrainingSummarizing {
+    if (!this.results) {
+      const trainingResult = new TrainingSaveResult(this.trainingType, this.isReverse, this.questions);
+      this.trainingDataService.saveTrainingResult(trainingResult).subscribe(res => console.log(res));
+      this.results = new TrainingSummarizing(this.questions.length, this._rightAnsweredQuestions);
+    }
+    return this.results;
   }
- 
-  protected abstract checkAnswerInternal(answer: string): boolean;
+
+  private checkAnswerInternal(answer: string): boolean {
+    let question = this.getCurrentQuestion();
+    return question.checkAnswer(answer);
+  }
 
   public checkAnswer(answer: string): boolean {
     let isRight = this.checkAnswerInternal(answer);

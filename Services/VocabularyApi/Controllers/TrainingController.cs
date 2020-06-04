@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Data.Core;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -10,6 +11,7 @@ using VocabularyApi.Dtos.Training;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
 using VocabularyApi.Services;
+using VocabularyApi.Services.Training;
 
 namespace VocabularyApi.Controllers
 {
@@ -33,44 +35,31 @@ namespace VocabularyApi.Controllers
         [HttpGet("RequiringStudyWords")]
         public async Task<ActionResult<List<UserVocabularyWordDto>>> GetRequiringStudyWords(TrainingTypeEnum trainingType, bool isReverseTraining, int count = 10)
         {
-            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId).Include(uw => uw.TrainingStatistics).ToListAsync();
-
-            var requiringStudyWords = userWords.Where(uv => uv.NeedToRepeat(trainingType, isReverseTraining))
-                                                .OrderByDescending(uv => uv.GetKnowledgeRatio(trainingType, isReverseTraining))
-                                                .Take(count)
-                                                .ToList();
+            var requiringStudyWords = await GetUserVocabularyWords(trainingType, isReverseTraining, count);
 
             return requiringStudyWords.Select(rsw => new UserVocabularyWordDto(rsw)).ToList();
         }
 
-
-        [HttpGet("TrainingWords")]
-        public async Task<ActionResult<List<UserVocabularyWordDto>>> GetTrainingWords([FromQuery]IEnumerable<int> userSelectedWords)
+        private async Task<UserVocabularyWord[]> GetUserVocabularyWords(TrainingTypeEnum trainingType, bool isReverseTraining, int count = 10)
         {
-            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId && userSelectedWords.Contains(uv.Id)).Include(uw => uw.TrainingStatistics).ToListAsync();
-            return userWords.Select(rsw => new UserVocabularyWordDto(rsw)).ToList();
+            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId).Include(uw => uw.TrainingStatistics).ToListAsync();
+
+            return userWords.Where(uv => uv.NeedToRepeat(trainingType, isReverseTraining))
+                                                .OrderByDescending(uv => uv.GetKnowledgeRatio(trainingType, isReverseTraining))
+                                                .Take(count)
+                                                .ToArray();
+        }
+
+        [HttpGet("RequiringStudyWords/ChooseTranslate")]
+        public async Task<ActionResult<List<QuestionWithOptionsDto>>> GetChooseTranslateTrainingsWords(bool isReverseTraining)
+        {
+            var words = await GetUserVocabularyWords(TrainingTypeEnum.ChooseTranslate, isReverseTraining);
+
+            var questions = new ChooseTranslateTrainingService().GetQuestions(words);
+            return questions.ToList();
         }
 
        
-
-        [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult> SaveTrainingResult(TrainingResultDto training)
-        {
-            var userWordIdList = training.TrainingWordResults.Select(tw => tw.UserWordId).ToList();
-            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId && userWordIdList.Contains(uv.Id)).Include(uvw => uvw.TrainingStatistics).ToListAsync();
-
-            foreach (var userWord in userWords)
-            {
-                var wordResult = training.TrainingWordResults.Single(trw => trw.UserWordId == userWord.Id);
-
-                userWord.SetTrainingResult(training.TrainingType, training.IsReverseTraining, wordResult.IsRightAnswer, wordResult.UserAnswer);
-            }
-
-            await _vocabularyContext.SaveChangesAsync();
-            return CreatedAtAction(nameof(SaveTrainingResult), training);
-        }
 
 
         [HttpGet("TrainingWordsRatio")]

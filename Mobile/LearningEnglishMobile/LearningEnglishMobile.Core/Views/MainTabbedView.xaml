@@ -5,8 +5,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             xmlns:views="clr-namespace:LearningEnglishMobile.Core.Views"
             mc:Ignorable="d"
-             x:Class="LearningEnglishMobile.Core.Views.MainTabbedView">
-    
+            x:Class="LearningEnglishMobile.Core.Views.MainTabbedView">
+
+    <TabbedPage.Title  HorizontalOptions="Center">LearningEnglish</TabbedPage.Title>
+
     <views:VocabularyView x:Name="VocabularyView"/>
     <views:TrainingView x:Name="TrainingView"/>
     <views:WordSetView x:Name="WordSetView"/>

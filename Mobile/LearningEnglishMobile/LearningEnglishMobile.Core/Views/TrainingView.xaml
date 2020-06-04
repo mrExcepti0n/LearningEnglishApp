@@ -7,7 +7,7 @@
              viewModelBase:ViewModelLocator.AutoWireViewModel="true"
              mc:Ignorable="d"
              x:Class="LearningEnglishMobile.Core.Views.TrainingView"             
-             Title="Trainings">
+             Title="Тренировки">
     <ContentPage.Content>
         <Grid >
             <Grid.ColumnDefinitions>

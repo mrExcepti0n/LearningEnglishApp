@@ -41,7 +41,7 @@ namespace LearningEnglishWeb
                 .AddHttpClientServices();
 
             IdentityModelEventSource.ShowPII = true;       // Caution! Do NOT use in production: https://aka.ms/IdentityModel/PII
-
+ 
             services.AddControllers();
 
             services.AddCustomAuthentication(Configuration);
@@ -139,7 +139,7 @@ namespace LearningEnglishWeb
                     options.RequireHttpsMetadata = false;
                     options.Scope.Add("openid");
                     options.Scope.Add("profile");
-                    options.Scope.Add("learningenglish");
+                    options.Scope.Add("vocabulary");
                 });
 
             return services;

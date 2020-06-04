@@ -1,2 +1,67 @@
-<router-outlet>
-</router-outlet>
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-6 p-3">
+      <div class="trainingContainer">
+        <a class="trainingBtn trainingTopBtn">
+          <div>
+            <p>  Русский </p>
+            <p *ngIf="trainingInfoTW">
+              Количество слов: {{trainingInfoTW.availableWordsCount}}
+            </p>
+          </div>
+        </a>
+        <button class="trainingDesc" disabled > Перевод слова </button>
+        <a class="trainingBtn trainingBotBtn" data-words-count="">
+          <div>
+            <p>  Английский </p>
+            <p *ngIf="trainingInfoReverseTW">
+              Количество слов: {{trainingInfoReverseTW.availableWordsCount}}
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-6 p-3">
+      <div class="trainingContainer">
+        <a class="trainingBtn trainingTopBtn" [routerLink]="['chooseTranslate']">
+          <div>
+            <p>  Русский </p>
+            <p *ngIf="trainingInfoCT">
+              Количество слов: {{trainingInfoCT.availableWordsCount}}
+            </p>
+          </div>
+        </a>
+        <button class="trainingDesc" disabled> Выбор перевода </button>
+        <a  class="trainingBtn trainingBotBtn"  [routerLink]="['chooseTranslate/isReverse']">
+          <div>
+            <p>  Английский </p>
+            <p *ngIf="trainingInfoReverseCT">
+              Количество слов: {{trainingInfoReverseCT.availableWordsCount}}
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+    <div class="col-6 p-3">
+      <div class="trainingContainer">
+        <a class="trainingBtn trainingTopBtn" [routerLink]="['collectWord']">
+          <div>
+            <p>  Русский </p>
+            <p *ngIf="trainingInfoCW">
+              Количество слов: {{trainingInfoCW.availableWordsCount}}
+            </p>
+          </div>
+        </a>
+        <button class="trainingDesc" disabled> Собери слово </button>
+        <a class="trainingBtn trainingBotBtn" [routerLink]="['collectWord/isReverse']">
+          <div>
+            <p>  Английский </p>
+            <p *ngIf="trainingInfoReverseCW">
+              Количество слов: {{trainingInfoReverseCW.availableWordsCount}}
+            </p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>

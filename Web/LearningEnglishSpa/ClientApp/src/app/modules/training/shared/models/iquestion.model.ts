@@ -1,6 +1,10 @@
 export interface IQuestion {
+  userWordId: number;
   number: string;
   word: string;
   translation: string;
-  skippedQuestion: boolean;
+
+  checkAnswer(answer: string): boolean;
+  isRightAnswer(): boolean;
+  userAnswer: string;
 }
