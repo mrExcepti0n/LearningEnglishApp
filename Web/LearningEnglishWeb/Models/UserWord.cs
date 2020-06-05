@@ -16,7 +16,7 @@ namespace LearningEnglishWeb.Models
 
         public byte KnowledgeRatio { get; private set; }
 
-        public void SetKnotledgeRatio(byte ratio)
+        public void SetKnowledgeRatio(byte ratio)
         {
             byte minRatio = 10;
             KnowledgeRatio = ratio < minRatio ? minRatio : ratio;

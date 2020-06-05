@@ -61,7 +61,7 @@
       <Project>{04AB29E6-F3D7-4898-A6A7-7DDF9DDA782D}</Project>
       <Name>Data.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Services\SpeachApi\SpeechApi.csproj">
+    <ProjectReference Include="..\..\Services\SpeechApi\SpeechApi.csproj">
       <Project>{5ef5306f-c509-4681-926e-3a24abfdc89a}</Project>
       <Name>SpeechApi</Name>
     </ProjectReference>

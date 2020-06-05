@@ -11,11 +11,6 @@ namespace VocabularyApi.Parsers
 {
     public class XdXfParser
     {
-        public XdXfParser()
-        {
-        }
-    
-
         public async Task<Dictionary<string, List<string>>> Parse(Stream stream)
         {
             var xmlDocument = await XDocument.LoadAsync(stream, LoadOptions.PreserveWhitespace, CancellationToken.None);
@@ -43,10 +38,12 @@ namespace VocabularyApi.Parsers
                 russianWord = match.Value.ToLower();
 
                 if (!result.ContainsKey(englishWord)) {
-                    result.Add(englishWord, new List<string> {});
+                    result.Add(englishWord, new List<string> { russianWord });
                 }
-
-                result[englishWord].Add(russianWord);        
+                else
+                {
+                    result[englishWord].Add(russianWord);
+                }
             }
 
             return result;

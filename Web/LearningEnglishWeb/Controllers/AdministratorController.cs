@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using LearningEnglishWeb.Services;
+﻿using System.IO;
 using LearningEnglishWeb.Services.Abstractions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +7,7 @@ namespace LearningEnglishWeb.Controllers
 {
     public class AdministratorController : Controller
     {
-        private IVocabularyService _vocabularyService;
+        private readonly IVocabularyService _vocabularyService;
         public AdministratorController(IVocabularyService vocabularyService)
         {
             _vocabularyService = vocabularyService;

@@ -15,8 +15,8 @@ namespace VocabularyApi.Controllers
     [ApiController]
     public class WordSetController : ControllerBase
     {
-        private VocabularyContext _vocabularyContext;
-        private IIdentityService _identityService;
+        private readonly VocabularyContext _vocabularyContext;
+        private readonly IIdentityService _identityService;
 
         public WordSetController(VocabularyContext vocabularyContext, IIdentityService identityService)
         {
@@ -24,7 +24,7 @@ namespace VocabularyApi.Controllers
             _identityService = identityService;
         }
 
-        private Guid userId => _identityService.GetUserIdentity();
+        private Guid UserId => _identityService.GetUserIdentity();
 
         [HttpGet]
         public ActionResult<List<WordSetShortDto>> Get()
@@ -44,11 +44,11 @@ namespace VocabularyApi.Controllers
             var userVocabulary = _vocabularyContext.Set<UserVocabulary>().SingleOrDefault(uv => uv.WordSetId == userWordSet.WordSetId);
             if (userVocabulary == null)
             {              
-                userVocabulary = new UserVocabulary { UserId = userId, WordSetId = userWordSet.WordSetId, Title = wordSet.Title };
+                userVocabulary = new UserVocabulary(wordSet.Title, userWordSet.WordSetId, UserId);
                 _vocabularyContext.Add(userVocabulary);
             }
 
-            List<UserVocabularyWord> userWords = _vocabularyContext.UserVocabularyWords.Where(uvw => uvw.UserVocabulary.UserId == userId).ToList();
+            List<UserVocabularyWord> userWords = _vocabularyContext.UserVocabularyWords.Where(uvw => uvw.UserVocabulary.UserId == UserId).ToList();
             var wordSets = selectedWords.Where(sw => !userWords.Any(uw => uw.Word == uw.Translation && uw.Translation == sw.Translation)).ToList();
 
             foreach (var ws in wordSets) {

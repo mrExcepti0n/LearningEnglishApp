@@ -30,7 +30,7 @@ namespace LearningEnglishMobile.Core.ViewModels
             await NavigationService.NavigateToAsync<CollectWordTrainingViewModel>();
         }
 
-        private async Task GetTranslateWordTrainingAsync()
+        private Task GetTranslateWordTrainingAsync()
         {
             throw new NotImplementedException();
         }
@@ -40,7 +40,7 @@ namespace LearningEnglishMobile.Core.ViewModels
             await NavigationService.NavigateToAsync<ChooseTranslateTrainingViewModel>();
         }
 
-        private async Task GetAuditionTrainigCommandAsync()
+        private Task GetAuditionTrainigCommandAsync()
         {
             throw new NotImplementedException();
         }

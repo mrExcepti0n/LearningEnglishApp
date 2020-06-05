@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using VocabularyApi.Dtos;
 using VocabularyApi.Dtos.Training;
+using VocabularyApi.Infrastructure;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
 using VocabularyApi.Services;
@@ -19,8 +20,8 @@ namespace VocabularyApi.Controllers
     [ApiController]
     public class TrainingController : ControllerBase
     {
-        private VocabularyContext _vocabularyContext;
-        private IIdentityService _identityService;
+        private readonly VocabularyContext _vocabularyContext;
+        private readonly IIdentityService _identityService;
 
         public TrainingController(VocabularyContext vocabularyContext, IIdentityService identityService)
         {
@@ -28,81 +29,55 @@ namespace VocabularyApi.Controllers
             _identityService = identityService;
         }
 
+        private Guid UserId => _identityService.GetUserIdentity();
 
-        private Guid userId => _identityService.GetUserIdentity();
-
-
-        [HttpGet("RequiringStudyWords")]
-        public async Task<ActionResult<List<UserVocabularyWordDto>>> GetRequiringStudyWords(TrainingTypeEnum trainingType, bool isReverseTraining, int count = 10)
+        [HttpGet("TrainingQuestion")]
+        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetTrainingQuestions(TrainingTypeEnum trainingType, bool isReverseTraining, int count = 10)
         {
-            var requiringStudyWords = await GetUserVocabularyWords(trainingType, isReverseTraining, count);
-
-            return requiringStudyWords.Select(rsw => new UserVocabularyWordDto(rsw)).ToList();
+            var trainingService = TrainingFactory.GetTrainingService(_vocabularyContext, trainingType);
+            var words = await trainingService.GetUserWordAsync(UserId, isReverseTraining);
+            var result = trainingService.GetQuestions(words);
+            return result.ToList();
         }
-
-        private async Task<UserVocabularyWord[]> GetUserVocabularyWords(TrainingTypeEnum trainingType, bool isReverseTraining, int count = 10)
-        {
-            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId).Include(uw => uw.TrainingStatistics).ToListAsync();
-
-            return userWords.Where(uv => uv.NeedToRepeat(trainingType, isReverseTraining))
-                                                .OrderByDescending(uv => uv.GetKnowledgeRatio(trainingType, isReverseTraining))
-                                                .Take(count)
-                                                .ToArray();
-        }
-
-        [HttpGet("RequiringStudyWords/ChooseTranslate")]
-        public async Task<ActionResult<List<QuestionWithOptionsDto>>> GetChooseTranslateTrainingsWords(bool isReverseTraining)
-        {
-            var words = await GetUserVocabularyWords(TrainingTypeEnum.ChooseTranslate, isReverseTraining);
-
-            var questions = new ChooseTranslateTrainingService().GetQuestions(words);
-            return questions.ToList();
-        }
-
-       
-
 
         [HttpGet("TrainingWordsRatio")]
         public async Task<ActionResult<List<TrainingWordRatioDto>>> GetTrainingWordsRatio([FromQuery] List<int> userWordIds)
         {
-            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId && userWordIds.Contains(uv.Id)).Include(uw => uw.TrainingStatistics).ToListAsync();
+            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == UserId
+                                                                                           && userWordIds.Contains(uv.Id)).Include(uw => uw.TrainingStatistics)
+                .ToListAsync();
 
             return userWords.Select(uw => new TrainingWordRatioDto { UserWordId = uw.Id, TrainingRatio = (byte)uw.GetKnowledgeRatio() }).ToList();
         }
 
-        [HttpGet("AvailibleTrainingWordsCount")]
-        public async Task<ActionResult<List<TrainingAvailableWordsDto>>> GetAvailibleTrainingWordsCount()
+        [HttpGet("AvailableTrainingWordsCount")]
+        public async Task<ActionResult<List<TrainingAvailableWordsDto>>> GetAvailableTrainingWordsCount()
         {
-            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uvw => uvw.UserVocabulary.UserId == userId).Include(uw => uw.TrainingStatistics).ToListAsync();
+            var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uvw => uvw.UserVocabulary.UserId == UserId).Include(uw => uw.TrainingStatistics).ToListAsync();
 
-            var trainingTypes = Enum.GetValues(typeof(TrainingTypeEnum)).Cast<TrainingTypeEnum>();
-
-            var result = new List<TrainingAvailableWordsDto>();
-            foreach (var trainingType in trainingTypes)
-            {
-                var trainingWordsCountDto = GetAvailibleTrainingWordsDto(userWords, trainingType, false);
-                result.Add(trainingWordsCountDto);
-
-                var inverseTrainingWordsCountDto = GetAvailibleTrainingWordsDto(userWords, trainingType, true);
-                result.Add(inverseTrainingWordsCountDto);
-            }
-
-            return result;
+            return GetAvailableTrainingWordsCount(userWords).ToList();
         }
 
-        private TrainingAvailableWordsDto GetAvailibleTrainingWordsDto(IEnumerable<UserVocabularyWord> userWords, TrainingTypeEnum trainingType, bool isReverseTraining)
+
+        private IEnumerable<TrainingAvailableWordsDto> GetAvailableTrainingWordsCount(List<UserVocabularyWord> userWords)
+        {
+            var trainingTypes = Enum.GetValues(typeof(TrainingTypeEnum)).Cast<TrainingTypeEnum>();
+            foreach (var trainingType in trainingTypes)
+            {
+                yield return GetAvailableTrainingWordsDto(userWords, trainingType, false);
+                yield return GetAvailableTrainingWordsDto(userWords, trainingType, true);
+            }
+        }
+
+
+        private TrainingAvailableWordsDto GetAvailableTrainingWordsDto(IEnumerable<UserVocabularyWord> userWords, TrainingTypeEnum trainingType, bool isReverseTraining)
         {
             return new TrainingAvailableWordsDto
             {
                 TrainingType = trainingType,
                 IsReverseTraining = isReverseTraining,
-                AvailableWordsCount = GetAvailibleTrainingWordsCount(userWords, trainingType, isReverseTraining)
+                AvailableWordsCount = userWords.Count(uw => uw.NeedToRepeat(trainingType, isReverseTraining))
             };
-        }
-
-        private int GetAvailibleTrainingWordsCount(IEnumerable<UserVocabularyWord> userWords, TrainingTypeEnum trainingType, bool isReverseTraining)
-        {
-            return userWords.Count(uw => uw.NeedToRepeat(trainingType, isReverseTraining));
         }
     }
 }

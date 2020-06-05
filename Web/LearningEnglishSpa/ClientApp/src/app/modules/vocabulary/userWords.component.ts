@@ -76,8 +76,9 @@ export class UserWordsComponent implements OnInit {
   }
 
   private setTrainingRatio(word: UserWord, ratio: number) {
-    if (ratio < 8) {
-      word.trainingRatio = 8;
+    const minRatio = 8;
+    if (ratio < minRatio) {
+      word.trainingRatio = minRatio;
     } else {
       word.trainingRatio = ratio;
     }

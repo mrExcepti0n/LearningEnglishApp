@@ -14,7 +14,7 @@ namespace LearningEnglishWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private ISpeechService _speechService;
+        private readonly ISpeechService _speechService;
         public HomeController(ISpeechService speechService)
         {
             _speechService = speechService;
@@ -25,11 +25,7 @@ namespace LearningEnglishWeb.Controllers
             return View();
         }      
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+       
 
 
         [HttpPost]
@@ -40,11 +36,7 @@ namespace LearningEnglishWeb.Controllers
                 await formFile.CopyToAsync(fileStream);
             }
 
-            return "Ok";
-
-
             var res = await _speechService.GetText(formFile.OpenReadStream());
-
             return res;
         }
     }

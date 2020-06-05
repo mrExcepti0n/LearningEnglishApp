@@ -1,10 +1,8 @@
 ﻿using Data.Core;
-using LearningEnglishWeb.Models.Training;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace LearningEnglishWeb.Services.Helpers
 {
@@ -106,43 +104,6 @@ namespace LearningEnglishWeb.Services.Helpers
             }
         }
 
-        public static class Training
-        {
-
-            public static string GetRequiringStudyWords(string baseUrl, TrainingTypeEnum trainingType, bool isReverseTraining)
-            {
-                return $"{baseUrl}/RequiringStudyWords?trainingType={trainingType}&isReverseTraining={isReverseTraining}";
-            }
-
-            internal static string GetAvailibleTrainingWordsCount(string baseUrl)
-            {
-                return $"{baseUrl}/AvailibleTrainingWordsCount";
-            }
-
-            internal static string GetTrainingWords(string baseUrl, IEnumerable<int> userSelectedWords)
-            {
-                var parameters = userSelectedWords.Select(uw => $"userSelectedWords={uw}");
-                return $"{baseUrl}/TrainingWords?" + String.Join('&',parameters);
-            }
-
-            internal static string GetTrainingWordsRatio(string baseUrl, ICollection<int> userWordIs)
-            {
-                var urlBulder = new StringBuilder($"{baseUrl}/TrainingWordsRatio");
-
-                if (userWordIs.Any()) {
-                    var parameters = string.Join('&', userWordIs.Select(uw => $"userWordIds={uw}"));
-                    urlBulder.Append('?');
-                    urlBulder.Append(parameters);
-                }
-
-                return urlBulder.ToString();
-            }
-
-
-            internal static string SaveTrainingResult(string baseUrl)
-            {
-                return baseUrl;
-            }
-        }
+    
     }
 }

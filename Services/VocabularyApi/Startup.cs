@@ -37,8 +37,6 @@ namespace VocabularyApi
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
 
-
-            //для работы angular
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy",
@@ -81,9 +79,6 @@ namespace VocabularyApi
             app.UseAuthentication();
             app.UseAuthorization();
         }
-
-
-    
     }
 
 

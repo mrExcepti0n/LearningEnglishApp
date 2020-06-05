@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-using TinyIoC;
+using LearningEnglishMobile.Core.TinyIoC;
 using Xamarin.Forms;
 
 namespace LearningEnglishMobile.Core.ViewModels.Base

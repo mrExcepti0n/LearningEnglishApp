@@ -1,0 +1,26 @@
+﻿@model LearningEnglishWeb.Areas.Training.ViewModels.TranslateWord.TranslateWordAnswerViewModel
+
+
+
+<div class="userAnswerArea">
+
+
+    @if (@Model.UserTranslation != @Model.RightTranslation)
+    {
+        <h5 class="p-2">
+             <span  class="text-danger"> <s>@Model.UserTranslation </s></span>
+            
+             <span class="@(@Model.UserTranslation == null ? "text-danger" : "text-success")">@Model.RightTranslation</span> 
+        </h5>
+    }
+    else
+    {
+        <h5 class="text-success"> @Model.UserTranslation </h5>
+    }
+</div>
+
+<div class="actionArea">
+    <button data-request-url="@Url.Action("GetNextQuestion")" class="btn btn-primary w-50 nextAnswerBtn"> Следующий вопрос</button>
+</div>
+
+

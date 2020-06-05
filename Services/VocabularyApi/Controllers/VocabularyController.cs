@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net.Http;
-using System.Security.Claims;
 using System.Threading.Tasks;
-using AutoMapper;
 using LinqKit;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using VocabularyApi.Dtos;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
@@ -20,8 +16,8 @@ namespace VocabularyApi.Controllers
     [ApiController]
     public class VocabularyController : ControllerBase
     {
-        private VocabularyContext _vocabularyContext;
-        private IIdentityService _identityService;
+        private readonly VocabularyContext _vocabularyContext;
+        private readonly IIdentityService _identityService;
 
 
 
@@ -35,17 +31,19 @@ namespace VocabularyApi.Controllers
         private Guid userId => _identityService.GetUserIdentity();
 
 
+
         [HttpGet]
-        public ActionResult<List<UserVocabularyDto>> Get()
+        public async Task<ActionResult<List<UserVocabularyDto>>> Get()
         {
-            var userVocabularies = _vocabularyContext.Set<UserVocabulary>().Where(uv => uv.UserId == userId).Select(uv => new UserVocabularyDto { WordsCount = uv.Words.Count,  Title = uv.Title, Id = uv.Id });
-            return userVocabularies.ToList();
+            var userVocabularies = _vocabularyContext.UserVocabularies.Where(uv => uv.UserId == userId)
+                                                    .Select(uv => new UserVocabularyDto { WordsCount = uv.Words.Count,  Title = uv.Title, Id = uv.Id });
+            return await userVocabularies.ToListAsync();
         }
 
         [HttpGet("{id}")]
         public ActionResult<UserVocabularyDto> Get(int id)
         {
-            var userVocabulary = _vocabularyContext.Set<UserVocabulary>()
+            var userVocabulary = _vocabularyContext.UserVocabularies
                 .Select(uv => new { 
                     Id = uv.Id, 
                     WordsCount = uv.Words.Count,
@@ -53,8 +51,12 @@ namespace VocabularyApi.Controllers
                     UserId = uv.UserId
                 }).SingleOrDefault(uv => uv.UserId == userId && uv.Id == id);
 
+            if (userVocabulary == null)
+            {
+                return NotFound();
+            }
 
-            return new UserVocabularyDto { WordsCount = userVocabulary.WordsCount, Title = userVocabulary.Title, Id = userVocabulary.Id };
+            return new UserVocabularyDto(userVocabulary.Id, userVocabulary.Title, userVocabulary.WordsCount);
         }
 
         [HttpGet("Words")]
@@ -109,40 +111,26 @@ namespace VocabularyApi.Controllers
             if (userVocabularyId != null)
             {
                 return userVocabularyId.Value;
-              
-
             }
-            var userVocabulary = new UserVocabulary { IsDefault = true, Title = "Пользовательский набор слов", UserId = userId };
 
+            var userVocabulary = UserVocabulary.GetDefaultUserVocabulary(userId);
             _vocabularyContext.Add(userVocabulary);
             _vocabularyContext.SaveChanges();
 
             return userVocabulary.Id;
         }
 
-
-        [HttpPost("Load")]
-        public async Task<ActionResult> LoadDictionary(IFormFile fromFile)
-        {
-            var loader = new VocabularyLoader(_vocabularyContext);
-            await loader.LoadAsync(fromFile.OpenReadStream());
-            return Ok();
-        }
-
-
-
         [HttpDelete("Words/{wordId}")]
         public ActionResult Delete(int wordId)
         {
-            var predicateBuilder = PredicateBuilder.New<UserVocabularyWord>(uvw => uvw.UserVocabulary.UserId == userId && uvw.Id == wordId);
-
-            var word = _vocabularyContext.Set<UserVocabularyWord>().SingleOrDefault(predicateBuilder);
+            var word = _vocabularyContext.UserVocabularyWords.SingleOrDefault(uvw => uvw.UserVocabulary.UserId == userId && uvw.Id == wordId);
 
             if (word != null)
             {
                 _vocabularyContext.Remove(word);
                 _vocabularyContext.SaveChanges();
             }
+
             return Ok();
         }
     }

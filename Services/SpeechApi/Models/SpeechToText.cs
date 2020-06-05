@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Speech.Recognition;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace SpeechApi.Models
 {
     public class SpeechToText
     {
 
-        private Grammar _grammar;
+        private readonly Grammar _grammar;
          
         public SpeechToText()
         {
-            _grammar = new DictationGrammar();
-            _grammar.Name = "Dictation Grammar";
+            _grammar = new DictationGrammar {Name = "Dictation Grammar"};
         }
 
         public string GetText(Stream stream)
@@ -34,7 +30,7 @@ namespace SpeechApi.Models
             using (SpeechRecognitionEngine recognizer = new SpeechRecognitionEngine(GetRecognizerInfo()))
             {
                 recognizer.LoadGrammar(_grammar);
-                SetRegcognizerInput(recognizer, stream);
+                SetRecognizerInput(recognizer, stream);
               
                 var result = recognizer.Recognize();
 
@@ -46,7 +42,7 @@ namespace SpeechApi.Models
             }
         }
 
-        protected void SetRegcognizerInput(SpeechRecognitionEngine recognizer, Stream stream)
+        protected void SetRecognizerInput(SpeechRecognitionEngine recognizer, Stream stream)
         {
             //var fmt = new SpeechAudioFormatInfo(8000, AudioBitsPerSample.Sixteen, AudioChannel.Mono);
             recognizer.SetInputToWaveStream(stream);

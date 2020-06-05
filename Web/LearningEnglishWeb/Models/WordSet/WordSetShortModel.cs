@@ -1,7 +1,7 @@
-﻿using LearningEnglishWeb.Services.Dtos;
-using System;
+﻿using System;
+using LearningEnglishWeb.Services.Dtos;
 
-namespace LearningEnglishWeb.Models
+namespace LearningEnglishWeb.Models.WordSet
 {
     public class WordSetShortModel
     {

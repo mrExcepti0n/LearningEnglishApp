@@ -14,16 +14,16 @@ namespace LearningEnglishWeb.Configuration
     public class HttpClientAuthorizationDelegatingHandler
         : DelegatingHandler
     {
-        private readonly IHttpContextAccessor _httpContextAccesor;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccesor)
+        public HttpClientAuthorizationDelegatingHandler(IHttpContextAccessor httpContextAccessor)
         {
-            _httpContextAccesor = httpContextAccesor;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var authorizationHeader = _httpContextAccesor.HttpContext
+            var authorizationHeader = _httpContextAccessor.HttpContext
                 .Request.Headers["Authorization"];
 
             if (!string.IsNullOrEmpty(authorizationHeader))
@@ -44,7 +44,7 @@ namespace LearningEnglishWeb.Configuration
         async Task<string> GetToken()
         {
             const string ACCESS_TOKEN = "access_token";
-            return await _httpContextAccesor.HttpContext.GetTokenAsync(ACCESS_TOKEN);
+            return await _httpContextAccessor.HttpContext.GetTokenAsync(ACCESS_TOKEN);
         }
     }
 }

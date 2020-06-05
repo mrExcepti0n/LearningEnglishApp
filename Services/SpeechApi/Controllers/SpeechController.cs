@@ -16,8 +16,8 @@ namespace SpeechApi.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SpeechController : ApiController
     {
-        private TextToSpeech _textToSpeech;
-        private SpeechToText _speechToText;
+        private readonly TextToSpeech _textToSpeech;
+        private readonly SpeechToText _speechToText;
 
         public SpeechController(TextToSpeech textToSpeech, SpeechToText speechToText)
         {
@@ -25,26 +25,19 @@ namespace SpeechApi.Controllers
             _speechToText = speechToText;
         }
 
-        public SpeechController()
-        {
-            _textToSpeech = new TextToSpeech();
-            _speechToText = new SpeechToText();
-        }
-
         [Route("{word}")]
         public async Task<HttpResponseMessage> GetAudio(string word, LanguageEnum language = LanguageEnum.English)
         {
             var stream = await _textToSpeech.GetAudioAsync(word, language);
 
-            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StreamContent(stream);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment");
-            response.Content.Headers.ContentDisposition.FileName = "sound.wav";
+            HttpResponseMessage response = new HttpResponseMessage(HttpStatusCode.OK)
+            {
+                Content = new StreamContent(stream)
+            };
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") {FileName = "sound.wav"};
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("audio/wav");
             return response;
-
         }
-
 
         [HttpPost]
         public async Task<string> GetText()
@@ -55,7 +48,6 @@ namespace SpeechApi.Controllers
             var provider = new MultipartMemoryStreamProvider();
             await Request.Content.ReadAsMultipartAsync(provider);
             var file = provider.Contents.First();
-
 
             using (var stream = await file.ReadAsStreamAsync())
             {
@@ -79,7 +71,6 @@ namespace SpeechApi.Controllers
         [HttpGet]
         public async Task<IHttpActionResult> SaveAudio(string word, LanguageEnum language = LanguageEnum.English, string path = @"D:\\sounds\sound.wav")
         {
-
             await _textToSpeech.SaveAudioAsync(word, language, path);            
             return Ok();
         }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
+using VocabularyApi.Services;
 
 namespace VocabularyApi.Controllers
 {
@@ -18,22 +19,24 @@ namespace VocabularyApi.Controllers
     [ApiController]
     public class WordImageController : ControllerBase
     {
-        VocabularyContext _context;
+        readonly VocabularyContext _context;
+        private ImageWebLoaderService _imageWebLoaderService;
 
-        public WordImageController(VocabularyContext context)
+        public WordImageController(VocabularyContext context, ImageWebLoaderService imageLoaderService)
         {
             _context = context;
+            _imageWebLoaderService = imageLoaderService;
         }
 
 
         [HttpGet("{word}")]
-        public async Task<FileContentResult>  GetWordImage(string word)
+        public async Task<ActionResult>  GetWordImage(string word)
         {
             var vocabularyWord = _context.VocabularyWords.Include(vw => vw.Image).FirstOrDefault(w => w.Word == word);
 
             if (vocabularyWord == null)
             {
-                return null;
+                return NoContent();
             }
             if (vocabularyWord.Image == null)
             {
@@ -45,13 +48,13 @@ namespace VocabularyApi.Controllers
 
 
         [HttpGet("{word}/thumbnail")]
-        public async Task<FileContentResult> GetWordThumbnaile(string word)
+        public async Task<ActionResult> GetWordThumbnail(string word)
         {
             var vocabularyWord = _context.VocabularyWords.Include(vw => vw.Thumbnail).FirstOrDefault(w => w.Word == word);
 
             if (vocabularyWord == null)
             {
-                return null;
+                return NoContent();
             }
             if (vocabularyWord.Thumbnail == null)
             {
@@ -64,51 +67,11 @@ namespace VocabularyApi.Controllers
 
         private async Task FillWordImage(VocabularyWord word)
         {
-            var image = GetImage(word.Word);
-
-            word.Image = new WordImage { Image = GetThubnail(image, 220, 220), IsThumbnail = false};
-            word.Thumbnail = new WordImage { Image = GetThubnail(image, 60, 60), IsThumbnail = true };
+            var image = _imageWebLoaderService.GetImage(word.Word);
+            word.SaveImages(_imageWebLoaderService.GetImage(image), _imageWebLoaderService.GetThumbnail(image));
 
             await _context.SaveChangesAsync();
         }
 
-
-
-        private Image GetImage(string word)
-        {
-            var config = Configuration.Default.WithDefaultLoader();
-            var context = BrowsingContext.New(config);
-            var document = context.OpenAsync("https://yandex.ru/images/search?text=" + word).Result;
-
-            var element = document.QuerySelector("a.serp-item__link img");
-            var href = element.GetAttribute("src");
-            using (WebClient client = new WebClient())
-            {
-                Stream stream = client.OpenRead("http:" + href);
-                return Image.FromStream(stream);
-            }
-        }
-
-
-        private byte[] GetThubnail(Image image, int width, int height)
-        {
-
-            if (image.Height > image.Width)
-            {
-                width = width * image.Width / image.Height;
-            }
-            else
-            {
-                height = height * image.Height / image.Width;
-            }
-
-            var thubnail = image.GetThumbnailImage(width, height, () => false, IntPtr.Zero);
-
-            using (var memoryStream = new MemoryStream())
-            {
-                thubnail.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
-                return memoryStream.ToArray();
-            }
-        }
     }
 }

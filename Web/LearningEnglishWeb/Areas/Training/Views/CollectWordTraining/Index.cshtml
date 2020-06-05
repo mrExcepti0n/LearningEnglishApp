@@ -1,0 +1,65 @@
+﻿@using LearningEnglishWeb.Areas.Training.ViewModels.Abstractions
+@using LearningEnglishWeb.Areas.Training.ViewModels.CollectWord
+@model TrainingViewModel<CollectWordQuestionViewModel>
+
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+<div class="trainingArea cw" data-isreverse="@Model?.IsReverse">
+    @if (Model != null)
+    {
+        <input id="trainingId" type="hidden" value="@Model.TrainingId" />
+        @await Html.PartialAsync("CollectWordTrainingQuestion", @Model.CurrentQuestion)
+    }
+    else
+    {
+        @await Html.PartialAsync("../Training/TrainingComplete")
+    }
+</div>
+
+
+@section Scripts{
+
+    <script type="module">
+        import { TrainingBase } from "../js/training.js";
+
+        (function () {
+
+            let isReverse = document.querySelector('.trainingArea').dataset['isreverse'] == "True";
+            let trainingId = document.querySelector('#trainingId').value;
+            let training = new TrainingBase(trainingId, isReverse);
+            let userAnswerAreaClassName = '.userAnswerArea.cw';
+
+
+            $(document).on("click", '.cwOptionsArea button.letter', function (evt) {
+                this.classList.add('btn-warning');
+                this.classList.remove('btn-info');
+                document.querySelector(userAnswerAreaClassName).appendChild(this);
+                if (allLettersIsCollect()) {
+                    training.checkAnswer('@Url.Action("CheckAnswer")', getAnswer());
+                }
+            });
+
+            $(document).on("click", userAnswerAreaClassName +' button.letter', function (evt) {
+                this.classList.add('btn-info');
+                this.classList.remove('btn-warning');
+                document.querySelector(".cwOptionsArea").appendChild(this);
+            });
+
+            function getAnswer() {
+                let answer = '';
+                document.querySelectorAll(userAnswerAreaClassName +' button.letter').forEach(el => {
+                    answer += el.innerText;
+                });
+                return answer;
+            }
+            function allLettersIsCollect() {
+                return document.querySelector(".cwOptionsArea").children.length === 0;
+            }
+        })();
+
+    </script>
+}

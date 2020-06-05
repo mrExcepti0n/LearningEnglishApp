@@ -28,10 +28,7 @@ namespace SpeechApi
             builder.RegisterWebApiFilterProvider(config);
 
             builder.RegisterWebApiModelBinderProvider();
-            builder.RegistryServices();         
-
-         
-
+            builder.RegistryServices();
 
             var container = builder.Build();
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
@@ -39,7 +36,7 @@ namespace SpeechApi
     }
 
 
-    public static class SearchApiExtenstions
+    public static class SearchApiExtensions
     {
         public static ContainerBuilder RegistryServices(this ContainerBuilder container)
         {

@@ -1,0 +1,12 @@
+﻿@model LearningEnglishWeb.Areas.Training.ViewModels.ChooseTranslate.ChooseTranslateAnswerViewModel
+
+@foreach (var trans in Model.Translations)
+{
+    <button class="text-left btn btn-block m-2 @(@trans.IsRight ? (Model.Translations.Any(tr => tr.UserSelect) ?
+                "btn-success" : "btn-danger") : trans.UserSelect ? "btn-danger" : "btn-info")  " disabled>
+        @trans.Option
+    </button>
+}
+<button class="nextAnswerBtn btn btn-block m-2 btn-primary text-left" data-request-url="@Url.Action("GetNextQuestion")">Следующее слово</button>
+
+

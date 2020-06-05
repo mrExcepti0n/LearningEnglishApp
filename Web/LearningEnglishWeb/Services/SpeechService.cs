@@ -25,21 +25,18 @@ namespace LearningEnglishWeb.Services
 
         public async Task<string> GetAudio(string word, LanguageEnum language)
         {
-            var result =  await _httpClient.GetAsync($"{_baseUrl}/{word}?language={(int)language}");
+            var result = await _httpClient.GetAsync($"{_baseUrl}/{word}?language={(int)language}");
             byte[] file;
-            using (Stream stream = await result.Content.ReadAsStreamAsync())
+
+            await using (Stream stream = await result.Content.ReadAsStreamAsync())
+            await using (MemoryStream ms = new MemoryStream())
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    stream.CopyTo(ms);
-                    file =  ms.ToArray();
-                }
+                await stream.CopyToAsync(ms);
+                file = ms.ToArray();
             }
-        
 
             var fileStr = Convert.ToBase64String(file);
-
-            return string.Format("data:audio/wav;base64,{0}", fileStr);
+            return $"data:audio/wav;base64,{fileStr}";
         }
 
 
@@ -49,7 +46,7 @@ namespace LearningEnglishWeb.Services
             content.Add(new StreamContent(stream), "file", "sound.wav");
             var result = await _httpClient.PostAsync(_baseUrl, content);
             result.EnsureSuccessStatusCode();
-            return  JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
+            return JsonConvert.DeserializeObject<string>(await result.Content.ReadAsStringAsync());
         }
     }
 }

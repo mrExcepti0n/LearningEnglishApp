@@ -1,18 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
-using AngleSharp;
 using Data.Core;
+using LearningEnglishWeb.Areas.Training.Services;
 using LearningEnglishWeb.Models;
-using LearningEnglishWeb.Services;
 using LearningEnglishWeb.Services.Abstractions;
-using LearningEnglishWeb.ViewModels;
 using LearningEnglishWeb.ViewModels.Vocabulary;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LearningEnglishWeb.Controllers
@@ -28,11 +21,12 @@ namespace LearningEnglishWeb.Controllers
             _speechService = speechService;
             _wordImageService = wordImageService;
         }
-        private IVocabularyService _vocabularyService { get; set; } 
-        private ISpeechService _speechService { get; set; }
-        private IWordImageService _wordImageService { get; set; }
 
-        private ITrainingService _trainingService { get; set; }
+        private readonly IVocabularyService _vocabularyService;
+        private readonly ISpeechService _speechService;
+        private readonly IWordImageService _wordImageService;
+
+        private readonly ITrainingService _trainingService;
 
 
         private async Task FillImages(List<UserWord> words)
@@ -50,10 +44,11 @@ namespace LearningEnglishWeb.Controllers
 
             foreach (var word in words)
             {
-                word.SetKnotledgeRatio(trainingWordsRatio[word.Id]);
+                word.SetKnowledgeRatio(trainingWordsRatio[word.Id]);
             }
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index(int? id)
         {
             var words = await _vocabularyService.GetWords(vocabularyId: id);
@@ -72,18 +67,7 @@ namespace LearningEnglishWeb.Controllers
             }
         }
 
-        
-
-        //public async Task<IActionResult> Details(int id)
-        //{
-        //    var words = await _vocabularyService.GetWords(vocabularyId : id);
-        //    var userVocabulary = await _vocabularyService.GetVocabulary(id);
-        //    await FillImages(words);
-        //    await FillTrainingRatio(words);
-        //    return View(new UserVocabularyViewModel { UserVocabulary = userVocabulary, UserWords = words });
-        //}
-
-
+        [HttpGet]
         public async Task<IActionResult> WordList(string mask, int? vocabularyId)
         {
             var words = await _vocabularyService.GetWords(mask, vocabularyId);
@@ -91,7 +75,7 @@ namespace LearningEnglishWeb.Controllers
             await FillTrainingRatio(words);
             return PartialView(words);
         }
-
+        [HttpGet]
         public async Task<IActionResult> TranslationList(string word)
         {
             var words = await _vocabularyService.GetTranslations(word);

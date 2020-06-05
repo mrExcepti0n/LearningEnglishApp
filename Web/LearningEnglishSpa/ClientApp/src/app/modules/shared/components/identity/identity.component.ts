@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit} from '@angular/core';
 import { Subscription } from 'rxjs';
 import { SecurityService } from '../../services/security.service';
 
@@ -37,7 +37,6 @@ export class IdentityComponent implements OnInit {
 
   logoutClicked(event: any) {
     event.preventDefault();
-    console.log('Logout clicked');
     this.logout();
   }
 

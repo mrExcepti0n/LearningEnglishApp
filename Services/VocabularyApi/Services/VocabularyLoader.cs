@@ -13,58 +13,47 @@ namespace VocabularyApi.Services
 {
     public class VocabularyLoader
     {
-        private XdXfParser _parser = new XdXfParser();
+        private readonly XdXfParser _parser;
         private LanguageEnum _fromLanguage = LanguageEnum.English;
         private LanguageEnum _toLanguage = LanguageEnum.Russian;
 
-        private VocabularyContext _context;
+        private readonly VocabularyContext _context;
 
-        public VocabularyLoader(VocabularyContext context)
+        public VocabularyLoader(VocabularyContext context, XdXfParser parser)
         {
             _context = context;
+            _parser = parser;
         }
 
 
         public async Task LoadAsync(Stream file)
         {
             var parsedWords = await _parser.Parse(file);
-            var allwords =  await _context.VocabularyWords.Where(vw => vw.Language == _fromLanguage)
-                                                   .Include(vw => vw.WordTranslations)
-                                                   .ToDictionaryAsync(vw => vw.Word);
-
-            List<VocabularyWord> newWords = new List<VocabularyWord>();
+            var allWords = await GetAllWords();
 
             foreach(var parsedWord in parsedWords)
             {
-                allwords.TryGetValue(parsedWord.Key, out var word);
+                allWords.TryGetValue(parsedWord.Key, out var word);
 
                 if (word == null)
                 {
-                    var newWord = new VocabularyWord
-                    {
-                        Language = _fromLanguage,
-                        Word = parsedWord.Key,
-                        WordTranslations = parsedWord.Value.Select(v => new WordTranslation { Language = _toLanguage, Translation = v }).ToList()
-                    };
-
-                    newWords.Add(newWord);
+                    var newWord = new VocabularyWord(parsedWord.Key, _fromLanguage, _toLanguage, parsedWord.Value);
+                    await _context.VocabularyWords.AddAsync(newWord);
                 } 
                 else
                 {
-                   var newTrasnlations = parsedWord.Value.Where(t => !word.WordTranslations.Any(wt => wt.Translation == t)).ToList();
-                   foreach (var newTranslation in newTrasnlations)
-                   {
-                        word.WordTranslations.Add(new WordTranslation { Language = _toLanguage, Translation = newTranslation });
-                   }
+                    word.UpdateTranslations(_toLanguage, parsedWord.Value);
                 }
             }
 
-            if (newWords.Any())
-            {
-                await _context.VocabularyWords.AddRangeAsync(newWords);
-            }
-
             await _context.SaveChangesAsync();
+        }
+
+        private async Task<Dictionary<string, VocabularyWord>> GetAllWords()
+        {
+            return await _context.VocabularyWords.Where(vw => vw.Language == _fromLanguage)
+                .Include(vw => vw.WordTranslations)
+                .ToDictionaryAsync(vw => vw.Word);
         }
     }
 }

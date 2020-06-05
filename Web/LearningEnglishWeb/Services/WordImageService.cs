@@ -18,7 +18,7 @@ namespace LearningEnglishWeb.Services
             _httpClient = httpClient;
             _baseUrl = configuration.GetSection("WordImageUrl").Value;
         }
-       
+
 
         public async Task<byte[]> GetImage(string word)
         {
@@ -33,13 +33,12 @@ namespace LearningEnglishWeb.Services
         {
             using (HttpResponseMessage response = await _httpClient.GetAsync(requestUrl))
             using (Stream stream = await response.Content.ReadAsStreamAsync())
+            using (MemoryStream ms = new MemoryStream())
             {
-                using (MemoryStream ms = new MemoryStream())
-                {
-                    stream.CopyTo(ms);
-                    return ms.ToArray();
-                }
+                await stream.CopyToAsync(ms);
+                return ms.ToArray();
             }
+
         }
 
         public async Task<string> GetImageSrc(string word)
@@ -47,7 +46,7 @@ namespace LearningEnglishWeb.Services
             var image = await GetImage(word);
             return GetSrc(image);
         }
-        
+
         public async Task<byte[]> GetThumbnail(string word)
         {
             var requestUrl = Api.WordImage.GetThumbnail(_baseUrl, word);
@@ -58,7 +57,7 @@ namespace LearningEnglishWeb.Services
 
         public async Task<string> GetThumbnailSrc(string word)
         {
-            var image = await GetThumbnail(word);            
+            var image = await GetThumbnail(word);
             return GetSrc(image);
         }
 
@@ -66,7 +65,7 @@ namespace LearningEnglishWeb.Services
         private string GetSrc(byte[] image)
         {
             var base64 = Convert.ToBase64String(image);
-            return string.Format("data:image/gif;base64,{0}", base64);
+            return $"data:image/gif;base64,{base64}";
         }
     }
 }

@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Http;
 
-
-namespace LearningEnglishWeb.Models
+namespace LearningEnglishWeb.Models.WordSet
 {
     public class WordSetAddModel
     {

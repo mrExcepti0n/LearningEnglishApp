@@ -108,16 +108,15 @@
 
     setImageBlur() {
         let image = document.getElementById('wordImage');
-
         //показ результатов (картинки нет)
-        if (image !== null) {
+        if (image) {
             image.style.filter = 'blur(8px)';
         }
     }
 
     removeImageBlur() {
         let image = document.getElementById('wordImage');
-        if (image !== null) {
+        if (image) {
             image.style.filter = 'blur(0px)';
         }
     }

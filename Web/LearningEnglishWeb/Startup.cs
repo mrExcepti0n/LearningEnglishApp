@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
+using LearningEnglishWeb.Areas.Training.Infrastructure.Facades;
+using LearningEnglishWeb.Areas.Training.Infrastructure.Factories;
+using LearningEnglishWeb.Areas.Training.Services;
 using LearningEnglishWeb.Configuration;
-using LearningEnglishWeb.Infrastructure;
-using LearningEnglishWeb.Infrastructure.Training;
 using LearningEnglishWeb.Services;
 using LearningEnglishWeb.Services.Abstractions;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -16,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -47,6 +41,9 @@ namespace LearningEnglishWeb
             services.AddCustomAuthentication(Configuration);
 
             services.AddScoped<TrainingFactory>();
+            services.AddScoped<ChooseTranslateTrainingFacade>();
+            services.AddScoped<CollectWordTrainingFacade>();
+            services.AddScoped<TranslateWordTrainingFacade>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,13 +59,6 @@ namespace LearningEnglishWeb
             else
             {
                 app.UseExceptionHandler("/Error");
-            }
-
-            var pathBase = Configuration["PATH_BASE"];
-
-            if (!string.IsNullOrEmpty(pathBase))
-            {
-                app.UsePathBase(pathBase);
             }
 
             app.UseStaticFiles();

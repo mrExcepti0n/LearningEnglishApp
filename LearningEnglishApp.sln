@@ -37,6 +37,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web Apps", "Web Apps", "{02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{7171C073-4B41-40EA-A76E-31CB251CD998}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyApi.IntegrationTests", "VocabularyApi.IntegrationTests\VocabularyApi.IntegrationTests.csproj", "{213DE5FB-2997-40DE-954F-714792CD40CD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -171,6 +173,18 @@ Global
 		{02000F21-5ACF-4D06-B576-64C7CA5DD09E}.Release|iPhone.Build.0 = Release|Any CPU
 		{02000F21-5ACF-4D06-B576-64C7CA5DD09E}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{02000F21-5ACF-4D06-B576-64C7CA5DD09E}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Release|iPhone.Build.0 = Release|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{213DE5FB-2997-40DE-954F-714792CD40CD}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -188,6 +202,7 @@ Global
 		{4232765A-86C0-443F-8810-63A503EF8126} = {DB2ACCE3-BB34-4BB8-8396-5C36164990B4}
 		{D68BD730-E418-4E25-AD03-103A79F5BE97} = {DB2ACCE3-BB34-4BB8-8396-5C36164990B4}
 		{02000F21-5ACF-4D06-B576-64C7CA5DD09E} = {CA3C4482-7A36-4D0D-BA87-651E46FD48DD}
+		{213DE5FB-2997-40DE-954F-714792CD40CD} = {8391949A-B6C0-473A-A463-5FFBD0DE730E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {680B9730-E225-4B3E-8896-E347C792359D}

@@ -134,8 +134,8 @@
             type: 'GET',
             data: { mask: word, vocabularyId: vocabularyId },
             success: (res) => {
-                var refreshArea = document.querySelector("#wordList");
-                refreshArea.innerHTML = res;
+                let refreshDivArea = document.querySelector("#wordList");
+                refreshDivArea.innerHTML = res;
             }
         });
     }
@@ -178,11 +178,11 @@
             inputs[i].checked = checked;
         }
 
-        setTraingBtnVisibility(checked);
+        setTrainingBtnVisibility(checked);
     }
 
 
-    function setTraingBtnVisibility(isVisible) {
+    function setTrainingBtnVisibility(isVisible) {
         let btn = document.querySelector('.training-sw-btn');
         if (isVisible) {
             if (!btn.style.visibility || btn.style.visibility === 'hidden') {
@@ -210,7 +210,7 @@
 
     function checkTrainingBtnVisibility(isVisible) {
         if (isVisible) {
-            setTraingBtnVisibility(isVisible);
+            setTrainingBtnVisibility(isVisible);
             let notCheckedElement = document.querySelector('tbody tr input[type=checkbox]:not(:checked)');
 
             if (!notCheckedElement) {
@@ -222,7 +222,7 @@
         } else {
             let checkedElement = document.querySelector('tbody tr input[type=checkbox]:checked');
             if (!checkedElement) {
-                setTraingBtnVisibility(isVisible);
+                setTrainingBtnVisibility(isVisible);
             }
             let checkAllInput = document.getElementById('checkAll');
             if (checkAllInput.checked) {

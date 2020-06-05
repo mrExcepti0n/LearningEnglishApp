@@ -1,0 +1,27 @@
+﻿@model LearningEnglishWeb.Areas.Training.ViewModels.Abstractions.QuestionViewModel
+
+    <div class="row">
+        <div class="col text-center">
+            <div class="questionArea tw">
+
+                <h5>Вопрос @Model.QuestionNumber </h5>
+                <h4>
+                    <span>@Model.Word</span>
+                    <button class="audio btn p-0" data-request-url="@Url.Action("GetAudio", "Vocabulary")">
+                        <i class="fas audio fa-play"></i>
+                    </button>
+                </h4>
+                <div class="imageWrapper">
+                    <img id="wordImage" src="@Model.ImageSrc" />
+                </div>
+            </div>
+            <div id="answerRefreshArea">
+                <div class="userAnswerArea ">
+                    <input type="text" class="form-control w-50" placeholder="Ваш перевод" />
+                </div>
+                <div class="actionArea">
+                    <button data-request-url="@Url.Action("CheckAnswer")" class="skipBtn btn btn-warning w-50 text-white  text-center">Не знаю</button>
+                </div>
+            </div>
+        </div>
+    </div>

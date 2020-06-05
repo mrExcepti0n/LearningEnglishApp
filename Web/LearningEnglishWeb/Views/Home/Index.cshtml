@@ -33,11 +33,11 @@
 
             navigator.mediaDevices.getUserMedia(constraints)
                 .then(stream => {
-                    let options = MediaRecorder.isTypeSupported('audio/webm') ? {
+                    let options = window.MediaRecorder.isTypeSupported('audio/webm') ? {
                         mimeType: 'audio/webm'
                     } : {};
 
-                    const mediaRecorder = new MediaRecorder(stream, options);
+                    const mediaRecorder = new window.MediaRecorder(stream, options);
                     mediaRecorder.start();
                     const audioChunks = [];
                     mediaRecorder.addEventListener("dataavailable", event => {

@@ -1,7 +1,5 @@
 ﻿using Data.Core;
-using System;
 using System.IO;
-using System.Linq;
 using System.Speech.Synthesis;
 using System.Threading.Tasks;
 
@@ -22,6 +20,7 @@ namespace SpeechApi.Models
             memoryStream.Position = 0;
             return memoryStream;
         }
+
         public void SaveAudio(string text, LanguageEnum language, string path)
         {
             using (var synth = new SpeechSynthesizer())
@@ -37,19 +36,16 @@ namespace SpeechApi.Models
         {
             return await Task.Run(() => GetAudio(text, language));
         }
+
         public async Task SaveAudioAsync(string text, LanguageEnum language, string path)
         {
             await Task.Run(() => SaveAudio(text, language, path));
         }
 
-    
-
         private void SelectVoice(SpeechSynthesizer synth, LanguageEnum language)
         {
             synth.SelectVoiceByHints(VoiceGender.Neutral, VoiceAge.NotSet, 0, language.GetCulture());
         }
-
-       
 
     }
 }

@@ -1,18 +1,17 @@
-﻿using LearningEnglishWeb.Models;
-using LearningEnglishWeb.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Linq;
 using LearningEnglishWeb.Services.Dtos;
 using System.Threading.Tasks;
 using LearningEnglishWeb.Services.Abstractions;
 using System.Collections.Generic;
+using LearningEnglishWeb.Models.WordSet;
 
 namespace LearningEnglishWeb.Controllers
 {
     public class WordSetController : Controller
     {
-        private IWordSetService _wordSetService;
+        private readonly IWordSetService _wordSetService;
         public WordSetController(IWordSetService wordSetService)
         {
             _wordSetService = wordSetService;

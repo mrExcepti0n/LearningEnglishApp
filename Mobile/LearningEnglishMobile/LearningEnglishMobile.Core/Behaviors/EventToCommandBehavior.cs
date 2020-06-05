@@ -1,11 +1,9 @@
 ﻿using LearningEnglishMobile.Core.Behaviors.Base;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
 using System.Windows.Input;
 using Xamarin.Forms;
 
@@ -33,37 +31,37 @@ namespace LearningEnglishMobile.Core.Behaviors
             BindableProperty.CreateAttached("EventArgsConverterParameter", typeof(object), typeof(EventToCommandBehavior), null,
                 BindingMode.OneWay);
 
-        protected Delegate _handler;
+        protected Delegate Handler;
         private EventInfo _eventInfo;
 
         public string EventName
         {
-            get { return (string)GetValue(EventNameProperty); }
-            set { SetValue(EventNameProperty, value); }
+            get => (string)GetValue(EventNameProperty);
+            set => SetValue(EventNameProperty, value);
         }
 
         public ICommand Command
         {
-            get { return (ICommand)GetValue(CommandProperty); }
-            set { SetValue(CommandProperty, value); }
+            get => (ICommand)GetValue(CommandProperty);
+            set => SetValue(CommandProperty, value);
         }
 
         public object CommandParameter
         {
-            get { return GetValue(CommandParameterProperty); }
-            set { SetValue(CommandParameterProperty, value); }
+            get => GetValue(CommandParameterProperty);
+            set => SetValue(CommandParameterProperty, value);
         }
 
         public IValueConverter EventArgsConverter
         {
-            get { return (IValueConverter)GetValue(EventArgsConverterProperty); }
-            set { SetValue(EventArgsConverterProperty, value); }
+            get => (IValueConverter)GetValue(EventArgsConverterProperty);
+            set => SetValue(EventArgsConverterProperty, value);
         }
 
         public object EventArgsConverterParameter
         {
-            get { return GetValue(EventArgsConverterParameterProperty); }
-            set { SetValue(EventArgsConverterParameterProperty, value); }
+            get => GetValue(EventArgsConverterParameterProperty);
+            set => SetValue(EventArgsConverterParameterProperty, value);
         }
 
         protected override void OnAttachedTo(View visualElement)
@@ -75,7 +73,7 @@ namespace LearningEnglishMobile.Core.Behaviors
             {
                 _eventInfo = events.FirstOrDefault(e => e.Name == EventName);
                 if (_eventInfo == null)
-                    throw new ArgumentException(String.Format("EventToCommand: Can't find any event named '{0}' on attached type", EventName));
+                    throw new ArgumentException($"EventToCommand: Can't find any event named '{EventName}' on attached type");
 
                 AddEventHandler(_eventInfo, AssociatedObject, OnFired);
             }
@@ -83,8 +81,8 @@ namespace LearningEnglishMobile.Core.Behaviors
 
         protected override void OnDetachingFrom(View view)
         {
-            if (_handler != null)
-                _eventInfo.RemoveEventHandler(AssociatedObject, _handler);
+            if (Handler != null)
+                _eventInfo.RemoveEventHandler(AssociatedObject, Handler);
 
             base.OnDetachingFrom(view);
         }
@@ -100,14 +98,14 @@ namespace LearningEnglishMobile.Core.Behaviors
             var actionInvoke = action.GetType()
                 .GetRuntimeMethods().First(m => m.Name == "Invoke");
 
-            _handler = Expression.Lambda(
+            Handler = Expression.Lambda(
                 eventInfo.EventHandlerType,
                 Expression.Call(Expression.Constant(action), actionInvoke, eventParameters[0], eventParameters[1]),
                 eventParameters
             )
             .Compile();
 
-            eventInfo.AddEventHandler(item, _handler);
+            eventInfo.AddEventHandler(item, Handler);
         }
 
         private void OnFired(object sender, EventArgs eventArgs)

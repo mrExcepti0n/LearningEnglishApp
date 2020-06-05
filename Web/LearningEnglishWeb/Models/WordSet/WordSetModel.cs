@@ -1,10 +1,8 @@
-﻿using LearningEnglishWeb.Services.Dtos;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using LearningEnglishWeb.Services.Dtos;
 
-
-namespace LearningEnglishWeb.Models
+namespace LearningEnglishWeb.Models.WordSet
 {
     public class WordSetModel : WordSetShortModel
     {
