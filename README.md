@@ -25,3 +25,7 @@
  Для получения картинки слова используется поиск яндекс.картинки с последующим сохранением результата в бд.
  
  Присутствует сохранение статистики тренировок и составление рейтинга слов.
+ 
+ ![словарь](https://github.com/mrExcepti0n/LearningEnglishApp/blob/master/.images/vocabulary.png)
+
+ ![тренировки](https://github.com/mrExcepti0n/LearningEnglishApp/blob/master/.images/chooseTranslate.png)
