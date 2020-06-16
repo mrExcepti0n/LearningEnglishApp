@@ -23,21 +23,7 @@ namespace LearningEnglishWeb.Controllers
         public IActionResult Index()
         {
             return View();
-        }      
-
-       
-
-
-        [HttpPost]
-        public async Task<string> GetText(IFormFile formFile)
-        {
-            using (var fileStream = new FileStream(@"D:\\sounds\soundnew.wav", FileMode.Create))
-            {
-                await formFile.CopyToAsync(fileStream);
-            }
-
-            var res = await _speechService.GetText(formFile.OpenReadStream());
-            return res;
         }
+
     }
 }

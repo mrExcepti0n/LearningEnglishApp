@@ -12,21 +12,21 @@ namespace LearningEnglishWeb.Areas.Training.Services.Helpers
         public static class Training
         {
 
-            public static string GetRequiringStudyWords(string baseUrl, TrainingTypeEnum trainingType, bool isReverseTraining)
-            {
-                return $"{baseUrl}/RequiringStudyWords?trainingType={trainingType}&isReverseTraining={isReverseTraining}";
-            }
+            //public static string GetRequiringStudyWords(string baseUrl, TrainingTypeEnum trainingType, bool isReverseTraining)
+            //{
+            //    return $"{baseUrl}/RequiringStudyWords?trainingType={trainingType}&isReverseTraining={isReverseTraining}";
+            //}
 
             internal static string GetAvailableTrainingWordsCount(string baseUrl)
             {
                 return $"{baseUrl}/AvailableTrainingWordsCount";
             }
 
-            internal static string GetTrainingWords(string baseUrl, IEnumerable<int> userSelectedWords)
-            {
-                var parameters = userSelectedWords.Select(uw => $"userSelectedWords={uw}");
-                return $"{baseUrl}/TrainingWords?" + String.Join('&', parameters);
-            }
+            //internal static string GetTrainingWords(string baseUrl, IEnumerable<int> userSelectedWords)
+            //{
+            //    var parameters = userSelectedWords.Select(uw => $"userSelectedWords={uw}");
+            //    return $"{baseUrl}/TrainingWords?" + String.Join('&', parameters);
+            //}
 
             internal static string GetTrainingWordsRatio(string baseUrl, ICollection<int> userWordIs)
             {
@@ -46,6 +46,19 @@ namespace LearningEnglishWeb.Areas.Training.Services.Helpers
             internal static string SaveTrainingResult(string baseUrl)
             {
                 return baseUrl;
+            }
+
+            public static string GetTrainingQuestions(string baseUrl, TrainingTypeEnum trainingType, bool isReverseTraining, IEnumerable<int> selectedUserWords)
+            {
+                var url =  $"{baseUrl}/TrainingQuestion?trainingType={trainingType}&isReverseTraining={isReverseTraining}";
+
+                if (selectedUserWords != null && selectedUserWords.Any())
+                {
+                    var parameters = selectedUserWords.Select(uw => $"userSelectedWords={uw}");
+                    url += $"&{string.Join('&', parameters)}";
+                }
+
+                return url;
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Data.Core;
+using VocabularyApi.Dtos;
 using VocabularyApi.Dtos.Training;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
@@ -14,7 +15,7 @@ namespace VocabularyApi.Services.Training
         {
         }
 
-        public override IEnumerable<QuestionWithOptionsDto> GetQuestions(IEnumerable<UserVocabularyWord> words)
+        public override IEnumerable<QuestionWithOptionsDto> GetQuestions(IEnumerable<UserVocabularyWordDto> words)
         {
             var userVocabularyWords = words.ToList();
 
@@ -25,13 +26,13 @@ namespace VocabularyApi.Services.Training
             }
         }
 
-        private QuestionWithOptionsDto GetQuestion(int number, UserVocabularyWord word, List<string> options)
+        private QuestionWithOptionsDto GetQuestion(int number, UserVocabularyWordDto word, List<string> options)
         {
             return new QuestionWithOptionsDto(word, number + 1,  options);
         }
 
 
-        private List<string> GetOptions(IEnumerable<UserVocabularyWord> words, int currentWordIndex, int size)
+        private List<string> GetOptions(IEnumerable<UserVocabularyWordDto> words, int currentWordIndex, int size)
         {
             var userVocabularyWords = words.ToList();
 

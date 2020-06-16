@@ -35,11 +35,11 @@ namespace VocabularyApi.Models
 
         public int GetKnowledgeRatio()
         {
-            var succesfullTrainings = TrainingStatistics.Count(ts => !ts.NeedToRepeat());
+            var sucessfullTrainings = TrainingStatistics.Count(ts => !ts.NeedToRepeat());
 
             var totalTrainings = Enum.GetValues(typeof(TrainingTypeEnum)).Length * 2;
 
-            return succesfullTrainings *100 / totalTrainings ;
+            return sucessfullTrainings *100 / totalTrainings ;
         }
 
         public bool NeedToRepeat(TrainingTypeEnum trainingType, bool isReverseTraining)

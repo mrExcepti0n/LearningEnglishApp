@@ -8,13 +8,12 @@ namespace LearningEnglishWeb.Areas.Training.Services
 {
     public interface ITrainingService
     {
-        Task<List<UserWord>> GetRequiringStudyWords(TrainingTypeEnum trainingType, bool isReverseTraining);
+        //Task<List<UserWord>> GetRequiringStudyWords(TrainingTypeEnum trainingType, bool isReverseTraining);
         Task SaveTrainingResult(TrainingResultDto training);
         Task<Dictionary<int, byte>> GetTrainingWordsRatio(List<int> userWordIds);
 
         Task<Dictionary<(TrainingTypeEnum, bool), int>> GetAvailableTrainingWordsCount();
-        Task<List<UserWord>> GetTrainingWords(IEnumerable<int> userSelectedWords);
 
-        Task<IEnumerable<T>> GetTrainingQuestions<T>(TrainingTypeEnum trainingType, bool isReverseTraining);
+        Task<IEnumerable<T>> GetTrainingQuestions<T>(TrainingTypeEnum trainingType, bool isReverseTraining, IEnumerable<int> selectedUserWords);
     }
 }

@@ -15,11 +15,21 @@ namespace VocabularyApi.Dtos
 
         }
 
-        public UserVocabularyWordDto(UserVocabularyWord userVocabularyWord)
+        public UserVocabularyWordDto(UserVocabularyWord userVocabularyWord, bool isReverse = false)
         {
             Id = userVocabularyWord.Id;
-            Word = userVocabularyWord.Word;
-            Translation = userVocabularyWord.Translation;
+
+            if (!isReverse)
+            {
+                Word = userVocabularyWord.Word;
+                Translation = userVocabularyWord.Translation;
+            }
+            else
+            {
+                Word = userVocabularyWord.Translation;
+                Translation = userVocabularyWord.Word;
+            }
+
             UserVocabularyId = userVocabularyWord.UserVocabularyId;
         }
 

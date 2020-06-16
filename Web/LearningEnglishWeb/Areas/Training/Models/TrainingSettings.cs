@@ -13,7 +13,7 @@ namespace LearningEnglishWeb.Areas.Training.Models
         public TrainingSettings(bool isReverseWay, IEnumerable<int> userWords = null)
         {
             IsReverseWay = isReverseWay;
-            SelectedUserWords = userWords;
+            SelectedUserWords = userWords ?? new List<int>();
         }
 
         public bool IsReverseWay { get; } 

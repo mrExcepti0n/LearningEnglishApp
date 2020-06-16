@@ -26,18 +26,7 @@ namespace LearningEnglishWeb.Areas.Training.Infrastructure.Factories.Abstraction
 
         protected async Task<IEnumerable<TW>> GetQuestions<TW>()
         {
-            IEnumerable<TW> words = new List<TW>();
-            if (TrainingSettings.SelectedUserWords?.Any() ?? false)
-            {
-               // words = await TrainingService.GetTrainingWords(TrainingSettings.SelectedUserWords);
-            }
-            else
-            {
-                words = await TrainingService.GetTrainingQuestions<TW>(TrainingType, TrainingSettings.IsReverseWay);
-            }
-
-            return words;
-
+            return await TrainingService.GetTrainingQuestions<TW>(TrainingType, TrainingSettings.IsReverseWay, TrainingSettings.SelectedUserWords);
         }
 
         //protected async Task<UserWord[]> GetWords()

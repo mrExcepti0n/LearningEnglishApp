@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Data.Core;
 using LearningEnglishWeb.Areas.Training.Services.Dtos;
 using LearningEnglishWeb.Areas.Training.Services.Helpers;
-using LearningEnglishWeb.Models;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -23,26 +22,12 @@ namespace LearningEnglishWeb.Areas.Training.Services
             _baseUrl = configuration.GetSection("TrainingUrl").Value;
         }
 
-        public async Task<List<UserWord>> GetRequiringStudyWords(TrainingTypeEnum trainingType, bool isReverseTraining)
+        public async Task<IEnumerable<T>> GetTrainingQuestions<T>(TrainingTypeEnum trainingType, bool isReverseTraining, IEnumerable<int> selectedUserWords)
         {
-            var requestUrl = Api.Training.GetRequiringStudyWords(_baseUrl, trainingType, isReverseTraining);
-            var stringResult = await _httpClient.GetStringAsync(requestUrl);
-            return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);
-        }
-
-        public async Task<IEnumerable<T>> GetTrainingQuestions<T>(TrainingTypeEnum trainingType, bool isReverseTraining)
-        {
-            var requestUrl = Api.Training.GetRequiringStudyWords(_baseUrl, trainingType, isReverseTraining);
+            var requestUrl = Api.Training.GetTrainingQuestions(_baseUrl, trainingType, isReverseTraining, selectedUserWords);
             var stringResult = await _httpClient.GetStringAsync(requestUrl);
 
             return JsonConvert.DeserializeObject<List<T>>(stringResult);
-        }
-
-        public async Task<List<UserWord>> GetTrainingWords(IEnumerable<int> userSelectedWords)
-        {
-            var requestUrl = Api.Training.GetTrainingWords(_baseUrl, userSelectedWords);
-            var stringResult = await _httpClient.GetStringAsync(requestUrl);
-            return JsonConvert.DeserializeObject<List<UserWord>>(stringResult);
         }
 
         public async Task SaveTrainingResult(TrainingResultDto training)
@@ -71,7 +56,6 @@ namespace LearningEnglishWeb.Areas.Training.Services
 
             return result.ToDictionary(key => (key.TrainingType, key.IsReverseTraining), value => value.AvailableWordsCount);
         }
-
 
     }
 }

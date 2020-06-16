@@ -4,7 +4,7 @@ namespace VocabularyApi.Dtos.Training
 {
     public class QuestionDto
     {
-        public QuestionDto(UserVocabularyWord userWord, int number)
+        public QuestionDto(UserVocabularyWordDto userWord, int number)
         {
             UserWordId = userWord.Id;
             Word = userWord.Word;

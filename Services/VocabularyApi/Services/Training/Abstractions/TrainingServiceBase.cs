@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Data.Core;
 using Microsoft.EntityFrameworkCore;
+using VocabularyApi.Dtos;
 using VocabularyApi.Infrastructure.DataAccess;
 using VocabularyApi.Models;
 
@@ -36,19 +37,38 @@ namespace VocabularyApi.Services.Training.Abstractions
         }
 
 
-        public async Task<IEnumerable<UserVocabularyWord>> GetUserWordAsync(Guid userId, bool isReverseTraining, int wordsCount = 10)
+        public async Task<IEnumerable<UserVocabularyWordDto>> GetUserWordAsync(Guid userId, bool isReverseTraining, int wordsCount = 10)
         {
             var userWords = await _vocabularyContext.Set<UserVocabularyWord>().Where(uv => uv.UserVocabulary.UserId == userId)
                                                                         .Include(uw => uw.TrainingStatistics)
                                                                         .ToListAsync();
             //todo order/take on sever
-            return userWords.Where(uv => uv.NeedToRepeat(_trainingType, isReverseTraining))
+            userWords = userWords.Where(uv => uv.NeedToRepeat(_trainingType, isReverseTraining))
                 .OrderByDescending(uv => uv.GetKnowledgeRatio(_trainingType, isReverseTraining))
                 .Take(wordsCount)
                 .ToList();
+
+            return GetUserVocabularyWords(userWords, isReverseTraining).ToList();
         }
 
-        public abstract IEnumerable<T> GetQuestions(IEnumerable<UserVocabularyWord> words);
+        public async Task<IEnumerable<UserVocabularyWordDto>> GetUserWordAsync(Guid userId, IEnumerable<int> userWordIds, bool isReverseTraining)
+        {
+            var userWords = await _vocabularyContext.Set<UserVocabularyWord>()
+                .Where(uv => uv.UserVocabulary.UserId == userId && userWordIds.Contains(uv.Id))
+                .ToListAsync();
+            return GetUserVocabularyWords(userWords, isReverseTraining).ToList();
+        }
+
+
+        private IEnumerable<UserVocabularyWordDto> GetUserVocabularyWords(IEnumerable<UserVocabularyWord> userVocabularyWords, bool isReverseTraining)
+        {
+            foreach (var userVocabularyWord in userVocabularyWords)
+            {
+                yield return new UserVocabularyWordDto(userVocabularyWord, isReverseTraining);
+            }
+        }
+
+        public abstract IEnumerable<T> GetQuestions(IEnumerable<UserVocabularyWordDto> words);
 
 
        

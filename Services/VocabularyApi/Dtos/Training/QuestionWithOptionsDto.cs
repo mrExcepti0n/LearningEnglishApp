@@ -8,7 +8,7 @@ namespace VocabularyApi.Dtos.Training
 {
     public class QuestionWithOptionsDto : QuestionDto
     {
-        public QuestionWithOptionsDto(UserVocabularyWord userWord, int number, List<string> options) : base(userWord, number)
+        public QuestionWithOptionsDto(UserVocabularyWordDto userWord, int number, List<string> options) : base(userWord, number)
         {
             Options = options;
         }

@@ -34,7 +34,6 @@ namespace LearningEnglishWeb.Areas.Training.Infrastructure.Facades.Abstractions
                 return default;
             }
 
-
             SaveTraining(httpContext, training);
             var question = training.GetCurrentQuestion();
             var image = await training.GetCurrentWordImageSrc(WordImageService);
