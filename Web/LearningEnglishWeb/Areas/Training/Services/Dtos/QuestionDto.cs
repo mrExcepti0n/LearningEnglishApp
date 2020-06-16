@@ -4,13 +4,13 @@ namespace LearningEnglishWeb.Areas.Training.Services.Dtos
 {
     public class QuestionDto
     {
-        public int UserWordId { get; protected set; }
+        public int UserWordId { get; set; }
 
-        public int Number { get; protected set; }
+        public int Number { get; set; }
 
-        public string Word { get; protected set; }
+        public string Word { get; set; }
 
-        public string Translation { get; protected set; }
+        public string Translation { get; set; }
 
 
         public UserWord ToUserWord()

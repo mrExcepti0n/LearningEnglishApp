@@ -8,6 +8,10 @@ namespace VocabularyApi.Models
 {
     public class VocabularyWord
     {
+        protected VocabularyWord()
+        {
+
+        }
         public VocabularyWord(string word, LanguageEnum fromLanguage, LanguageEnum toLanguage, List<string> translations)
         {
             Word = word;

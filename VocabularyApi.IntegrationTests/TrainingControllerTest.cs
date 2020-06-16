@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.Core;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -29,8 +31,10 @@ namespace VocabularyApi.IntegrationTests
             var trainingController = new TrainingController(GetInMemoryContext(userId), identityServiceMock.Object);
             var actionResult = await trainingController.GetTrainingQuestions(TrainingTypeEnum.ChooseTranslate, false);
 
-            Assert.IsTrue(actionResult.Value.Any());
-            Assert.IsTrue(actionResult.Value.First() is QuestionWithOptionsDto);
+            Assert.IsTrue(actionResult is OkObjectResult okObjectResult && okObjectResult.Value is IEnumerable<QuestionDto>);
+            var result = (actionResult as OkObjectResult).Value as IEnumerable<QuestionDto>;
+
+            Assert.IsTrue(result.All(r => r is QuestionWithOptionsDto));
         }
 
         private VocabularyContext GetInMemoryContext(Guid userId)

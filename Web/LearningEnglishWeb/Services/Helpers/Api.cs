@@ -61,14 +61,16 @@ namespace LearningEnglishWeb.Services.Helpers
             }
 
 
+        }
+
+        public static class ImportVocabulary
+        {
             public static string LoadDictionary(string baseUrl)
             {
                 return baseUrl + "/Load";
             }
-
         }
-
-
+        
         public static class WordImage
         {
             public static string GetWordImage(string baseUrl, string word)

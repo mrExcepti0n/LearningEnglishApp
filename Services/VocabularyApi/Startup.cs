@@ -16,6 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using VocabularyApi.Infrastructure.DataAccess;
+using VocabularyApi.Parsers;
 using VocabularyApi.Services;
 
 namespace VocabularyApi
@@ -36,6 +37,9 @@ namespace VocabularyApi
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddTransient<IIdentityService, IdentityService>();
+            services.AddScoped<ImageWebLoaderService>();
+            services.AddScoped<VocabularyLoader>();
+            services.AddScoped<XdXfParser>();
 
             services.AddCors(options =>
             {

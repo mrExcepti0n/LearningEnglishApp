@@ -7,10 +7,10 @@ namespace LearningEnglishWeb.Controllers
 {
     public class AdministratorController : Controller
     {
-        private readonly IVocabularyService _vocabularyService;
-        public AdministratorController(IVocabularyService vocabularyService)
+        private readonly IImportVocabularyService _importVocabularyService;
+        public AdministratorController(IImportVocabularyService importVocabularyService)
         {
-            _vocabularyService = vocabularyService;
+            _importVocabularyService = importVocabularyService;
         }
 
         [HttpGet]
@@ -29,7 +29,7 @@ namespace LearningEnglishWeb.Controllers
                 {
                     uploadedFile.CopyTo(ms);
                     var fileBytes = ms.ToArray();
-                    _vocabularyService.LoadDictionary(fileBytes);
+                    _importVocabularyService.LoadDictionary(fileBytes);
                 }
             }
             return Ok();

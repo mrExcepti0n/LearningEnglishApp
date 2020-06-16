@@ -16,6 +16,7 @@ namespace LearningEnglishWeb.Areas.Training.Models.Shared
             Options = options;
         }
 
+        [JsonProperty]
         public IEnumerable<string> Options { get; protected set; }
 
     }

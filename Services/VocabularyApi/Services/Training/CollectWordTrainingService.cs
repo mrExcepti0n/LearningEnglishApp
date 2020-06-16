@@ -20,7 +20,7 @@ namespace VocabularyApi.Services.Training
         {
             var userVocabularyWords = words.Select((uv, ind) =>
                     new QuestionWithLettersDto(uv, ind + 1, ShuffleWords(uv.Translation.ToCharArray())))
-                .ToList();
+                .ToArray();
             return userVocabularyWords;
         }
     }

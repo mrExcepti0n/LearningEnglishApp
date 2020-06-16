@@ -20,7 +20,7 @@ namespace VocabularyApi.Services.Training
 
         public override IEnumerable<QuestionDto> GetQuestions(IEnumerable<UserVocabularyWordDto> words)
         {
-            return words.Select((vw, ind) => new QuestionDto(vw, ind + 1)).ToList();
+            return words.Select((vw, ind) => new QuestionDto(vw, ind + 1)).ToArray();
         }
     }
 }

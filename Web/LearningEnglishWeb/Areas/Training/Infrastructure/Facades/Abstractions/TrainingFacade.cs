@@ -62,7 +62,8 @@ namespace LearningEnglishWeb.Areas.Training.Infrastructure.Facades.Abstractions
 
         protected void SaveTraining(HttpContext httpContext, T training)
         {
-            httpContext.Session.SetString(training.Id.ToString(), JsonConvert.SerializeObject(training));
+            var trainingString = JsonConvert.SerializeObject(training);
+            httpContext.Session.SetString(training.Id.ToString(), trainingString);
         }
 
         protected T GetTraining(HttpContext httpContext, Guid trainingId)

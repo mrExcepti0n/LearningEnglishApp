@@ -7,6 +7,7 @@ namespace VocabularyApi.Models
 {
     public class UserVocabulary
     {
+
         public UserVocabulary()
         {
 
@@ -22,16 +23,16 @@ namespace VocabularyApi.Models
         }
 
 
-        public int Id { get; protected set; }
+        public int Id { get; set; }
 
-        public string Title { get; protected set; }
+        public string Title { get; set; }
         
-        public Guid UserId { get; protected set; }
+        public Guid UserId { get; set; }
 
-        public int? WordSetId { get; protected set; }
+        public int? WordSetId { get; set; }
 
 
-        public bool IsDefault { get; protected set; }
+        public bool IsDefault { get; set; }
 
         public ICollection<UserVocabularyWord> Words { get; set; } = new HashSet<UserVocabularyWord>();
         public WordSet WordSet { get; set; }

@@ -31,15 +31,15 @@ namespace VocabularyApi.Controllers
         private Guid UserId => _identityService.GetUserIdentity();
 
         [HttpGet("TrainingQuestion")]
-        public async Task<ActionResult<IEnumerable<QuestionDto>>> GetTrainingQuestions(TrainingTypeEnum trainingType, bool isReverseTraining, List<int> selectedWordIds = null,
+        public async Task<ActionResult> GetTrainingQuestions(TrainingTypeEnum trainingType, bool isReverseTraining, [FromQuery] List<int> userSelectedWords = null,
             int count = 10)
         {
             var trainingService = TrainingFactory.GetTrainingService(_vocabularyContext, trainingType);
 
             IEnumerable<UserVocabularyWordDto> words;
-            if (selectedWordIds != null && selectedWordIds.Any())
+            if (userSelectedWords != null && userSelectedWords.Any())
             {
-                words = await trainingService.GetUserWordAsync(UserId, selectedWordIds, isReverseTraining);
+                words = await trainingService.GetUserWordAsync(UserId, userSelectedWords, isReverseTraining);
             }
             else
             {
@@ -47,7 +47,8 @@ namespace VocabularyApi.Controllers
             }
 
             var result = trainingService.GetQuestions(words);
-            return result.ToList();
+
+            return Ok(result.ToArray());
         }
 
         [HttpGet("TrainingWordsRatio")]

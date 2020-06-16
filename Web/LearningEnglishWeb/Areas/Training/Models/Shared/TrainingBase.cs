@@ -24,18 +24,18 @@ namespace LearningEnglishWeb.Areas.Training.Models.Shared
             RightAnsweredQuestions = 0;
         }
 
-
+        [JsonProperty]
         public bool IsReverse { get; }
-
-        public Guid Id { get;  }
+        [JsonProperty]
+        public Guid Id { get; protected set; }
 
         public int QuestionsCount => Questions.Length;
-
-        public int CurrentQuestionNumber { get; private set; }
-
-        public int RightAnsweredQuestions { get; private set; }
-
-        protected TrainingTypeEnum TrainingType { get; }
+        [JsonProperty]
+        public int CurrentQuestionNumber { get; protected set; }
+        [JsonProperty]
+        public int RightAnsweredQuestions { get; protected set; }
+        [JsonProperty]
+        protected TrainingTypeEnum TrainingType { get;}
 
 
         [JsonProperty]

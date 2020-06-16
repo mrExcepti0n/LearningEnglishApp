@@ -35,7 +35,7 @@ namespace LearningEnglishWeb
                 .AddHttpClientServices();
 
             IdentityModelEventSource.ShowPII = true;       // Caution! Do NOT use in production: https://aka.ms/IdentityModel/PII
- 
+
             services.AddControllers();
 
             services.AddCustomAuthentication(Configuration);
@@ -71,6 +71,10 @@ namespace LearningEnglishWeb
 
             app.UseEndpoints(endpoints =>
             {
+                //endpoints.MapControllerRoute(
+                //      name: "areas",
+                //    pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapAreaControllerRoute("training_area", "Training",  pattern: "Training/{controller=Training}/{action=Index}");
                 endpoints.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllerRoute("defaultError", "{controller=Error}/{action=Error}");
                 endpoints.MapControllers();
@@ -94,6 +98,7 @@ namespace LearningEnglishWeb
             services.AddTransient<HttpClientAuthorizationDelegatingHandler>();
 
             services.AddHttpClient<IVocabularyService, VocabularyService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
+            services.AddHttpClient<IImportVocabularyService, ImportVocabularyService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<IWordSetService, WordSetService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<IWordImageService, WordImageService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();
             services.AddHttpClient<ITrainingService, TrainingService>().AddHttpMessageHandler<HttpClientAuthorizationDelegatingHandler>();

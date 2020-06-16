@@ -21,9 +21,9 @@ namespace LearningEnglishWeb.Areas.Training.Infrastructure.Factories
 
         public override async Task<CollectWordTraining> GetTraining()
         {
-            IEnumerable<QuestionDto> questionsDto = await GetQuestions<QuestionDto>();
+            IEnumerable<QuestionWithLettersDto> questionsDto = await GetQuestions<QuestionWithLettersDto>();
 
-            var questions = questionsDto.Select(q => new CollectWordQuestion(q.Number, q.ToUserWord(), new char[]{}));
+            var questions = questionsDto.Select(q => new CollectWordQuestion(q.Number, q.ToUserWord(), q.AnswerLetters));
             return new CollectWordTraining(questions, TrainingSettings.IsReverseWay);
         }  
     }

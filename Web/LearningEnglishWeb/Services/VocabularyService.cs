@@ -73,14 +73,7 @@ namespace LearningEnglishWeb.Services
         }
 
 
-        public async Task LoadDictionary(byte[] array)
-        {
-            var requestUrl = Api.Vocabulary.LoadDictionary(_baseUrl);
-            var content = new MultipartFormDataContent();
-            content.Add(new StreamContent(new MemoryStream(array)), "fromFile", "vocabulary.xdxf");
-            var result = await _httpClient.PostAsync(requestUrl, content);
-            result.EnsureSuccessStatusCode();          
-        }    
+
 
     }
 }

@@ -18,10 +18,5 @@ namespace LearningEnglishWeb.Services.Abstractions
 
         Task RemoveWord(int wordId);
 
-
-
-
-
-        Task LoadDictionary(byte[] array);
     }
 }

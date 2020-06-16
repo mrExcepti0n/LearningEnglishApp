@@ -11,10 +11,10 @@
     <button (click)="logoutClicked($event)" class="btn"> Выйти</button>
   </div>
   <ul class="navbar-nav flex-grow-1" *ngIf="authenticated">
-    <li class="nav-item"> <button class="btn nav-link text-dark" [routerLink]="['training']">Тренировки</button></li>
-    <li class="nav-item"><button class="btn nav-link text-dark" [routerLink]="['vocabulary']">Словарь</button></li>
-    <li class="nav-item"><button class="btn nav-link text-dark" [routerLink]="['wordset']">Наборы слов</button></li>
-    <li class="nav-item"><button class=" btn  nav-link text-dark">Администрирование</button></li>
+    <li class="nav-item" [routerLinkActive]='["active"]'> <button class="btn nav-link" [routerLink]="['training']">Тренировки</button></li>
+    <li class="nav-item" [routerLinkActive]='["active"]'> <button class="btn nav-link" [routerLink]="['vocabulary']">Словарь</button></li>
+    <li class="nav-item" [routerLinkActive]='["active"]'> <button class="btn nav-link" [routerLink]="['wordset']">Наборы слов</button></li>
+    <li class="nav-item" [routerLinkActive]='["active"]'> <button class=" btn  nav-link">Администрирование</button></li>
   </ul>
 </ng-template>
 

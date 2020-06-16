@@ -16,7 +16,8 @@ namespace LearningEnglishWeb.Areas.Training.Models.CollectWord
             AnswerLetters = answerLetters;
         }
 
-        public char[] AnswerLetters { get; }
+        [JsonProperty]
+        public char[] AnswerLetters { get; protected set; }
 
         public char[] UserLetters => UserAnswer?.ToCharArray();
 

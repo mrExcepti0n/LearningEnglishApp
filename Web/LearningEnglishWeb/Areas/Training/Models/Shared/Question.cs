@@ -17,15 +17,15 @@ namespace LearningEnglishWeb.Areas.Training.Models.Shared
             Word = userWord.Word.ToLower();
             Translation = userWord.Translation.ToLower();
         }
-
+        [JsonProperty]
         public int UserWordId { get; protected set; }
-
+        [JsonProperty]
         public int Number { get; protected set; }
-
+        [JsonProperty]
         public string Word { get; protected set; }
-
+        [JsonProperty]
         public string Translation { get; protected set; }
-
+        [JsonProperty]
         public string UserAnswer { get; protected set; }
 
 
