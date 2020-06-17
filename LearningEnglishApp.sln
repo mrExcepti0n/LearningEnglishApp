@@ -37,7 +37,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web Apps", "Web Apps", "{02
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{7171C073-4B41-40EA-A76E-31CB251CD998}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyApi.IntegrationTests", "VocabularyApi.IntegrationTests\VocabularyApi.IntegrationTests.csproj", "{213DE5FB-2997-40DE-954F-714792CD40CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VocabularyApi.IntegrationTests", "Tests\VocabularyApi.IntegrationTests\VocabularyApi.IntegrationTests.csproj", "{213DE5FB-2997-40DE-954F-714792CD40CD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
